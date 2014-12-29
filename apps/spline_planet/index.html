@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="description" content="WebGL experiments - Collinear Squares on a sphere">
+		<meta name="keywords" content="callum,chrome,collada,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,shader,spline,three.js,webgl,">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<title>callum.com - Spline Planet</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Stats.js"></script>
+		<script src="js/latlng.js"></script>
+		<script src="js/planet.js"></script>
+		<script src="js/city_locations.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+			uniform vec2 uvScale;
+			varying vec2 vUv;
+
+			void main() {
+				vUv = uv;
+				vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+				gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+		<script id="fragmentShader" type="x-shader/x-fragment">
+			uniform float time;
+			uniform vec2 resolution;
+			varying vec2 vUv;
+
+			void main(void) {
+				vec2 position = vUv / resolution.xy;
+				float red = abs(sin(position.x * position.y + time / 5.0)) + 0.5;
+				float green = abs(sin(position.x * position.y + time / 4.0));
+				float blue = abs(sin(position.x * position.y + time / 3.0));
+				gl_FragColor = vec4(red, green, blue, 1.0);
+			}
+		</script>
+		<script>
+			var camera, scene, renderer;
+			var planet, controls, stats;
+			var clock = new THREE.Clock();
+
+			if (window.innerWidth === 0) {
+				window.innerWidth = parent.innerWidth;
+				window.innerHeight = parent.innerHeight;
+			}
+
+			var uniforms;
+
+			function addTrack(start_lat, start_lng, end_lat, end_lng, radius, sphere) {
+				var num_control_points = 10;
+				var max_altitude = 50 + Math.random() * 120;
+
+				var points = [];
+				var i;
+				for (i = 0; i < num_control_points + 1; i++) {
+					var arc_angle = i * 180.0 / num_control_points;
+					var arc_radius = radius + (Math.sin(latlngDeg2rad(arc_angle))) * max_altitude;
+					var latlng = latlngInterPoint(start_lat, start_lng, end_lat, end_lng, i / num_control_points);
+					var pos = latlngPosFromLatLng(latlng.lat, latlng.lng, arc_radius);
+
+					points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
+				}
+
+				var spline = new THREE.SplineCurve3(points);
+
+				var circleRadius = 4;
+				var circleShape = new THREE.Shape();
+				circleShape.moveTo(0, circleRadius);
+				circleShape.quadraticCurveTo(circleRadius, circleRadius, circleRadius, 0);
+				circleShape.quadraticCurveTo(circleRadius, - circleRadius, 0, - circleRadius);
+				circleShape.quadraticCurveTo(-circleRadius, - circleRadius, - circleRadius, 0);
+				circleShape.quadraticCurveTo(-circleRadius, circleRadius, 0, circleRadius);
+				var extrudeSettings = {
+					amount: 10,
+					bevelEnabled: false,
+					steps: 64,
+					extrudePath: spline
+				};
+				var circle_extrude = circleShape.extrude(extrudeSettings);
+
+				uniforms = {
+					time: {
+						type: "f",
+						value: 1.0
+					},
+					resolution: {
+						type: "v2",
+						value: new THREE.Vector2()
+					}
+				};
+
+				var material = new THREE.ShaderMaterial({
+					uniforms: uniforms,
+					vertexShader: document.getElementById('vertexShader')
+						.textContent,
+					fragmentShader: document.getElementById('fragmentShader')
+						.textContent
+				});
+
+				uniforms.resolution.value.x = 100;
+				uniforms.resolution.value.y = 100;
+
+				var mesh = new THREE.Mesh(circle_extrude, material);
+				scene.add(mesh);
+			}
+
+			function addIcon(lat, lng, radius, mesh, icon_name) {
+				var icon_geom = new THREE.PlaneGeometry(1, 1, 1, 1);
+
+				var icon_material = new THREE.MeshLambertMaterial({
+					color: 0xffffff,
+					side: THREE.DoubleSide,
+					alphaTest: 0.5,
+					transparent: true,
+					map: THREE.ImageUtils.loadTexture(icon_name)
+				});
+				var icon_mesh = new THREE.Mesh(icon_geom, icon_material);
+				icon_mesh.scale.set(50, 50, 1);
+				var icon_pos = latlngPosFromLatLng(lat, lng, radius * 1.002);
+				icon_mesh.position.set(icon_pos.x, icon_pos.y, icon_pos.z);
+				icon_mesh.lookAt(mesh.position);
+				scene.add(icon_mesh);
+			}
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer({
+					clearAlpha: 1,
+					clearColor: 0x000000,
+					antialias: true
+				});
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.sortObjects = true;
+				renderer.autoClear = true;
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+				document.body.appendChild(renderer.domElement);
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+				camera.position.z = 800;
+
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = 0.6;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = false;
+				controls.dynamicDampingFactor = 0.4;
+				controls.minDistance = 500;
+				controls.maxDistance = 1800;
+				controls.keys = [65, 83, 77];
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				stats.domElement.style.zIndex = 100;
+				document.body.appendChild(stats.domElement);
+
+				window.addEventListener('resize', onWindowResize, false);
+			}
+
+			function addDecoration(start_lat, start_lng, end_lat, end_lng, radius, sphere) {
+				addTrack(start_lat, start_lng, end_lat, end_lng, radius, sphere);
+				addIcon(start_lat, start_lng, radius, planet.surface_mesh, "icons/star.png");
+				addIcon(end_lat, end_lng, radius, planet.surface_mesh, "icons/circle.png");
+			}
+
+			function build() {
+
+				var dir_light = new THREE.DirectionalLight(0xffffff);
+				dir_light.position.set(1, 1, 0)
+					.normalize();
+				scene.add(dir_light);
+
+				var ambient_light = new THREE.AmbientLight(0xffffff);
+				scene.add(ambient_light);
+
+				var planet_radius = 400;
+				planet = new cpPlanet({
+					planet_radius: planet_radius,
+					planet_tilt_rad: 0.41,
+					planet_surface_texture: "textures/mars_surface.jpg",
+					planet_geom_segments: 64,
+					planet_geom_rings: 64,
+					use_surface_shader: false,
+					create_combined_mesh: false
+				});
+
+				scene.add(planet.surface_mesh);
+
+				var start_lat, start_lng, end_lat, end_lng;
+
+				var num_decorators = 5;
+				for (var i = 0; i < num_decorators; ++i) {
+
+					var start_index = Math.floor(Math.random() * locations.length) - 1;
+					var start_lat = locations[start_index].lat;
+					var start_lng = locations[start_index].lng;
+
+					var end_index = Math.floor(Math.random() * locations.length) - 1;
+					var end_lat = locations[end_index].lat;
+					var end_lng = locations[end_index].lng;
+
+					addDecoration(start_lat, start_lng, end_lat, end_lng, planet_radius, planet.surface_mesh);
+				};
+			}
+
+			function onWindowResize(event) {
+
+				width = window.innerWidth;
+				height = window.innerHeight;
+
+				renderer.setSize(width, height);
+
+				camera.aspect = width / height;
+				camera.updateProjectionMatrix();
+
+				controls.screen.width = width;
+				controls.screen.height = height;
+
+				camera.radius = (width + height) / 4;
+			}
+
+			function animate() {
+
+				requestAnimationFrame(animate);
+
+				var rotation_speed = 0.1;
+				var delta = clock.getDelta();
+
+				uniforms.time.value += 0.1;
+
+				controls.update();
+
+				stats.update();
+
+				renderer.render(scene, camera);
+			}
+
+			init();
+			build();
+			animate();
+		</script>
+		<div id="instructions"><em>Extruded shape along spline + icons. On Mars!</em> - Mouse rotates plus (S)cale / (M)ove</div>
+	</body>
+</html>

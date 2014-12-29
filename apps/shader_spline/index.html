@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="description" content="WebGL experiments - Shader Spline test">
+		<meta name="keywords" content="callum,chrome,collada,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,shader,spline,three.js,webgl,">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<title>callum.com - Shader Spline</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Stats.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+			uniform vec2 uvScale;
+			varying vec2 vUv;
+
+			void main() {
+				vUv = uv;
+				vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+				gl_Position = projectionMatrix * mvPosition;
+			}
+		</script>
+		<script id="fragmentShader" type="x-shader/x-fragment">
+			uniform float time;
+			uniform vec2 resolution;
+			varying vec2 vUv;
+
+			void main(void) {
+				vec2 position = vUv / resolution.xy;
+				float red = abs(sin(position.x * position.y + time / 5.0)) + 0.5;
+				float green = abs(sin(position.x * position.y + time / 4.0));
+				float blue = abs(sin(position.x * position.y + time / 3.0));
+				gl_FragColor = vec4(red, green, blue, 1.0);
+			}
+		</script>
+		<script>
+			var height = window.innerHeight;
+			var width = window.innerWidth;
+			var container, camera, scene, renderer, geometry;
+			var uniforms;
+			var controls, stats;
+
+			function addWorm() {
+				var points = [];
+				var i;
+				for (i = 0; i < 2 * Math.PI; i += .001) {
+					var x = Math.cos(i) * 200;
+					var y = Math.cos(i * 4) * 20
+					var z = Math.sin(i) * 200;
+					points.push(new THREE.Vector3(x, y, z));
+				}
+
+				var spline = new THREE.SplineCurve3(points);
+
+				var circleRadius = 32;
+				var circleShape = new THREE.Shape();
+				circleShape.moveTo(0, circleRadius);
+				circleShape.quadraticCurveTo(circleRadius, circleRadius, circleRadius, 0);
+				circleShape.quadraticCurveTo(circleRadius, - circleRadius, 0, - circleRadius);
+				circleShape.quadraticCurveTo(-circleRadius, - circleRadius, - circleRadius, 0);
+				circleShape.quadraticCurveTo(-circleRadius, circleRadius, 0, circleRadius);
+				var extrudeSettings = {
+					amount: 10,
+					bevelEnabled: false,
+					steps: 64,
+					extrudePath: spline
+				};
+				var circle_extrude = circleShape.extrude(extrudeSettings);
+
+				uniforms = {
+					time: {
+						type: "f",
+						value: 1.0
+					},
+					resolution: {
+						type: "v2",
+						value: new THREE.Vector2()
+					}
+				};
+
+				var material = new THREE.ShaderMaterial({
+					uniforms: uniforms,
+					vertexShader: document.getElementById('vertexShader').textContent,
+					fragmentShader: document.getElementById('fragmentShader').textContent
+				});
+
+				uniforms.resolution.value.x = 100; //width
+				uniforms.resolution.value.y = 100; //height
+
+				var mesh = new THREE.Mesh(circle_extrude, material);
+				mesh.rotation.x = Math.PI / 8;
+				scene.add(mesh);
+			}
+
+			function init() {
+				if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+				scene = new THREE.Scene();
+
+				renderer = new THREE.WebGLRenderer({
+					clearAlpha: 1,
+					clearColor: 0x000000,
+					antialias: true
+				});
+				renderer.setSize(width, height);
+				renderer.sortObjects = true;
+				renderer.autoClear = false;
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+
+				document.body.appendChild(renderer.domElement);
+
+				camera = new THREE.PerspectiveCamera(25, width / height, 50, 1e7);
+				camera.position.z = -200 * 7;
+				scene.add(camera);
+
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = 3.0;
+				controls.zoomSpeed = 1.2;
+				controls.panSpeed = 0.2;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = true;
+				controls.dynamicDampingFactor = 0.3;
+				controls.minDistance = 50 * 1.1;
+				controls.maxDistance = 50 * 100;
+				controls.keys = [65, 83, 77];
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				document.body.appendChild( stats.domElement );
+
+				var ambientLight = new THREE.AmbientLight(0x999999);
+				scene.add(ambientLight);
+
+				addWorm();
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+				uniforms.time.value += 0.3;
+				controls.update();
+				stats.update();
+				renderer.clear();
+				renderer.render(scene, camera);
+			}
+
+			init();
+			animate();
+		</script>
+		<div id="instructions"><em>Shader spline</em> - Mouse rotates plus (S)cale / (M)ove</div>
+	</body>
+</html>

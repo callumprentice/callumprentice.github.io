@@ -1,0 +1,175 @@
+.button {
+	*display: inline;
+	-moz-border-radius: 0.5em;
+	-moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	-webkit-border-radius: 0.5em;
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	border-radius: 0.5em;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, .2);
+	cursor: pointer;
+	display: inline-block;
+	font: bold 14px /1.8em "Lucida Grande", Arial, Verdana;
+	margin: 0px 2px;
+	outline: none;
+	padding: 0.2em 1.5em 0.25em;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, .3);
+	vertical-align: baseline;
+	zoom: 1;
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+.bigrounded {
+	-moz-border-radius: 2em;
+	-webkit-border-radius: 2em;
+	border-radius: 2em;
+}
+.medium {
+	font-size: 12px;
+	padding: 0.4em 1.5em 0.42em;
+}
+.small {
+	font-size: 11px;
+	padding: 0.2em 1em 0.275em;
+}
+.black {
+	background: #333;
+	border: solid 1px #333;
+	color: #d7d7d7;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #666', endColorstr=' #000');
+}
+.black:hover {
+	background: #000;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #444', endColorstr=' #000');
+}
+.black:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#444));
+	color: #666;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #000', endColorstr=' #666');
+}
+.gray {
+	background: #6e6e6e;
+	border: solid 1px #555;
+	color: #e9e9e9;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #888', endColorstr=' #575757');
+}
+.gray:hover {
+	background: #616161;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #757575', endColorstr=' #4b4b4b');
+}
+.gray:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#575757), to(#888));
+	color: #afafaf;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #575757', endColorstr=' #888');
+}
+.white {
+	background: #fff;
+	border: solid 1px #b7b7b7;
+	color: #606060;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #fff', endColorstr=' #ededed');
+}
+.white:hover {
+	background: #ededed;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #fff', endColorstr=' #dcdcdc');
+}
+.white:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+	color: #999;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #ededed', endColorstr=' #fff');
+}
+.orange {
+	background: #f78d1d;
+	border: solid 1px #da7c0c;
+	color: #fef4e9;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #faa51a', endColorstr=' #f47a20');
+}
+.orange:hover {
+	background: #f47c20;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #f88e11', endColorstr=' #f06015');
+}
+.orange:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+	color: #fcd3a5;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #f47a20', endColorstr=' #faa51a');
+}
+.red {
+	background: #d81b21;
+	border: solid 1px #980c10;
+	color: #faddde;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #ed1c24', endColorstr=' #aa1317');
+}
+.red:hover {
+	background: #b61318;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #c9151b', endColorstr=' #a11115');
+}
+.red:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#aa1317), to(#ed1c24));
+	color: #de898c;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #aa1317', endColorstr=' #ed1c24');
+}
+.blue {
+	background: #0095cd;
+	border: solid 1px #0076a3;
+	color: #d9eef7;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #00adee', endColorstr=' #0078a5');
+}
+.blue:hover {
+	background: #007ead;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #0095cc', endColorstr=' #00678e');
+}
+.blue:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	color: #80bed6;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #0078a5', endColorstr=' #00adee');
+}
+.rosy {
+	background: #da5867;
+	border: solid 1px #b73948;
+	color: #fae7e9;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #f16c7c', endColorstr=' #bf404f');
+}
+.rosy:hover {
+	background: #ba4b58;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #cf5d6a', endColorstr=' #a53845');
+}
+.rosy:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#bf404f), to(#f16c7c));
+	color: #dca4ab;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #bf404f', endColorstr=' #f16c7c');
+}
+.green {
+	background: #64991e;
+	border: solid 1px #538312;
+	color: #e8f0de;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #7db72f', endColorstr=' #4e7d0e');
+}
+.green:hover {
+	background: #538018;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #6b9d28', endColorstr=' #436b0c');
+}
+.green:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#4e7d0e), to(#7db72f));
+	color: #a9c08c;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #4e7d0e', endColorstr=' #7db72f');
+}
+.pink {
+	background: #f895c2;
+	border: solid 1px #d2729e;
+	color: #feeef5;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #feb1d3', endColorstr=' #f171ab');
+}
+.pink:hover {
+	background: #d57ea5;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #f4aacb', endColorstr=' #e86ca4');
+}
+.pink:active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#f171ab), to(#feb1d3));
+	color: #f3c3d9;
+	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr=' #f171ab', endColorstr=' #feb1d3');
+}

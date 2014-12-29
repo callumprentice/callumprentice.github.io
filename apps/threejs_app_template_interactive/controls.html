@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link href="css/controls.css" rel="stylesheet">
+    <script type="text/javascript" src="js/jszip.min.js"></script>
+    <script type="text/javascript" src="js/jszip-utils.min.js"></script>
+    <script type="text/javascript" src="js/FileSaver.js"></script>
+
+<script>
+var controls = [
+    { id: "app_name",              expr: "AN" },
+    { id: "minified",              expr: "MI" },
+    { id: "rstats_package",        expr: "RS" },
+    { id: "webgl_detector",        expr: "WD" },
+    { id: "full_screen"     ,      expr: "FS" },
+    { id: "window_size_changing",  expr: "SZ" },
+    { id: "helper_objects",        expr: "HO" },
+    { id: "shading_type",          expr: "ST" },
+    { id: "ambient_light",         expr: "AL" },
+    { id: "point_light",           expr: "PL" },
+    { id: "directional_light",     expr: "DL" },
+    { id: "include_object",        expr: "IO" },
+    { id: "object_material",       expr: "OM" },
+    { id: "input_model",           expr: "IM" },
+    { id: "tween_lib",             expr: "TL" },
+    { id: "datgui_lib",            expr: "DG" },
+    { id: "intersect_code",        expr: "IC" },
+    { id: "for_mobile",            expr: "FM" }
+];
+
+var app_title = "";
+
+document.addEventListener("DOMContentLoaded", init_page, false);
+
+function init_page() {
+
+    controls.forEach(function(each) {
+        document.getElementById(each.id).addEventListener("change", update_scene, true);
+    });
+
+    document.getElementById("download_zip").addEventListener("click", download_zip, true);
+
+    document.getElementById("open_js_fiddle").addEventListener("click", open_js_fiddle, true);
+
+    document.getElementById("show_help").addEventListener("click", show_help, true);
+}
+
+var app_files = [
+    { tag:"js/three.min.js",         dst:"js/three.min.js",         furl:"http://threejs.org/build/three.js" },
+    { tag:"js/three.js",             dst:"js/three.js",             furl:"http://threejs.org/build/three.js" },
+    { tag:"js/rStats.js",            dst:"js/rStats.js",            furl:"http://callum.com/apps/threejs_app_template_interactive/js/rStats.js" },
+    { tag:"js/rStats.js",            dst:"css/rStats.css" ,         furl:"http://callum.com/apps/threejs_app_template_interactive/css/rStats.css"},
+    { tag:"js/Detector.js",          dst:"js/Detector.js",          furl:"http://callum.com/apps/threejs_app_template_interactive/js/Detector.js" },
+    { tag:"js/TrackballControls.js", dst:"js/TrackballControls.js", furl:"http://callum.com/apps/threejs_app_template_interactive/js/TrackballControls.js" },
+    { tag:"js/dat.gui.min.js",       dst:"js/dat.gui.min.js",       furl:"http://callum.com/apps/threejs_app_template_interactive/js/dat.gui.js" },
+    { tag:"js/dat.gui.js",           dst:"js/dat.gui.js",           furl:"http://callum.com/apps/threejs_app_template_interactive/js/dat.gui.js" },
+    { tag:"js/tween.min.js",         dst:"js/tween.min.js",         furl:"http://callum.com/apps/threejs_app_template_interactive/js/tween.js" },
+    { tag:"js/tween.js",             dst:"js/tween.js",             furl:"http://callum.com/apps/threejs_app_template_interactive/js/tween.js" }
+];
+
+function download_zip() {
+
+    add_file(new JSZip(), 0, "my_webgl_app.zip");
+}
+
+function post(path, params, method) {
+    method = method || "post";
+
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+    form.setAttribute("target", "_blank");
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function open_js_fiddle() {
+    var resource_urls = "";
+
+    // dat.gui breaks fiddle for the moment
+    document.getElementById("datgui_lib").checked = false;
+    update_scene();
+
+    app_files.forEach(function(each_file) {
+        if ( parent.html_content.indexOf(each_file.dst) !== -1 ) {
+            resource_urls += each_file.furl + ",";
+        }
+    });
+
+    if ( resource_urls.length ) {
+        resource_urls = resource_urls.substring(0, resource_urls.length - 1);
+    }
+
+    if ( parent.html_content.indexOf("rStats.js") !== -1 ) {
+        resource_urls += ",http://callum.com/apps/threejs_app_template_interactive/css/rStats.css";
+    }
+
+    var start_tag = '<script type="text/javascript">';
+    var start_js = parent.html_content.indexOf(start_tag);
+    var end_js = parent.html_content.indexOf("</scrip", start_js);
+    var script_src = parent.html_content.substring(start_js + start_tag.length, end_js);
+
+    script_src = script_src.replace('document.addEventListener("DOMContentLoaded", start_app, false);', "start_app();")
+
+    post("http://jsfiddle.net/api/post/library/pure/",
+        {
+            js: script_src,
+            resources: resource_urls,
+            wrap: "d",
+            dtd: "html 5",
+            title: app_title,
+            description: "Fiddle created by http://callum.com/apps/threejs_app_template_interactive/index.html"
+        })
+}
+
+function show_help() {
+    parent.document.getElementById("help_and_credits").className = "show";
+}
+
+function update_ui(elem) {
+
+    if ( elem.id == "include_object" ) {
+        if ( elem.selectedIndex === 0 ) {
+            document.getElementById("object_material").disabled = true;
+            document.getElementById("shading_type").disabled = true;
+            document.getElementById("intersect_code").checked = false;
+            document.getElementById("intersect_code").disabled = true;
+            document.getElementById("datgui_lib").checked = false;
+            document.getElementById("datgui_lib").disabled = true;
+            document.getElementById("tween_lib").checked = false;
+            document.getElementById("tween_lib").disabled = true;
+            document.getElementById("intersect_code").checked = false;
+            document.getElementById("intersect_code").disabled = true;
+        } else {
+            document.getElementById("object_material").disabled = false;
+            document.getElementById("shading_type").disabled = false;
+            document.getElementById("intersect_code").disabled = false;
+            document.getElementById("datgui_lib").disabled = false;
+            document.getElementById("tween_lib").disabled = false;
+            document.getElementById("intersect_code").disabled = false;
+        }
+    }
+
+    document.getElementById("for_mobile").disabled = true;
+}
+
+function update_scene() {
+    var expression = "(BA)";
+
+    controls.forEach(function(each) {
+
+        var elem = document.getElementById(each.id);
+
+        update_ui(elem);
+
+        if (typeof elem.options !== "undefined") {
+            expression += "(" + each.expr + elem.selectedIndex + ")";
+        }
+
+        if ( elem.checked ) {
+            expression += "(" + each.expr + ")";
+        }
+
+        if ( elem.type === "text" ) {
+            app_title = elem.value;
+        }
+    });
+
+    parent.render_page(expression);
+}
+
+function add_file(zip, cur_file_index, archive_name) {
+
+    JSZipUtils.getBinaryContent(app_files[cur_file_index].dst, function(err, data) {
+        if( err) {
+            console.error("Unable to read source JS file");
+        } else {
+            if ( parent.html_content.indexOf(app_files[cur_file_index].tag) !== -1  ) {
+                console.log("Adding", app_files[cur_file_index].dst, " to the zip file");
+                zip.file(app_files[cur_file_index].dst, data);
+            }
+
+            if ( cur_file_index < app_files.length - 1 ) {
+                add_file(zip, cur_file_index + 1, archive_name);
+            } else {
+                zip.file("index.html", parent.html_content);
+                saveAs(zip.generate({type:"blob"}), archive_name);
+            }
+        }
+    });
+}
+</script>
+</head>
+<body>
+    <div id="column1">
+        <h5>Name of your masterpiece</h5>
+        <input type="text" id="app_name" value="Application Title">
+
+        <h4>Options</h4>
+        <input id="minified" class="css-checkbox" type="checkbox" checked/>
+        <label for="minified" class="css-label">Minified source for 3rd party libs</label>
+
+        <input id="window_size_changing" class="css-checkbox" type="checkbox" checked/>
+        <label for="window_size_changing" class="css-label">Handle window size changing</label>
+
+        <input id="webgl_detector" class="css-checkbox" type="checkbox" checked/>
+        <label for="webgl_detector" class="css-label">Include WebGL Detector code</label>
+
+        <input id="rstats_package" class="css-checkbox" type="checkbox" checked/>
+        <label for="rstats_package" class="css-label">Include <a href="http://spite.github.io/rstats/" target="blank">rStats</a> package</label>
+
+        <input id="full_screen" class="css-checkbox" type="checkbox" />
+        <label for="full_screen" class="css-label">Include full screen control</label>
+
+        <input id="helper_objects" class="css-checkbox" type="checkbox" />
+        <label for="helper_objects" class="css-label">Include helper object geometry</label>
+
+    </div>
+    <div id="column2">
+        <h5>Include object in scene</h5>
+        <select id="include_object">
+        <option>None</option>
+        <option>Box</option>
+        <option>Torus</option>
+        <option selected>Knot</option>
+        <option>Icosahedron</option>
+        </select>
+
+        <h4>Object material</h4>
+        <select id="object_material">
+        <option>Basic</option>
+        <option selected>Lambert</option>
+        <option>Phong</option>
+        <option>Normal</option>
+        </select>
+
+        <h4>Shading type</h4>
+        <select id="shading_type">
+        <option selected>Flat</option>
+        <option>Smooth</option>
+        </select>
+
+        <h4>Add lights to scene</h4>
+        <input id="ambient_light" class="css-checkbox" type="checkbox" checked/>
+        <label for="ambient_light" class="css-label">Ambient</label>
+        <br>
+        <input id="directional_light" class="css-checkbox" type="checkbox" checked />
+        <label for="directional_light" class="css-label">Directional</label>
+        <br>
+        <input id="point_light" class="css-checkbox" type="checkbox" checked/>
+        <label for="point_light" class="css-label">Point</label>
+        <p>
+        <h4>Input model for controls</h4>
+        <select id="input_model">
+        <option value="none">None</option>
+        <option value="trackball" selected>Trackball</option>
+        </select>
+        <p><br>
+    </div>
+    <div id="column3">
+        <h5>Misc code examples</h5>
+        <input id="intersect_code" class="css-checkbox" type="checkbox" />
+        <label for="intersect_code" class="css-label">Object intersection</label>
+        <p>
+        <h4>Misc 3rd party library examples</h4>
+        <input id="datgui_lib" class="css-checkbox" type="checkbox" checked/>
+        <label for="datgui_lib" class="css-label"><a href="https://code.google.com/p/dat-gui/" target="blank">dat.GUI</a> user interface library</label>
+
+        <input id="tween_lib" class="css-checkbox" type="checkbox"/>
+        <label for="tween_lib" class="css-label">Sole's <a href="https://github.com/sole/tween.js/" target="blank">TWEEN</a> library</label>
+        <p>
+        <h4>Platform specific options</h4>
+        <input id="for_mobile" class="css-checkbox" type="checkbox" />
+        <label for="for_mobile" class="css-label">Optimize for mobile devices</label>
+
+        <p>
+        <h4>Help & Credits</h4>
+        <input type="submit" value="Show" id="show_help"><p>
+        <h4>Generate output</h4>
+        <input type="submit" value="Download zip" id="download_zip">
+        <input type="submit" value="Open in JsFiddle" id="open_js_fiddle">
+    </div>
+</body>
+</html>

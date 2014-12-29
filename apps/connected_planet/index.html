@@ -1,0 +1,485 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="description" content="WebGL experiments - Connected Earth experiment">
+		<meta name="keywords" content="callum,chrome,collada,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,shader,spline,three.js,webgl,">
+		<link rel="stylesheet" media="all" href="css/button.css" />
+		<script src="js/three.min.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Tween.js"></script>
+		<script src="js/planet.js"></script>
+		<script src="js/latlng.js"></script>
+		<script src="js/city_locations.js"></script>
+		<script src="js/Stats.js"></script>
+		<style>
+			body {
+				background: #000;
+				padding: 0;
+				margin: 0;
+				color: #fff;
+				font-family:"Lucida Console", Monaco, monospace;
+				text-align:left;
+				overflow: hidden;
+			}
+			#container canvas {
+				background: #000;
+				position: absolute;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				left: 0px;
+			}
+			#help {
+				position: absolute;
+				top: 50%;
+				width: 350px;
+				height: 400px;
+				left: 50%;
+				margin-left: -175px;
+				margin-top: -200px;
+				background-color: rgba(0, 0, 0, 0.7);
+				border-radius: 10px;
+				border: 5px solid #666;
+				padding: 10px;
+				overflow: auto;
+				pointer-events: none;
+			}
+			#controls {
+				position: absolute;
+				top: 8px;
+				width:800px;
+				height: 38px;
+				left: 50%;
+				text-align: center;
+				margin-left: -450px;
+				background-color: rgba(30, 60, 3, 0.7);
+				border-radius: 10px;
+				border: 5px solid #666;
+				padding: 10px;
+				overflow: auto;
+			}
+			h2 {
+				text-align: center;
+				color: #ff9;
+			}
+			a {
+				color: #9f9;
+				text-decoration: none;
+			}
+			.hide {
+				opacity: 0;
+				-webkit-transition: opacity .5s ease-out;
+				-moz-transition: opacity .5s ease-out;
+				-o-transition: opacity .5s ease-out;
+			}
+			.show {
+				opacity: 1;
+				-webkit-transition: opacity .5s ease-out;
+				-moz-transition: opacity .5s ease-out;
+				-o-transition: opacity .5s ease-out;
+			}
+			img.cornered {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				margin: 0;
+			}
+		</style>
+		<title>callum.com - Connected Planet</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+	</head>
+	<script>
+		var planetTilt = latlngDeg2rad(23.5);
+		console.log(planetTilt);
+		var planetRadius = 6378;
+		var rotationSpeed = 0.3;
+		var cloudsScale = 1.02;
+		var height = window.innerHeight;
+		var width = window.innerWidth;
+		var camera, controls, scene, renderer, geometry, meshPlanet, meshClouds;
+		var clock = new THREE.Clock();
+		var cameraZoomFactor = 7;
+		var displayHelp = false;
+		var curZoom = 100;
+		var markerGeom;
+		var markerMaterial;
+		var stats;
+
+		function onWindowResize(event) {
+			width = window.innerWidth;
+			height = window.innerHeight;
+
+			renderer.setSize(width, height);
+
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+
+			controls.screen.width = width;
+			controls.screen.height = height;
+
+			camera.radius = (width + height) / 4;
+		}
+
+		function init() {
+			if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+			scene = new THREE.Scene();
+
+			renderer = new THREE.WebGLRenderer({
+				clearAlpha: 1,
+				clearColor: 0x000000,
+				antialias: true
+			});
+			renderer.setSize(width, height);
+			renderer.sortObjects = true;
+			renderer.autoClear = false;
+			renderer.gammaInput = true;
+			renderer.gammaOutput = true;
+
+			renderer.domElement.style.position = 'absolute';
+			var container = document.getElementById('container');
+			container.appendChild(renderer.domElement);
+
+			camera = new THREE.PerspectiveCamera(25, width / height, 50, 1e7);
+			camera.position.z = planetRadius * cameraZoomFactor;
+			scene.add(camera);
+
+			controls = new THREE.TrackballControls(camera, renderer.domElement);
+			controls.rotateSpeed = 0.3;
+			controls.noZoom = true;
+			controls.noPan = true;
+			controls.staticMoving = false;
+			controls.dynamicDampingFactor = 0.4;
+
+			stats = new Stats();
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.bottom = '0px';
+			stats.domElement.style.right = '0px';
+
+			document.body.appendChild( stats.domElement );
+
+			var dirLight = new THREE.DirectionalLight(0xFFFFFF);
+			dirLight.position.set(1, 0, 1)
+				.normalize();
+			scene.add(dirLight);
+			var camLight = new THREE.DirectionalLight(0xffffff);
+			camera.add(camLight);
+
+			var ambientLight = new THREE.AmbientLight(0x999999);
+			scene.add(ambientLight);
+
+			var planet = new cpPlanet({
+				planet_radius: planetRadius,
+				planet_tilt_rad: planetTilt,
+				planet_cloud_texture: "textures/cloud.png",
+				planet_surface_texture: "textures/earth_surface.jpg",
+				planet_normals_texture: "textures/earth_normals.jpg",
+				planet_specular_texture: "textures/earth_specular.jpg",
+				planet_geom_segments: 64,
+				planet_geom_rings: 64,
+				use_surface_shader: true,
+				create_combined_mesh: false
+			});
+
+			meshPlanet = planet.surface_mesh;
+			scene.add(meshPlanet);
+
+			meshClouds = planet.cloud_mesh;
+			scene.add(meshClouds);
+
+			// markers and tracks
+			var marker_radius = 32;
+			var marker_color = 0xff0000;
+			markerGeom = new THREE.SphereGeometry(marker_radius, 5, 5);
+			markerMaterial = new THREE.MeshPhongMaterial({
+				ambient: 0x030303,
+				color: marker_color,
+				specular: 0x990000,
+				shininess: 80,
+				shading: THREE.SmoothShading
+			});
+
+			// need to update a bunch of stuff when window size changes
+			window.addEventListener('resize', onWindowResize, false);
+		}
+
+		function animate() {
+			requestAnimationFrame(animate);
+
+			var delta = clock.getDelta();
+
+			meshPlanet.rotation.y += rotationSpeed * rotationSpeed * delta;
+			meshClouds.rotation.y += rotationSpeed * 1.25 * rotationSpeed * delta;
+
+			controls.update();
+
+			TWEEN.update();
+
+			stats.update();
+
+			renderer.clear();
+			renderer.render(scene, camera);
+		}
+
+		function addData(locs) {
+
+			var index = Math.floor(Math.random() * locs.length) - 1;
+			var start_lat = locs[index].lat;
+			var start_lng = locs[index].lng;
+
+			var data_size = 30;
+			var start = Math.floor(Math.random() * locs.length) - 1;
+			if (start + data_size > locs.length) {
+				start = locs.length - data_size - 1;
+			}
+
+			var hue = Math.random();
+
+			var i;
+			for (i = start; i < start + data_size; i++) {
+				var obj = locs[i];
+				if (i != index) {
+					addTrack(start_lat, start_lng, obj.lat, obj.lng, planetRadius, hue);
+					addMarker(obj.lat, obj.lng, planetRadius);
+				}
+			}
+		}
+
+		function zoomToStart() {
+			new TWEEN.Tween({
+				scale: 1
+			})
+				.to({
+				scale: 100
+			}, 2500)
+				.easing(TWEEN.Easing.Elastic.InOut)
+				.onUpdate(function () {
+				var true_scale = this.scale / 100;
+				meshPlanet.scale.set(true_scale, true_scale, true_scale);
+				meshClouds.scale.set(true_scale * cloudsScale, true_scale * cloudsScale, true_scale * cloudsScale);
+			})
+				.start();
+		}
+
+		function addMarker(lat, lng, radius) {
+			var marker_mesh = new THREE.Mesh(markerGeom, markerMaterial);
+			var marker_position = latlngPosFromLatLng(lat, lng, radius);
+
+			marker_mesh.position.x = marker_position.x;
+			marker_mesh.position.y = marker_position.y;
+			marker_mesh.position.z = marker_position.z;
+
+			marker_mesh.name = "trackmarker";
+			meshPlanet.add(marker_mesh);
+		}
+
+		function addTrackLine(spline, hue) {
+			var num_control_points = 32;
+			var i;
+			var colors = [];
+			var geometry = new THREE.Geometry();
+			var pos;
+
+			for (i = 0; i < num_control_points; i++) {
+				var index = i / num_control_points;
+				pos = spline.getPoint(index);
+
+				colors[i] = new THREE.Color(0xffffff);
+				colors[i].setHSV(hue, (1.0 - i / num_control_points), 1.0);
+
+				geometry.vertices.push(new THREE.Vector3(pos.x, pos.y, pos.z));
+			}
+			pos = spline.getPoint(1.0);
+			geometry.vertices.push(new THREE.Vector3(pos.x, pos.y, pos.z));
+
+			geometry.colors = colors;
+
+			var material = new THREE.LineBasicMaterial({
+				color: 0xffffff,
+				opacity: 1,
+				linewidth: 2
+			});
+			material.vertexColors = true;
+
+			var line = new THREE.Line(geometry, material);
+			line.name = "trackline";
+			meshPlanet.add(line);
+		}
+
+		function addTrack(start_lat, start_lng, end_lat, end_lng, radius, hue) {
+			var num_control_points = 8;
+			var max_altitude = 500 + Math.random() * 1200;
+
+			var points = [];
+			var i;
+			for (i = 0; i < num_control_points + 1; i++) {
+				var arc_angle = i * 180.0 / num_control_points;
+				var arc_radius = radius + (Math.sin(latlngDeg2rad(arc_angle))) * max_altitude;
+				var latlng = latlngInterPoint(start_lat, start_lng, end_lat, end_lng, i / num_control_points);
+				var pos = latlngPosFromLatLng(latlng.lat, latlng.lng, arc_radius);
+
+				points.push(new THREE.Vector3(pos.x, pos.y, pos.z));
+			}
+
+			var spline = new THREE.SplineCurve3(points);
+
+			addTrackLine(spline, hue);
+		}
+
+		function toggleRotation() {
+			if (rotationSpeed > 0) rotationSpeed = 0.0;
+			else rotationSpeed = 0.3;
+		}
+
+		function zoomCamera(zoom_param) {
+			var minZoom = 20;
+			var maxZoom = 450;
+			var incZoom = (maxZoom - minZoom) / 9;
+			var timeZoom = 400;
+			var startZoom = curZoom;
+			var endZoom;
+
+			if (zoom_param == 1) {
+				endZoom = curZoom + incZoom;
+				if (endZoom > maxZoom) endZoom = maxZoom;
+			} else if (zoom_param == -1) {
+				endZoom = curZoom - incZoom;
+				if (endZoom < minZoom) endZoom = minZoom;
+			} else {
+				endZoom = zoom_param;
+			}
+
+			if (startZoom != endZoom) {
+				new TWEEN.Tween({
+					zoom: startZoom
+				})
+					.to({
+					zoom: endZoom
+				}, timeZoom)
+					.easing(TWEEN.Easing.Back.InOut)
+					.onUpdate(function () {
+					curZoom = this.zoom;
+					var true_scale = this.zoom / 100;
+					meshPlanet.scale.set(true_scale, true_scale, true_scale);
+					meshClouds.scale.set(true_scale * cloudsScale, true_scale * cloudsScale, true_scale * cloudsScale);
+				})
+					.onComplete(function () {
+					curZoom = this.zoom;
+				})
+					.start();
+			}
+		}
+
+		function toggleHelp() {
+			displayHelp = !displayHelp;
+			if (displayHelp) {
+				document.getElementById('help')
+					.style.opacity = 1;
+			} else {
+				document.getElementById('help')
+					.style.opacity = 0;
+			}
+		}
+
+		function resetView() {
+			scene.remove(camera);
+
+			camera = new THREE.PerspectiveCamera(25, width / height, 50, 1e7);
+			camera.position.z = planetRadius * cameraZoomFactor;
+			scene.add(camera);
+
+			controls = new THREE.TrackballControls(camera, renderer.domElement);
+			controls.rotateSpeed = 0.3;
+			controls.noZoom = true;
+			controls.noPan = true;
+			controls.staticMoving = false;
+			controls.dynamicDampingFactor = 0.4;
+
+			zoomCamera(100);
+			clock = new THREE.Clock();
+
+			meshPlanet.rotation.y = 0;
+			meshClouds.rotation.y = 0;
+
+			rotationSpeed = 0.3
+		}
+
+		function addNewData() {
+			addData(locations);
+		}
+
+		var deleteMe = [];
+
+		function newDataCallback(node) {
+			if (node instanceof THREE.Line && node.name == "trackline") {
+				deleteMe.push(node);
+			}
+			if (node instanceof THREE.Mesh && node.name == "trackmarker") {
+				deleteMe.push(node);
+			}
+		}
+
+		function remAllData() {
+			THREE.SceneUtils.traverseHierarchy(scene, newDataCallback);
+
+			for (var each = 0; each < deleteMe.length; ++each) {
+				meshPlanet.remove(deleteMe[each]);
+			}
+		}
+
+		window.onload = function () {
+			if (!Detector.webgl) {
+				Detector.addGetWebGLMessage();
+				return;
+			}
+
+			init();
+
+			var num_new_data_adds = 5;
+			for (var i = 0; i < num_new_data_adds; ++i) {
+				addData(locations);
+			}
+
+			zoomToStart();
+
+			animate();
+		}
+	</script>
+	<body>
+		<div id="container" class="container"></div>
+		<img class="cornered" src="textures/logo.png">
+		<div id="controls" class="show">
+			<div>
+				<a href="#" onClick="toggleRotation();" class="button rosy">Rotation</button></a>
+				<a href="#" onClick="zoomCamera(-1);" class="button blue">Zoom Out</button></a>
+				<a href="#" onClick="zoomCamera(+1);" class="button blue">Zoom In</button></a>
+				<a href="#" onClick="addNewData();" class="button green">Add</button></a>
+				<a href="#" onClick="remAllData();" class="button red">Remove All</button></a>
+				<a href="#" onClick="resetView();" class="button pink">Reset</button></a>
+				<a href="#" onClick="toggleHelp();" class="button orange">Help</button></a>
+			</div>
+		</div>
+		<div id="help" class="hide">
+			<h2>Instructions</h2>
+			<ul>
+				<li><font color="#da5867">Rotation</font> toggles rotation</li>
+				<li><font color="#0095cd">Zoom</font> view in and out</li>
+				<li><font color="#64991e">Add</font> random data sets</li>
+				<li><font color="#d81b21">Remove</font> all data</li>
+				<li><font color="#f895c2">Reset</font> everything</li>
+				<li><font color="#f78d1d">Help</font> toggle</li>
+			</ul>Contact me at <a href="mailto://callum@gmail.com?subject=WebGL">callum@gmail.com</a>.
+			<p>Many thanks to <a href="">Three.js</a>, <a href="">#three.js</a> and the authors of the wealth of example code out there I used to learn from - your generosity is appreciated.<p>
+<font color="#699">Version 0.1.0</font>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Three.js Interactive Template Generator</title>
+        <meta name="description" content="Three.js interactive application template generator">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+        <link href="css/controls.css" rel="stylesheet">
+
+        <style>
+        body {
+            overflow:hidden;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        #output_frame, #control_frame {
+            position:absolute;
+            width:100%;
+            left:0;
+        }
+        #output_frame {
+            top:0px;
+            height:100px;
+        }
+        #control_frame {
+            bottom:0px;
+            height:100px;
+        }
+        #help_and_credits {
+            position:absolute;
+            top:0;
+            left:0;
+            color:#fff;
+            width:100%;
+            height:100%;
+            background-color: #666;
+            z-index: 20;
+        }
+        #help_and_credits_inner {
+            width: 90%;
+            height:90%;
+            overflow: auto;
+            margin: auto;
+            position: absolute;
+            font-size: 1.1em;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background-color: #666;
+            z-index: 21;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        h2 {
+            color:yellow;
+            font-size:1.0em;
+            margin-bottom: 2px;
+        }
+        </style>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-51404170-1', 'callum.com');
+          ga('send', 'pageview');
+        </script>
+        <script type="text/javascript">
+            var content_lines = [];
+            var html_content="";
+
+            document.addEventListener("DOMContentLoaded", init_app, false);
+
+            function init_app() {
+                window.addEventListener('resize', fix_iframes, false);
+
+                document.getElementById("hide_help").addEventListener("click", hide_help, true);
+            }
+
+            function fix_iframes() {
+                var control_frame_elem = document.getElementById("control_frame");
+
+                var controls_height = control_frame_elem.contentWindow.document.body.scrollHeight;
+
+                if ( controls_height === 0 ) {
+                    controls_height = control_frame_elem.contentWindow.document.documentElement.scrollHeight;
+                }
+
+                control_frame_elem.style.height =  controls_height + "px";
+                document.getElementById("output_frame").style.height = (window.innerHeight - controls_height) + "px";
+            }
+
+            function hide_help() {
+                parent.document.getElementById("help_and_credits").className = "hide";
+            }
+
+            function load_template() {
+
+                content_lines = [];
+
+                var template_file = new XMLHttpRequest();
+                template_file.open("GET", "template.txt", false);
+                template_file.onreadystatechange = function ()
+                {
+                    if(template_file.readyState === 4)
+                    {
+                        if(template_file.status === 200 || template_file.status == 0)
+                        {
+                            content_lines = template_file.responseText.split("\n").map(function(line) {
+                                    var field = line.split("\\");
+                                    return {tag: field[0], content: field[1]};
+                            });
+
+                            document.getElementById("control_frame").contentWindow.update_scene();
+                        }
+                    }
+                }
+                template_file.send(null);
+            }
+
+            function render_page(exp) {
+                html_content = "";
+
+                content_lines.forEach(function(entry) {
+
+                    var regex = new RegExp(entry.tag);
+
+                    if ( regex.test( exp ) ) {
+
+                        var line = entry.content;
+
+                        if ( String(entry.content).indexOf("$T") !== -1 ) {
+                            line = line.replace("$T", document.getElementById("control_frame").contentWindow.app_title);
+                        }
+
+                        html_content += line + "\n";
+                    }
+                });
+
+                var old_iframe = document.getElementById('output_frame');
+                old_iframe.parentNode.removeChild(old_iframe);
+
+                var new_iframe = document.createElement('iframe');
+                new_iframe.id = "output_frame";
+                new_iframe.frameBorder=0;
+
+                document.body.appendChild(new_iframe);
+                fix_iframes();  // resizes iframes to fit window
+                new_iframe.contentWindow.document.open()
+                new_iframe.contentWindow.document.write(html_content);
+                new_iframe.contentWindow.document.close()
+            }
+        </script>
+    </head>
+    <body onload="fix_iframes(); load_template();">
+        <div id="help_and_credits" class="hide">
+        <div id="help_and_credits_inner">
+<h2>Purpose:</h2>
+I found myself needing an app template each time I wanted to create a new Three.js experiment. Previously, I would duplicate an old piece of code and use it as the basis for something new. However, with this approach, I would often end up copying over old, unnecessary code and find myself having to delete chunks of unwanted functionality. I did make a command line <a href="https://github.com/callumprentice/ThreeJsAppTemplate" target="blank">Python based generator</a> but it was a bit too limited and obviously, didn't offer any kind of visual feedback as you made changes to the options. So, I put this together to help me and thought maybe other amateur three.js hackers like myself might find it useful too.
+
+<h2>How it works:</h2>
+There is a <a href="http://callum.com/apps/threejs_app_template_interactive/template.txt" target="blank">template file</a> that describes all possible source options and has a regex for each line. When you change the UI, a signature is created that represent the selected options. The signature is evaluated against the regex for each line to test if the line needs to be included in the output. Seems to work pretty well and it's quite easy to add new options.
+
+<h2>Recent changes:</h2>
+Sounds a bit grandiose for what amounts to a quick hack but these are some things I'd like to add in the future when my absurdly cute 2 year old daughter allows me some time :)
+<ul>
+<li>Added feature to send code to JS Fiddle (you have to hit Run button after - bug??)</li>
+<li>Added option to include helper geometry like bounding box, light helpers, normal markers etc.</li>
+</ul>
+
+<h2>Future plans:</h2>
+Sounds a bit grandiose for what amounts to a quick hack but these are some things I'd like to add in the future when my absurdly cute 2 year old daughter allows me some time :)
+
+<ul>
+<li>Fix the JS Fiddle code so dat.GUI works properly</li>
+<li>Example objects constructed using various kinds of buffer geometry</li>
+<li>Other third party APIs and library like <a href="http://www.clicktorelease.com/tmp/wagner/" target="blank">WAGNER</a></li>
+<li>Ability to select older or newer (development) versions of three.js (The <a href="https://github.com/callumprentice/ThreeJsAppTemplate" target="blank">Python script</a> had this feature but I never actually used it so maybe it's not useful)</li>
+<li>Enable the mobile / iOS 8 optimizations check box once I figure out what they are :)</li>
+<li>Test on more browsers/platforms. I use Chrome on Windows and OS X so I was able to try it there but I'd like to make sure it behaves okay on other OSs like Linux and other browsers like Firefox.</li>
+</ul>
+
+<h2>Contact:</h2>
+
+Find me  <a href="http://callum.com" target="blank">here</a> for questions, issues or feedback.
+
+<h2>Credits:</h2>
+&#9679;
+<a href="http://threejs.org/" target="blank">three.js</a>  &#9679;
+<a href="http://spite.github.io/rstats/" target="blank">rStats</a>  &#9679;
+<a href="https://github.com/sole/tween.js/" target="blank">Sole/tween.js</a>  &#9679;
+<a href="http://stuartk.com/jszip" target="blank">JSZip</a>  &#9679;
+<a href="https://github.com/eligrey/FileSaver.js/" target="blank">Filesaver.js</a>  &#9679;
+<a href="https://code.google.com/p/dat-gui/" target="blank">dat.gui</a>  &#9679;
+
+<h2>Alternatives:</h2>
+
+Jerome Etienne made some similar in 2012 that looks very neat. Take a look <a href="http://jeromeetienne.github.io/threejsboilerplatebuilder/" target="blank">here</a> although it seems to be broken right now.
+<p>
+                <input type="submit" value="Close" id="hide_help">
+            </div>
+        </div>
+        <iframe id="output_frame" frameBorder="0"></iframe>
+        <iframe id="control_frame" src="controls.html" frameBorder="0"></iframe>
+    </body>
+</html>

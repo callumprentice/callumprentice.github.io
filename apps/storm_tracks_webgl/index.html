@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Storm Tracks WebGL
+        </title>
+        <meta charset="utf-8" />
+        <meta name="description" content="WebGL experiments - Storm Tracks WebGL">
+        <meta name="keywords" content="callum,chrome,storm,tracker,tracks,typhoon,hurricane,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,three.js,webgl,">
+        <link type="image/ico" rel="icon" href="favicon.ico">
+        <link type="text/css" rel="stylesheet" href="css/main.css" />
+        <link type="text/css" rel="stylesheet" href="css/filterbox.css" />
+        <link type="text/css" rel="stylesheet" href="css/jqrangeslider-theme.css" />
+        <script type="text/javascript" src="js/storms.js"></script>
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="js/jQDateRangeSlider-min.js"></script>
+        <script type="text/javascript" src="js/three.min.59.js"></script>
+        <script type="text/javascript" src="js/trackballcontrols.js"></script>
+        <script type="text/javascript" src="js/globe.js"></script>
+        <script type="text/javascript" src="js/filterbox.js"></script>
+        <script type="text/javascript" src="js/tween.min.js"></script>
+        <script type="text/javascript" src="js/rStats.js"></script>
+        <script type="text/javascript" src="js/rStats.extras.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+    </head>
+    <body>
+        <div style="display:none">
+            <canvas id="canvas_texture" style=""></canvas>
+        </div>
+        <div style="display:none">
+            <canvas id="backing_canvas_texture" style=""></canvas>
+        </div>
+
+        <div id="filter-box" class="show">
+
+            <div id="filter-box-date-slider-container" class="show">
+                <div id="filter-box-date-slider"></div>
+            </div>
+            <div id="filter-box-set-date-range" class="show">
+                Date range (<a href="#" class="pagelink" onClick="var d=new Date();d.setFullYear(d.getFullYear()-1);setDateRange(d,new Date());">Past year</a>, Last
+                <a href="#" class="pagelink" onClick="var d=new Date();d.setFullYear(d.getFullYear()-10);setDateRange(d,new Date());">10</a>,
+                <a href="#" class="pagelink" onClick="var d=new Date();d.setFullYear(d.getFullYear()-20);setDateRange(d,new Date());">20</a>,
+                <a href="#" class="pagelink" onClick="var d=new Date();d.setFullYear(d.getFullYear()-50);setDateRange(d,new Date());">50</a>,
+                <a href="#" class="pagelink" onClick="var d=new Date();d.setFullYear(d.getFullYear()-100);setDateRange(d,new Date());">100</a> years,
+                <a href="#" class="pagelink" onClick="setDateRange(new Date(1848,0,1),new Date());">All time</a>)
+            </div>
+
+            <div id="filter-box-windspeed-slider-container" class="show">
+                <div id="filter-box-windspeed-slider"></div>
+            </div>
+            <div id="filter-box-set-windspeed-range" class="show">
+                Wind speed (<a href="#" class="pagelink" onClick="setWindSpeedRange(0,38);">TS</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(39,73);">TD</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(74,95);">1</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(96,110);">2</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(111,129);">3</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(130,156);">4</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(157,180);">5</a>,
+                <a href="#" class="pagelink" onClick="setWindSpeedRange(0,180);">ALL</a>)
+            </div>
+
+            <div id="filter-box-search-container" class="show">
+                <input type="search" id="filter-storms" placeholder="Name of storm" results="5" autosave="1940304" onSearch="filterStorms();">
+            </div>
+            <div id ="filter-box-search-title" class="show">
+                Filter by name
+            </div>
+
+            <div id="filter-box-options-auto-spin" class="show">
+                <a href="#" onClick="toggleSpin();" class="button blue">Spin</button></a>
+            </div>
+            <div id="filter-box-options-draw-guides" class="show">
+                <a href="#" onClick="toggleGuides();" class="button blue">Guides</button></a>
+            </div>
+            <div id="filter-box-options-help" class="show">
+                <a href="#" onClick="toggleHelp();" class="button blue">Help</button></a>
+            </div>
+            <div id="controlsNameOptionsStormCount" class="show">
+                tracks
+            </div>
+        </div>
+        <div id="controlsButton" class="show">
+            <a href="#" onClick="toggleControlsBox();" class="button blue">Controls</button></a>
+        </div>
+        <div id="help" class="hide">
+            <h2>Storm Tracks WebGL - Instructions</h2>
+            Interactive map of hurricanes, typhoons, cyclones and tropical storm tracks from 1848 to the present day.<p> Tracks can be filtered by opening the <font color="#66a0d8">Controls</font> and modifying the settings.
+            <ul>
+                <li>Use the Date Range sliders and presets to filter by date</li>
+                <li>Use the Wind Speed sliders and presets to filter by storm wind speed in knots</li>
+                <li>Enter the name of a storm to filter by name</li>
+                <li>Use the <font color="#66a0d8">Guides</font> button to display latitude/longitude guide lines including the equator</li>
+                <li>Use the <font color="#66a0d8">Spin</font> button to toggle automatic rotation of the globe. It will stop spinning when you interact with it</li>
+            </ul>
+            <ul>
+                <li>Spin the globe by dragging with the left mouse button down</li>
+                <li>Zoom in and out using the mouse wheel or by holding down the <strong>S</strong> key and moving the mouse</li>
+            </ul>
+            Other features in progress include hover over storm for name, links to storm Wiki pages, videos etc., better storm track rendering, animations, performance improvements<p>
+            Questions or feedback? Contact me at <a target="_new" href="mailto://callum@gmail.com?subject=WebGL">callum@gmail.com</a>.
+            <p>Many thanks to <a target="_new" href="https://github.com/mrdoob/three.js/">Three.js</a>, the authors of the wealth of WebGL examples out there that I learned from and the <a target="_new" href="http://www.noaa.gov/">NOAA</a> for providing a great source of data.<p><font color="#699">Version 0.2.0</font>
+        </div>
+    </body>
+</html>

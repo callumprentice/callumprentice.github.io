@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body {
+				background-color: #003;
+				margin: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+        <script src="js/three.min.js"></script>
+        <script src="js/Detector.js"></script>
+        <script src="js/TrackballControls.js"></script>
+        <script src="js/Stats.js"></script>
+		<script>
+			var camera, scene, renderer;
+			var controls, stats;
+			var mesh;
+
+			init();
+			animate();
+
+			function init() {
+				if (!Detector.webgl)
+					Detector.addGetWebGLMessage();
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.autoClear = true;
+				renderer.antiAlias = true;
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+				camera.position.z = 500;
+
+				var ambient_light = new THREE.AmbientLight(0xcccccc);
+				scene.add(ambient_light);
+
+				var num_lines = 100000;
+
+				var geometry = new THREE.BufferGeometry();
+				var material = new THREE.LineBasicMaterial({ vertexColors: true, linewidth:16 });
+
+				geometry.attributes = {
+					position: {
+						itemSize: 3,
+						array: new Float32Array(num_lines * 6),
+						numItems: num_lines * 6
+					},
+					color: {
+						itemSize: 3,
+						array: new Float32Array(num_lines * 6),
+						numItems: num_lines * 6
+					}
+				};
+
+				var positions = geometry.attributes.position.array;
+				var colors = geometry.attributes.color.array;
+
+				var radius = 200;
+
+				for ( var i = 0; i < num_lines; i += 2 ) {
+
+					var lat = Math.random() * 360 - 180;
+					var lng = Math.random() * 360 - 180;
+
+					var phi = (90 - lat) * Math.PI / 180;
+					var theta = (360 - lng) * Math.PI / 180;
+
+					var scale = 1.0 + Math.random()/5.0;
+					var x = radius * scale * Math.sin(phi) * Math.cos(theta);
+					var y = radius * scale * Math.cos(phi);
+					var z = radius * scale * Math.sin(phi) * Math.sin(theta);
+
+					positions[ ( i + 0 ) * 3 + 0 ] = x;
+					positions[ ( i + 0 ) * 3 + 1 ] = y;
+					positions[ ( i + 0 ) * 3 + 2 ] = z;
+
+					positions[ ( i + 1 ) * 3 + 0 ] = 0;
+					positions[ ( i + 1 ) * 3 + 1 ] = 0;
+					positions[ ( i + 1 ) * 3 + 2 ] = 0;
+
+					colors[ ( i + 0 ) * 3 + 0 ] = ( x / radius ) + 0.5;
+					colors[ ( i + 0 ) * 3 + 1 ] = ( y / radius ) + 0.5;
+					colors[ ( i + 0 ) * 3 + 2 ] = ( z / radius ) + 0.5;
+
+					colors[ ( i + 1 ) * 3 + 0 ] = ( x / radius ) + 0.0;
+					colors[ ( i + 1 ) * 3 + 1 ] = ( y / radius ) + 0.0;
+					colors[ ( i + 1 ) * 3 + 2 ] = ( z / radius ) + 0.0;
+				}
+
+				geometry.computeBoundingSphere();
+
+				mesh = new THREE.Line( geometry, material );
+				scene.add(mesh)
+
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = 0.4;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = false;
+				controls.dynamicDampingFactor = 0.4;
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				stats.domElement.style.zIndex = 100;
+				document.body.appendChild(stats.domElement);
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+
+				controls.update();
+				stats.update();
+
+				mesh.rotation.x = Date.now() * 0.0005;
+				mesh.rotation.y = Date.now() * 0.0005;
+
+				renderer.render(scene, camera);
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Double Pendulum</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <style type="text/css">
+        body {
+            background-color: #000;
+            font-family: courier;
+            margin: 0;
+            overflow: hidden;
+        }
+        a {
+            color:#ff6666;
+            text-decoration: none;
+        }
+        #title {
+            position: absolute;
+            left: 8px;
+            padding:8px;
+            width: 300px;
+            top: 8px;
+            text-align: left;
+            z-index: 10;
+            font-size: 1.3em;
+            color: #66ff66;
+            border-radius:10px;
+            background-color: rgba(100,100,100,0.7);
+        }
+    </style>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/dat.gui.min.js"></script>
+    <script type="text/javascript">
+        var camera, scene, renderer;
+        var cameraCube, sceneCube;
+        var sphere_1_mesh = 0;
+        var sphere_2_mesh = 0;
+        var cylinder_mesh_1 = 0;
+        var cylinder_mesh_2 = 0;
+
+        var mouse_x = 0;
+        var mouse_y = 0;
+
+        var mass_1 = 30.0;
+        var mass_2 = 20.0;
+        var theta_1 = 30 / 180 * Math.PI;
+        var theta_2 = 45 / 180 * Math.PI;
+        var d2_theta1 = 0;
+        var d2_theta2 = 0;
+        var d_theta1 = 0;
+        var d_theta2 = 0;
+        var length_1 = 8000;
+        var length_2 = 2000;
+
+        var g = 9.8;
+        var time = 0.5;
+
+        document.addEventListener("DOMContentLoaded", start_app, false);
+
+        function start_app() {
+            init();
+            animate();
+        }
+
+        function init() {
+            if (! Detector.webgl) {
+                Detector.addGetWebGLMessage();
+            }
+
+            renderer = new THREE.WebGLRenderer({
+                antialias: true
+            });
+            renderer.setClearColor(0x000000, 1.0);
+            renderer.autoClear = false;
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000);
+            camera.position.z = 6500;
+
+            cameraCube = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100000);
+
+            scene = new THREE.Scene();
+            sceneCube = new THREE.Scene();
+
+            var geometry = new THREE.SphereGeometry(100, 32, 16);
+
+            var path = "textures/";
+            var format = '.png';
+            var urls = [
+                path + 'px' + format, path + 'nx' + format,
+                path + 'py' + format, path + 'ny' + format,
+                path + 'pz' + format, path + 'nz' + format
+            ];
+
+            var textureCube = THREE.ImageUtils.loadTextureCube(urls);
+
+            var material_1 = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                envMap: textureCube
+            });
+            sphere_mesh_1 = new THREE.Mesh(geometry, material_1);
+            sphere_mesh_1.position.x = sphere_mesh_1.position.y = sphere_mesh_1.position.z = 0;
+            sphere_mesh_1.scale.x = sphere_mesh_1.scale.y = sphere_mesh_1.scale.z = 5;
+            scene.add(sphere_mesh_1);
+
+            var material_2 = new THREE.MeshBasicMaterial({
+                color: 0xff9999,
+                envMap: textureCube
+            });
+            sphere_mesh_2 = new THREE.Mesh(geometry, material_2);
+            sphere_mesh_2.position.x = sphere_mesh_2.position.y = sphere_mesh_2.position.z = 0;
+            sphere_mesh_2.scale.x = sphere_mesh_2.scale.y = sphere_mesh_2.scale.z = 5;
+            scene.add(sphere_mesh_2);
+
+            var cylinder_material = new THREE.MeshBasicMaterial({
+                color: 0x00ff00,
+                envMap: textureCube
+            });
+
+            var cylinder_geometry_1 = new THREE.CylinderGeometry(100, 100, length_1, 50, 50, false) ;
+            cylinder_mesh_1 = new THREE.Mesh( cylinder_geometry_1, cylinder_material ) ;
+            cylinder_geometry_1.applyMatrix( new THREE.Matrix4().makeTranslation(0, -length_1/2, 0) );
+            scene.add(cylinder_mesh_1);
+
+            var cylinder_geometry_2 = new THREE.CylinderGeometry(100, 100, length_2, 50, 50, false) ;
+            cylinder_mesh_2 = new THREE.Mesh( cylinder_geometry_2, cylinder_material ) ;
+            cylinder_geometry_2.applyMatrix( new THREE.Matrix4().makeTranslation(0, -length_2/2, 0) );
+            scene.add(cylinder_mesh_2);
+
+            var shader = THREE.ShaderLib["cube"];
+            shader.uniforms["tCube"].value = textureCube;
+            var material = new THREE.ShaderMaterial({
+                fragmentShader: shader.fragmentShader,
+                vertexShader: shader.vertexShader,
+                uniforms: shader.uniforms,
+                depthWrite: false,
+                side: THREE.BackSide
+            });
+
+            mesh = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), material);
+            sceneCube.add(mesh);
+
+            var gui = new dat.GUI();
+
+            gui.add(this, 'mass_1', 1, 50).name("Mass 1").onChange(function (value) {
+                 d2_theta1 = d2_theta2 = d_theta1 = d_theta2 = 0;
+            });
+            gui.add(this, 'mass_2', 1, 50).name("Mass 2").onChange(function (value) {
+                 d2_theta1 = d2_theta2 = d_theta1 = d_theta2 = 0;
+            });
+            gui.add(this, 'theta_1', -90 / 180 * Math.PI, 90 / 180 * Math.PI).name("Theta 1").onChange(function (value) {
+                 d2_theta1 = d2_theta2 = d_theta1 = d_theta2 = 0;
+            });
+            gui.add(this, 'theta_2', -90 / 180 * Math.PI, 90 / 180 * Math.PI).name("Theta 2").onChange(function (value) {
+                 d2_theta1 = d2_theta2 = d_theta1 = d_theta2 = 0;
+            });
+
+            window.addEventListener('resize', onWindowResize, false);
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            cameraCube.aspect = window.innerWidth / window.innerHeight;
+            cameraCube.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            mouse_x = (event.clientX - window.innerWidth / 2) * 10;
+            mouse_y = (event.clientY - window.innerHeight / 2) * 10;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+            update_physics();
+
+            var top_offset = length_1;
+
+            if ( sphere_mesh_1 ) {
+                sphere_mesh_1.position.x = length_1 * Math.sin(theta_1);
+                sphere_mesh_1.position.y = top_offset - length_1 * Math.cos(theta_1);
+                sphere_mesh_1.scale.x = sphere_mesh_1.scale.y = sphere_mesh_1.scale.z = mass_1 / 5.0;
+            }
+
+            if ( sphere_mesh_2 ) {
+                sphere_mesh_2.position.x = length_1 * Math.sin(theta_1) + length_2 * Math.sin(theta_2);
+                sphere_mesh_2.position.y = top_offset - ( length_1 * Math.cos(theta_1) + length_2 * Math.cos(theta_2) );
+                sphere_mesh_2.scale.x = sphere_mesh_2.scale.y = sphere_mesh_2.scale.z = mass_2 / 5.0;
+            }
+
+            cylinder_mesh_1.position.x = 0;
+            cylinder_mesh_1.position.y = top_offset;
+            cylinder_mesh_1.position.z = 0;
+            cylinder_mesh_1.rotation.z = theta_1;
+
+            cylinder_mesh_2.position.x = sphere_mesh_1.position.x;
+            cylinder_mesh_2.position.y = sphere_mesh_1.position.y;
+            cylinder_mesh_2.position.z = sphere_mesh_1.position.z;
+            cylinder_mesh_2.rotation.z = theta_2;
+
+            camera.position.x += (mouse_x - camera.position.x) * 0.05;
+            camera.position.y += (-mouse_y - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            cameraCube.rotation.copy(camera.rotation);
+
+            renderer.render(sceneCube, cameraCube);
+            renderer.render(scene, camera);
+        }
+
+        function update_physics() {
+            mu = 1 + mass_1 / mass_2;
+
+            d2_theta1 = (g * (Math.sin(theta_2) * Math.cos(theta_1 - theta_2) - mu * Math.sin(theta_1)) - (length_2 * d_theta2 * d_theta2 + length_1 * d_theta1 * d_theta1 * Math.cos(theta_1 - theta_2)) * Math.sin(theta_1 - theta_2)) / (length_1 * (mu - Math.cos(theta_1 - theta_2) * Math.cos(theta_1 - theta_2)));
+            d2_theta2 = (mu * g * (Math.sin(theta_1) * Math.cos(theta_1 - theta_2) - Math.sin(theta_2)) + (mu * length_1 * d_theta1 * d_theta1 + length_2 * d_theta2 * d_theta2 * Math.cos(theta_1 - theta_2)) * Math.sin(theta_1 - theta_2)) / (length_2 * (mu - Math.cos(theta_1 - theta_2) * Math.cos(theta_1 - theta_2)));
+
+            d_theta1 += d2_theta1 * time;
+            d_theta2 += d2_theta2 * time;
+
+            theta_1 += d_theta1 * time;
+            theta_2 += d_theta2 * time;
+        }
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-51404170-1', 'callum.com');
+      ga('send', 'pageview');
+    </script>
+    </head>
+    <body>
+     <div id="title">Double Pendulum (mashup of <a target="blank" href="http://threejs.org/examples/webgl_materials_cubemap_balls_reflection.html">this</a> and <a target="blank" href="http://www.physicsandbox.com/projects/double-pendulum.html">this</a>)<br><a target="blank" href="http://www.callum.com">Back</a> to home page</div>
+    </body>
+</html>

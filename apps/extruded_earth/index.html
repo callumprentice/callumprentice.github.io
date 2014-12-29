@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Extruded Earth</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://github.com/callumprentice/ThreeJsAppTemplate">
+        <style type="text/css">
+            body { margin: 0; overflow: hidden; }
+        </style>
+    </head>
+    <body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+        <script type="text/javascript" src="js/three.r66/three.min.js"></script>
+        <script type="text/javascript" src="js/three.r66/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/dat.gui.js"></script>
+        <script type="text/javascript" src="js/countries.geo.json"></script>
+        <script type="text/javascript">
+            var camera, scene, renderer, controls, root_object = 0;
+            var uniform_color = false, uniform_height = false, extrusion_amount = 5.0;
+
+            init();
+            animate();
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({
+                    antialias: true
+                });
+                renderer.setClearColor(0x000000, 1.0);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+                camera.position.z = 400;
+                camera.position.y = 400;
+
+                var light = new THREE.DirectionalLight(0xffffff);
+                light.position.set(1, 0, 0);
+                scene.add(light);
+                var light2 = new THREE.DirectionalLight(0xffffff);
+                light2.position.set(0, 0, 1);
+                scene.add(light2);
+
+                var gui = new dat.GUI();
+                gui.add(this, 'uniform_color', false)
+                    .name("Uniform Color")
+                    .onChange( function(value) {
+                        add_all_countries();
+                    });
+                gui.add(this, 'uniform_height', false)
+                    .name("Uniform Height")
+                    .onChange( function(value) {
+                        add_all_countries();
+                    });
+                gui.add(this, 'extrusion_amount', 1, 40.0).name("Extrusion Amount")
+                    .onFinishChange( function(value) {
+                        add_all_countries();
+                    });
+
+                var radius = 300;
+                var segments = 128;
+                var rings = 128;
+                var geometry = new THREE.SphereGeometry(radius, segments, rings);
+                material_map = THREE.ImageUtils.loadTexture('textures/sea_texture.jpg');
+                material_map.wrapS = THREE.RepeatWrapping;
+                material_map.wrapT = THREE.RepeatWrapping;
+                material_map.repeat.set(8, 8);
+                material = new THREE.MeshPhongMaterial({
+                    map: material_map,
+                    color: 0x3366aa
+                });
+                mesh = new THREE.Mesh(geometry, material);
+                scene.add(mesh);
+
+                add_all_countries();
+
+                controls = new THREE.TrackballControls(camera, renderer.domElement);
+                window.addEventListener('resize', onWindowResize, false);
+            }
+
+            function add_country(shape_points) {
+                var shape = new THREE.Shape(shape_points);
+                var shape_geom;
+                var inner_radius = 300.0;
+                var outer_radius = 305.0;
+
+                shape_geom = shape.extrude({
+                    amount: outer_radius - inner_radius,
+                    bevelEnabled: false
+                });
+
+                var offset = 0;
+                if ( ! uniform_height )
+                     offset = Math.random() * extrusion_amount;
+
+                shape_geom.vertices.forEach(function (vert, index) {
+                    var radius = 0.0;
+                    if (index < shape_geom.vertices.length / 2) {
+                        radius = inner_radius;
+                    } else {
+                        radius = inner_radius + extrusion_amount + offset;
+                    }
+                    var phi = (90.0 - vert.y) * Math.PI / 180.0;
+                    var theta = (360.0 - vert.x) * Math.PI / 180.0;
+                    vert.x = radius * Math.sin(phi) * Math.cos(theta);;
+                    vert.y = radius * Math.cos(phi);;
+                    vert.z = radius * Math.sin(phi) * Math.sin(theta);;
+                });
+
+                var color = new THREE.Color(0xaa9933);
+                if (! uniform_color)
+                    color.setHSL(Math.random(),0.8,0.8 );
+
+                var shape_material = new THREE.MeshPhongMaterial({
+                    color: color,
+                    side: THREE.DoubleSide
+                });
+                var shape_mesh = new THREE.Mesh(shape_geom, shape_material);
+                root_object.add(shape_mesh);
+            }
+
+            function add_all_countries() {
+
+                if ( root_object ) {
+                    scene.remove(root_object);
+                }
+
+                root_object = new THREE.Object3D();
+                scene.add(root_object);
+
+                countries.features.forEach(function (country) {
+                    if (country.geometry.coordinates.length === 1) {
+                        var shape_points = [];
+                        country.geometry.coordinates[0].forEach(function (points) {
+                            shape_points.push(new THREE.Vector2(points[0], points[1]));
+                        });
+                        add_country(shape_points);
+                    } else {
+                        country.geometry.coordinates.forEach(function (coord_set) {
+                            if (coord_set.length == 1) {
+                                var shape_points = [];
+                                coord_set[0].forEach(function (points) {
+                                    shape_points.push(new THREE.Vector2(points[0], points[1]));
+                                });
+                                add_country(shape_points);
+                            } else {
+                                var shape_points = [];
+                                coord_set.forEach(function (points) {
+                                    shape_points.push(new THREE.Vector2(points[0], points[1]));
+                                });
+                                add_country(shape_points);
+                            }
+                        });
+                    }
+                });
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+        </script>
+    </body>
+</html>

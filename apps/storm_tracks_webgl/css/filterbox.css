@@ -1,0 +1,138 @@
+a.pagelink:active {
+color:#cfc;
+text-decoration:none;
+}
+
+a.pagelink:hover {
+color:#ff6;
+text-decoration:none;
+}
+
+a.pagelink:link,a.pagelink:visited {
+color:#ffc;
+text-decoration:none;
+}
+
+input[type=search] {
+cursor:pointer;
+display:block;
+font-size:16px;
+width:100%;
+}
+
+#filter-box {
+-moz-user-select:none;
+-webkit-user-select:none;
+background-color:rgba(30,60,63,0.9);
+border:none;
+border-radius:10px;
+font-family:"Lucida Console", Monaco, monospace;
+height:224px;
+left:50%;
+margin-left:-415px;
+overflow:none;
+padding:0 4px 4px;
+position:absolute;
+top:8px;
+width:800px;
+z-index:100;
+}
+
+#filter-box-date-slider-container {
+height:32px;
+left:50%;
+margin-left:-390px;
+position:absolute;
+top:50px;
+width:780px;
+}
+
+#filter-box-set-date-range {
+color:#fff;
+height:20px;
+left:50%;
+margin-left:-390px;
+position:absolute;
+text-align:center;
+top:84px;
+width:780px;
+}
+
+#filter-box-windspeed-slider-container {
+height:32px;
+left:16px;
+position:absolute;
+top:160px;
+width:440px;
+}
+
+#filter-box-set-windspeed-range {
+color:#fff;
+height:20px;
+left:18px;
+position:absolute;
+text-align:left;
+top:196px;
+width:440px;
+}
+
+#filter-box-search-container {
+height:32px;
+left:480px;
+position:absolute;
+text-align:left;
+top:164px;
+width:160px;
+}
+
+#filter-box-search-title {
+color:#fff;
+height:20px;
+left:480px;
+position:absolute;
+text-align:left;
+top:196px;
+width:160px;
+}
+
+#filter-box-options-draw-guides {
+color:#fff;
+height:32px;
+left:686px;
+position:absolute;
+text-align:left;
+top:152px;
+width:180px;
+}
+
+#filter-box-options-auto-spin {
+color:#fff;
+height:32px;
+left:686px;
+position:absolute;
+text-align:left;
+top:120px;
+width:180px;
+}
+
+#filter-box-options-help {
+color:#fff;
+height:32px;
+left:686px;
+position:absolute;
+text-align:left;
+top:184px;
+width:180px;
+}
+
+#controlsNameOptionsStormCount
+{
+    font-size: 90%;
+    position:absolute;
+    color:#66a0d8;
+    top:120px;
+    width:140px;
+    height:32px;
+    left:480px;
+    text-align:left;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <title>Sphere / Ray intersection</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://github.com/callumprentice/ThreeJsAppTemplate">
+        <style type="text/css">
+            body {
+                background-color: #000;
+                color: #ff0;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+    </head>
+    <body>
+        <script type="text/javascript" src="three.r63.min.js"></script>
+
+        <script type="text/javascript">
+        var camera, scene, renderer;
+        var mesh, helper, projector;
+
+        init();
+        animate();
+
+        function init() {
+            renderer = new THREE.WebGLRenderer({ antialias: true});
+            renderer.setClearColor(0x000066, 1.0);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 600);
+            camera.position.z = 500;
+            camera.lookAt(new THREE.Vector3(0, 0, 0));
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            projector = new THREE.Projector();
+
+            var radius = 200;
+            var segments = 128;
+            var rings = 128;
+            var geometry = new THREE.SphereGeometry(radius, segments, rings);
+
+            material = new THREE.MeshNormalMaterial();
+            mesh = new THREE.Mesh(geometry, material);
+
+            scene.add(mesh);
+
+            var helper_geometry = new THREE.CylinderGeometry( 0, 20, 100, 3 );
+            helper_geometry.applyMatrix( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
+            helper = new THREE.Mesh( helper_geometry, new THREE.MeshNormalMaterial() );
+            scene.add( helper );
+
+            renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            camera.updateProjectionMatrix();
+        }
+
+        function onDocumentMouseMove(event) {
+
+            event.preventDefault();
+
+            var mouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
+            var mouseY = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+            var vector = new THREE.Vector3( mouseX, mouseY, -1);
+
+            projector.unprojectVector( vector, camera );
+
+            var raycaster = new THREE.Raycaster(camera.position, vector.sub( camera.position ).normalize());
+
+            var intersects = raycaster.intersectObject(mesh);
+            if ( intersects.length > 0 ) {
+                helper.position.set( 0, 0, 0 );
+                helper.lookAt( intersects[ 0 ].face.normal );
+                helper.position.copy( intersects[ 0 ].point );
+            }
+            else {
+                helper.position.set( 0, 0, 0 );
+            }
+            console.log("Sampling at ", mouseX, ", ", mouseY, " - intersects = ", intersects);
+        }
+        </script>
+    </body>
+</html>
+

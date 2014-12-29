@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="description" content="WebGL experiments - Collada duck laoder">
+		<meta name="keywords" content="callum,chrome,collada,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,shader,spline,three.js,webgl,">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<title>callum.com - Collada Duck</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/ColladaLoader.js"></script>
+		<script src="js/Stats.js"></script>
+		<script>
+			var camera, scene, renderer, controls, stats, dae;
+
+			function init() {
+				if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.autoClear = true;
+				renderer.antiAlias = true;
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+				camera.position.z = 500;
+
+				var ambient_light = new THREE.AmbientLight(0xCCCCCC);
+				scene.add(ambient_light);
+
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = 0.4;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = false;
+				controls.dynamicDampingFactor = 0.4;
+				controls.minDistance = 300;
+				controls.maxDistance = 1600;
+				controls.keys = [65, 83, 77];
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				document.body.appendChild( stats.domElement );
+
+				load("models/duck.dae");
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+				controls.update();
+				stats.update();
+				dae.rotation.x = Date.now() * 0.00004;
+				dae.rotation.y = Date.now() * 0.00004;
+				dae.rotation.z = Date.now() * 0.00004;
+				renderer.render(scene, camera);
+			}
+
+			function load(filename) {
+				var loader = new THREE.ColladaLoader();
+				loader.load(filename, function (collada) {
+					dae = collada.scene;
+					dae.position.x = dae.position.y = dae.position.z = 0.0;
+					dae.scale.x = dae.scale.y = dae.scale.z = 0.2;
+					scene.add(dae);
+					animate();
+				});
+			}
+			init();
+		</script>
+	</body>
+	<div id="instructions"><em>Collada duck</em> - Mouse rotates plus (S)cale / (M)ove</div>
+</html>

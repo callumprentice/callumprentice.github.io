@@ -1,0 +1,318 @@
+BA\<!DOCTYPE html>
+BA\<html>
+BA\    <head>
+BA\    <title>$T</title>
+BA\    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+BA\    <meta name="Generator" content="https://callum.com">
+BA\    <style type="text/css">
+BA\        body {
+BA\            background-color: #000;
+BA\            font-family: courier;
+BA\            margin: 0;
+BA\            overflow: hidden;
+BA\        }
+FS\        a {
+FS\            text-decoration: none;
+FS\            color: yellow;
+FS\        }
+BA\        #title {
+BA\            position: absolute;
+BA\            left: 0px;
+BA\            width: 100%;
+BA\            top: 8px;
+BA\            text-align: center;
+BA\            z-index: 10;
+BA\            font-size: 1.5em;
+BA\            color: #0f0;
+BA\            pointer-events:none;
+BA\        }
+FS\        #fs_control {
+FS\            position: absolute;
+FS\            right: 8px;
+FS\            bottom: 8px;
+FS\            z-index: 10;
+FS\        }
+IC\        #debug_output {
+IC\            position: absolute;
+IC\            left: 8px;
+IC\            bottom: 8px;
+IC\            z-index: 10;
+IC\            color: orange;
+IC\        }
+BA\    </style>
+^(?=.*BA)(?=^(?:(?!MI).)*$).*$\    <script type="text/javascript" src="js/three.js"></script>
+((BA).*MI)|(MI.*(BA))\    <script type="text/javascript" src="js/three.min.js"></script>
+RS\    <script type="text/javascript" src="js/rStats.js"></script>
+WD\    <script type="text/javascript" src="js/Detector.js"></script>
+IM1\    <script type="text/javascript" src="js/TrackballControls.js"></script>
+^(?=.*TL)(?=^(?:(?!MI).)*$).*$\    <script type="text/javascript" src="js/tween.js"></script>
+((TL).*MI)|(MI.*(TL))\    <script type="text/javascript" src="js/tween.min.js"></script>
+^(?=.*DG)(?=^(?:(?!MI).)*$).*$\    <script type="text/javascript" src="js/dat.gui.js"></script>
+((DG).*MI)|(MI.*(DG))\    <script type="text/javascript" src="js/dat.gui.min.js"></script>
+BA\
+BA\    <script type="text/javascript">
+BA\        var camera, scene, renderer;
+RS\        var rs;
+IO[1-9]\        var mesh;
+IO[1-9]\        var mesh_scale = 0.999;
+IM[1-9]\        var controls;
+IC\        var helper_mesh;
+IC\        var projector;
+IC\        var intersect_point = undefined;
+IC\        var last_mouse_x = Infinity, last_mouse_y = Infinity;
+DG\        var auto_spin = true;
+BA\        var spin_speed = 1.0;
+DG\        var translucent = false;
+DG\        var color = 0x337873;
+BA\
+BA\        document.addEventListener("DOMContentLoaded", start_app, false);
+BA\
+BA\        function start_app() {
+BA\            init();
+BA\            animate();
+BA\        }
+BA\
+BA\        function init() {
+BA\
+WD\            if (!Detector.webgl) {
+WD\                Detector.addGetWebGLMessage();
+WD\            }
+WD\
+BA\            renderer = new THREE.WebGLRenderer({
+BA\                antialias: true
+BA\            });
+BA\            renderer.setClearColor(0x000000, 1.0);
+BA\            renderer.setSize(window.innerWidth, window.innerHeight);
+BA\            document.body.appendChild(renderer.domElement);
+BA\
+BA\            scene = new THREE.Scene();
+BA\
+BA\            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 10, 1000);
+BA\            camera.position.z = 80;
+BA\
+AL\            var ambient_light = new THREE.AmbientLight(0x333333);
+AL\            scene.add(ambient_light);
+AL\
+DL\            var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+DL\            directionalLight.position.set(0, -1, 0);
+DL\            scene.add(directionalLight);
+DL\
+PL\            var point_light = new THREE.PointLight(0xffffff);
+PL\            point_light.position.x = 20;
+PL\            point_light.position.y = 50;
+PL\            point_light.position.z = 100;
+PL\            scene.add(point_light);
+PL\
+((IO[1-9]).*ST0)|(ST0.*(IO[1-9]))\            var shading_type = THREE.FlatShading;
+((IO[1-9]).*ST1)|(ST1.*(IO[1-9]))\            var shading_type = THREE.SmoothShading;
+ST[0,1]\
+((IO[1-9]).*OM0)|(OM0.*(IO[1-9]))\            var material = new THREE.MeshBasicMaterial({
+((IO[1-9]).*OM0)|(OM0.*(IO[1-9]))\                color: 0x999900
+((IO[1-9]).*OM0)|(OM0.*(IO[1-9]))\            });
+((IO[1-9]).*OM1)|(OM1.*(IO[1-9]))\            var material = new THREE.MeshLambertMaterial({
+((IO[1-9]).*OM1)|(OM1.*(IO[1-9]))\                color: 0xff0000,
+((IO[1-9]).*OM1)|(OM1.*(IO[1-9]))\                shading: shading_type,
+((IO[1-9]).*OM1)|(OM1.*(IO[1-9]))\                transparent: true
+((IO[1-9]).*OM1)|(OM1.*(IO[1-9]))\            });
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\            var material = new THREE.MeshPhongMaterial({
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\                color: 0x00ff00,
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\                shading: shading_type,
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\                shininess: 50,
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\                transparent: true
+((IO[1-9]).*OM2)|(OM2.*(IO[1-9]))\            });
+
+((IO[1-9]).*OM3)|(OM3.*(IO[1-9]))\            var material = new THREE.MeshNormalMaterial({
+((IO[1-9]).*OM3)|(OM3.*(IO[1-9]))\                shading: shading_type,
+((IO[1-9]).*OM3)|(OM3.*(IO[1-9]))\                transparent: true
+((IO[1-9]).*OM3)|(OM3.*(IO[1-9]))\            });
+((IO[1-9]).*OM[0-3])|(OM[0-3].*(IO[1-9]))\
+IO1\            var geometry = new THREE.BoxGeometry(50, 40, 20, 2, 2, 2);
+IO2\            var geometry = new THREE.TorusGeometry(30, 15, 16, 40);
+IO3\            var geometry = new THREE.TorusKnotGeometry(30, 8, 60, 10, 2, 3);
+IO4\            var geometry = new THREE.IcosahedronGeometry(40, 3);
+(IO[1-9])\
+(IO[1-9])\            mesh = new THREE.Mesh(geometry, material);
+(IO[1-9])\            scene.add(mesh);
+(IO[1-9])\
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            scene.add( new THREE.PointLightHelper( point_light, 5 ) );
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            mesh.add( new THREE.FaceNormalsHelper( mesh, 5 ) );
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            mesh.add( new THREE.VertexNormalsHelper( mesh, 5 ) );
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            var helper = new THREE.WireframeHelper( mesh );
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            helper.material.depthTest = false;
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            helper.material.opacity = 0.25;
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            helper.material.transparent = true;
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            scene.add( helper );
+((IO[1-9]).*HO)|(HO.*(IO[1-9]))\            scene.add( new THREE.BoxHelper( mesh ) );
+IM1\            controls = new THREE.TrackballControls(camera, renderer.domElement);
+IM1\            controls.rotateSpeed = 0.4;
+IM1\            controls.noZoom = false;
+IM1\            controls.noPan = false;
+IM1\            controls.staticMoving = false;
+IM1\            controls.minDistance = 50;
+IM1\            controls.maxDistance = 400;
+IM1\            controls.dynamicDampingFactor = 0.2;
+IM1\
+DG\            var gui = new dat.GUI();
+DG\            gui.add(this, 'auto_spin', true).name("Auto Spin");
+DG\            gui.add(this, 'spin_speed', -1.2, 1.2).name("Spin Speed");
+DG\            gui.add(this, 'translucent', true).name("Translucent").onChange(function (value) {
+DG\                if (value)
+DG\                    mesh.material.opacity = 0.5;
+DG\                else
+DG\                    mesh.material.opacity = 1.0;
+DG\            });
+DG\            gui.addColor(this, 'color').name("Object Color").onChange(function (value) {
+DG\                mesh.material.color.setHex(value);
+DG\            });
+DG\
+RS\            rS = new rStats({
+RS\                CSSPath: "css/",
+RS\                values: {
+RS\                    frame: {
+RS\                        caption: 'Total frame time (ms)',
+RS\                        over: 16
+RS\                    },
+RS\                    fps: {
+RS\                        caption: 'Framerate (FPS)',
+RS\                        below: 30
+RS\                    },
+RS\                    render: {
+RS\                        caption: 'Time to render (ms)'
+RS\                    },
+RS\                    rstats: {
+RS\                        caption: 'rStats update (ms)'
+RS\                    },
+RS\                    intersect: {
+RS\                        caption: 'Display update (ms)'
+RS\                    }
+RS\                },
+RS\                groups: [
+RS\                    { caption: 'Framerate',
+RS\                      values: ['fps'] },
+RS\                    { caption: 'Misc',
+RS\                      values: ['rstats', 'intersect'] }
+RS\                ]
+RS\            });
+RS\
+TL\            var tween = new TWEEN.Tween({
+TL\                    scale: 100
+TL\                })
+TL\                .to({
+TL\                    scale: 50
+TL\                }, 1000)
+TL\                .easing(TWEEN.Easing.Elastic.InOut)
+TL\                .onUpdate(function () {
+TL\                    var real_scale = this.scale / 100.0;
+TL\                    mesh.scale.set(real_scale, real_scale, real_scale);
+TL\                });
+TL\            tween.repeat(Infinity);
+TL\            tween.yoyo(true);
+TL\            tween.start();
+TL\
+IC\            projector = new THREE.Projector();
+IC\
+IC\            var helper_geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+IC\            helper_mesh = new THREE.Mesh(helper_geometry, new THREE.MeshNormalMaterial());
+IC\            scene.add(helper_mesh);
+IC\            document.addEventListener('mousemove', onDocumentMouseMove, false);
+IC\
+SZ\            window.addEventListener('resize', onWindowResize, false);
+BA\        }
+BA\
+SZ\        function onWindowResize() {
+SZ\            camera.aspect = window.innerWidth / window.innerHeight;
+SZ\            camera.updateProjectionMatrix();
+SZ\            renderer.setSize(window.innerWidth, window.innerHeight);
+SZ\        }
+SZ\
+IC\        function onDocumentMouseMove(event) {
+IC\            last_mouse_x = (event.clientX / window.innerWidth) * 2 - 1;
+IC\            last_mouse_y = -(event.clientY / window.innerHeight) * 2 + 1;
+IC\            event.preventDefault();
+IC\
+IC\            checkIntersect();
+IC\        }
+IC\
+IC\        function checkIntersect() {
+IC\            camera.aspect = window.innerWidth / window.innerHeight;
+IC\            camera.updateProjectionMatrix();
+IC\            renderer.setSize(window.innerWidth, window.innerHeight);
+
+IC\            var vector = new THREE.Vector3(last_mouse_x, last_mouse_y, -1);
+IC\            projector.unprojectVector(vector, camera);
+IC\            var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+IC\            var intersects = raycaster.intersectObject(mesh, true);
+IC\            intersect_point = undefined;
+IC\            if (intersects.length > 0) {
+IC\                if (intersects[0].point !== null ) {
+IC\                    helper_mesh.position.copy(intersects[0].point);
+IC\                    intersect_point = intersects[0].point;
+IC\                    update_output();
+IC\                } else {
+IC\                    update_output();
+IC\                }
+IC\            } else {
+IC\                helper_mesh.position.set(Infinity, 0, 0);
+IC\                update_output();
+IC\            }
+IC\        }
+IC\
+IC\        function update_output() {
+IC\            var div = document.getElementById("debug_output");
+IC\            if ( div ) {
+IC\                if ( typeof intersect_point !== "undefined" ) {
+IC\                    div.innerHTML = "Intersects at " + intersect_point.x.toFixed(2) + ", " + intersect_point.y.toFixed(2) + ", " + intersect_point.z.toFixed(2);
+IC\                } else {
+IC\                    div.innerHTML = "Does not intersect";
+IC\                }
+IC\            }
+IC\        }
+IC\
+FS\        function full_screen() {
+FS\            if (document.documentElement.requestFullscreen) {
+FS\                document.documentElement.requestFullscreen();
+FS\            } else if (document.documentElement.mozRequestFullScreen) {
+FS\                document.documentElement.mozRequestFullScreen();
+FS\            } else if (document.documentElement.webkitRequestFullscreen) {
+FS\                document.documentElement.webkitRequestFullscreen();
+FS\            } else if (document.documentElement.msRequestFullscreen) {
+FS\                document.documentElement.msRequestFullscreen();
+FS\            }
+FS\        }
+FS\
+BA\        function animate() {
+RS\            rS('frame').start();
+RS\            rS('FPS').frame();
+RS\
+BA\            requestAnimationFrame(animate);
+BA\
+IM1\            controls.update();
+IM1\
+TL\            TWEEN.update();
+TL\
+DG\            if (auto_spin) {
+((IO[1-9]).*DG)|(DG.*(IO[1-9]))\                mesh.rotation.set(Date.now() * 0.0005 * spin_speed, Date.now() * 0.0005 * spin_speed, Date.now() * 0.0005 * spin_speed);
+DG\            }
+BA\
+RS\            rS('render').start();
+BA\            renderer.render(scene, camera);
+RS\            rS('render').end();
+RS\
+IC\            rS('intersect').start();
+IC\            checkIntersect();
+IC\            rS('intersect').end();
+RS\
+RS\            rS('frame').end();
+RS\
+RS\            rS('rStats').start();
+RS\            rS().update();
+RS\            rS('rStats').end();
+BA\        }
+BA\    </script>
+BA\    </head>
+BA\    <body>
+BA\     <div id="title">$T</div>
+FS\     <div id="fs_control"><a href="#" onClick="full_screen();">Go Full Screen</a></div>
+IC\     <div id="debug_output"></div>
+BA\    </body>
+BA\</html>

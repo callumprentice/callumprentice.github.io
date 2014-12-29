@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {
+                background-color: #000;
+                margin: 0;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+        <script src="js/three.js.r60/three.min.js"></script>
+        <script src="js/lzma.js"></script>
+        <script src="js/ctm.js"></script>
+        <script src="js/CTMLoader.js"></script>
+        <script src="js/three.js.r60/trackballcontrols.js"></script>
+        <script>
+            var camera, scene, renderer;
+            var controls;
+            var mesh, dae;
+            var sceneCube, cameraCube, textureCube
+
+            init();
+
+            var loader = new THREE.CTMLoader();
+
+            loader.load("models/male03.ctm", function (geometry) {
+
+                var mm = new THREE.MeshPhongMaterial({
+                    color: 0x777777,
+                    specular: 0x777777,
+                    shininess: 60
+                });
+
+                mm.envMap = textureCube;
+                mm.combine = THREE.MixOperation;
+                mm.reflectivity = 0.95;
+
+                var mesh = new THREE.Mesh(geometry, mm);
+
+                mesh.position.set(0, 0, 0);
+                mesh.scale.set(600, 600, 600);
+                mesh.rotation.x = 0.0;
+                mesh.rotation.x = -Math.PI / 2;
+
+                scene.add(mesh);
+
+                animate();
+
+            }, {
+                useWorker: true
+            });
+
+            function init() {
+
+                renderer = new THREE.WebGLRenderer();
+                renderer.autoClear = false;
+                renderer.antiAlias = true;
+                renderer.gammaInput = true;
+                renderer.gammaOutput = true;
+                renderer.physicallyBasedShading = true;
+
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+                camera.position.x = 626.7011349644499;
+                camera.position.y = 945.4744384763444;
+                camera.position.z = 803.7001623975352;
+
+                hemiLight = new THREE.HemisphereLight(0x999999, 0x345678, 0.7);
+                hemiLight.color.setHSL(0.2, 0.8, 0.5);
+                scene.add(hemiLight);
+
+                sceneCube = new THREE.Scene();
+                cameraCube = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
+                sceneCube.add(cameraCube);
+
+                var root = "skybox/";
+                var urls = [root + "px.png", root + "nx.png",
+                    root + "py.png", root + "ny.png",
+                    root + "pz.png", root + "nz.png"
+                ];
+
+                textureCube = THREE.ImageUtils.loadTextureCube(urls);
+
+                var shader = THREE.ShaderLib["cube"];
+                shader.uniforms["tCube"].value = textureCube;
+
+                var material = new THREE.ShaderMaterial({
+
+                        fragmentShader: shader.fragmentShader,
+                        vertexShader: shader.vertexShader,
+                        uniforms: shader.uniforms,
+                        depthWrite: false,
+                        side: THREE.BackSide
+                    }),
+
+                    mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), material);
+                sceneCube.add(mesh);
+
+                controls = new THREE.TrackballControls(camera, renderer.domElement);
+                controls.rotateSpeed = 0.4;
+                controls.noZoom = false;
+                controls.noRoll = true;
+                controls.noPan = false;
+                controls.staticMoving = false;
+                controls.dynamicDampingFactor = 0.4;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                cameraCube.rotation.copy(camera.rotation);
+
+                renderer.clear();
+                renderer.render(sceneCube, cameraCube);
+                renderer.render(scene, camera);
+            }
+        </script>
+    </body>
+</html>

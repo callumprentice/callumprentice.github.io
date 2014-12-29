@@ -1,0 +1,18 @@
+body {
+	background-color: #000;
+	margin: 0px;
+	overflow: hidden;
+}
+#instructions {
+	color: #ff9;
+	font-family: "Lucida Console", Monaco, monospace;
+	padding: 5px;
+	position: absolute;
+	text-align: center;
+	top: 0px;
+	width: 100%;
+	z-index: 100;
+}
+#instructions em {
+	color: #f99;
+}

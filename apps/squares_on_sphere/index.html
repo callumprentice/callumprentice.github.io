@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="description" content="WebGL experiments - Collinear Squares on a sphere">
+		<meta name="keywords" content="callum,chrome,collada,earth,example,experiments,globe,google,hurricane tracker,linden,opengl,planet,sample,shader,spline,three.js,webgl,">
+		<link rel="stylesheet" type="text/css" href="css/common.css" />
+		<title>callum.com - Squares On Sphere</title>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/Detector.js"></script>
+		<script src="js/Stats.js"></script>
+		<script>
+			var camera, scene, renderer, controls, stats;
+
+			function init() {
+				if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+				// renderer
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+				document.body.appendChild(renderer.domElement);
+
+				// camera
+				camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2000);
+				camera.position.z = 500;
+
+				// controls
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = 0.3;
+				controls.noZoom = false;
+				controls.noPan = false;
+				controls.staticMoving = false;
+				controls.dynamicDampingFactor = 0.4;
+				controls.minDistance = 300;
+				controls.maxDistance = 1600;
+				controls.keys = [65, 83, 77];
+
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.bottom = '0px';
+				document.body.appendChild( stats.domElement );
+
+				// scene
+				scene = new THREE.Scene();
+
+				// sphere
+				var radius = 250;
+				var geometry = new THREE.SphereGeometry(radius, 64, 64);
+				var materials = [
+				new THREE.MeshBasicMaterial({
+					color: 0x333399
+				}),
+				new THREE.MeshBasicMaterial({
+					color: 0x00ff00,
+					wireframe: true,
+					wireframeLinewidth: 4
+				})];
+				var sphere = THREE.SceneUtils.createMultiMaterialObject(geometry, materials);
+				scene.add(sphere);
+
+				// squares
+				var parent_obj = new THREE.Object3D();
+				var square_geom = new THREE.PlaneGeometry(30, 30);
+
+				for (var i = 0; i < 500; ++i) {
+					var lat = Math.random() * 180 - 90;
+					var lng = Math.random() * 360;
+
+					var phi = (90 - lat) * Math.PI / 180;
+					var theta = (360 - lng) * Math.PI / 180;
+
+					var x = radius * Math.sin(phi) * Math.cos(theta);
+					var y = radius * Math.cos(phi);
+					var z = radius * Math.sin(phi) * Math.sin(theta);
+
+					var square_material = new THREE.MeshBasicMaterial({
+						color: 0xff0000,
+						side: THREE.BackSide,
+						transparent: true,
+						opacity: 0.6
+					});
+
+					var mesh = new THREE.Mesh(square_geom, square_material);
+
+					// position square
+					mesh.position.set(x, y, z);
+
+					// rotate square to face target
+					mesh.lookAt(sphere.position);
+
+					parent_obj.add(mesh);
+				};
+
+				scene.add(parent_obj);
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+				controls.update();
+				stats.update();
+				renderer.render(scene, camera);
+			}
+
+			init();
+			animate();
+		</script>
+		<div id="instructions"><em>Collinear squares on sphere</em> - Mouse rotates plus (S)cale / (M)ove</div>
+	</body>
+</html>

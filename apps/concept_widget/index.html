@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>concept arts emotion widget demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <style type="text/css">
+            body {
+                background-color: #000;
+                color: #ff0;
+                margin: 0;
+                overflow: hidden;
+                font-family: "Verdana";
+                font-size: 24px;
+            }
+            a.corneredTL {
+                left:20px;
+                position:absolute;
+                top:10px;
+                margin:0;
+                z-index:100;
+                color:white;
+                text-decoration: none;
+            }
+            p.corneredTR {
+                right:20px;
+                position:absolute;
+                top:10px;
+                margin:0;
+                z-index:100;
+                color:red;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="js/three.r64.min.js"></script>
+        <script type="text/javascript" src="js/emotion.js"></script>
+        <script type="text/javascript" src="js/tween.min.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+
+        <script type="text/javascript">
+            var camera, scene, renderer;
+            var stats;
+            var targetRotation = 0;
+            var targetRotationOnMouseDown = 0;
+            var mouseX = 0;
+            var mouseXOnMouseDown = 0;
+            var numEmotions = 10;
+
+            init();
+            animate();
+
+            function init() {
+                renderer = new THREE.CanvasRenderer();
+                renderer.setClearColor(0x333366, 1.0);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                scene = new THREE.Scene();
+
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 2500);
+                camera.position.set(0, 0, 150);
+
+                var ambient_light = new THREE.AmbientLight(0xcccccc);
+                scene.add(ambient_light);
+
+                var values = [];
+                var colors = [];
+                for(var i=0; i < numEmotions; ++i) {
+                    values.push(Math.random() * 40 + 10);
+
+                    var col = HSVtoRGB(i/numEmotions, 0.9,0.9)
+                    colors.push(col);
+                }
+                var outer_radius = 100;
+                var inner_radius = 75;
+
+                widget = new emotionWidget(values, colors, inner_radius, outer_radius);
+
+                scene.add(widget.getParent());
+
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.bottom = '0px';
+                stats.domElement.style.zIndex = 100;
+                document.body.appendChild(stats.domElement);
+
+                document.addEventListener('mousedown', onDocumentMouseDown, false);
+                document.addEventListener('touchstart', onDocumentTouchStart, false);
+                document.addEventListener('touchmove', onDocumentTouchMove, false);
+
+                window.addEventListener('resize', onWindowResize, false);
+            }
+
+            function updateWidget() {
+                var values = [];
+
+                for(var i=0; i < numEmotions; ++i) {
+                    values.push(Math.random() * 40 + 10);
+                }
+
+                widget.updateValues(values);
+            }
+
+            function onDocumentMouseDown(event) {
+
+                document.addEventListener('mousemove', onDocumentMouseMove, false);
+                document.addEventListener('mouseup', onDocumentMouseUp, false);
+                document.addEventListener('mouseout', onDocumentMouseOut, false);
+
+                mouseXOnMouseDown = event.clientX - window.innerWidth / 2;
+                targetRotationOnMouseDown = targetRotation;
+
+                widget.checkClick(event, false);
+            }
+
+            function onDocumentMouseMove(event) {
+                mouseX = event.clientX - window.innerWidth / 2;
+                targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
+            }
+
+            function onDocumentMouseUp(event) {
+                document.removeEventListener('mousemove', onDocumentMouseMove, false);
+                document.removeEventListener('mouseup', onDocumentMouseUp, false);
+                document.removeEventListener('mouseout', onDocumentMouseOut, false);
+            }
+
+            function onDocumentMouseOut(event) {
+
+                document.removeEventListener('mousemove', onDocumentMouseMove, false);
+                document.removeEventListener('mouseup', onDocumentMouseUp, false);
+                document.removeEventListener('mouseout', onDocumentMouseOut, false);
+            }
+
+            function onDocumentTouchStart(event) {
+
+                if (event.touches.length == 1) {
+                    mouseXOnMouseDown = event.touches[0].pageX - window.innerWidth / 2;
+                    targetRotationOnMouseDown = targetRotation;
+                    widget.checkClick(event, true);
+                }
+            }
+
+            function onDocumentTouchMove(event) {
+
+                if (event.touches.length == 1) {
+                    mouseX = event.touches[0].pageX - window.innerWidth / 2;
+                    targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.05;
+
+                }
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                TWEEN.update();
+                stats.update();
+                widget.getParent().rotation.y += (targetRotation - widget.getParent().rotation.y) * 0.05;
+                renderer.render(scene, camera);
+            }
+
+            function HSVtoRGB(h, s, v) {
+                var r, g, b, i, f, p, q, t;
+
+                i = Math.floor(h * 6);
+                f = h * 6 - i;
+                p = v * (1 - s);
+                q = v * (1 - f * s);
+                t = v * (1 - (1 - f) * s);
+
+                switch (i % 6) {
+                    case 0:
+                        r = v, g = t, b = p;
+                    break;
+                    case 1:
+                        r = q, g = v, b = p;
+                    break;
+                    case 2:
+                        r = p, g = v, b = t;
+                    break;
+                    case 3:
+                        r = p, g = q, b = v;
+                    break;
+                    case 4:
+                        r = t, g = p, b = v;
+                    break;
+                    case 5:
+                        r = v, g = p, b = q;
+                    break;
+                }
+
+                return (Math.floor(r * 255) << 16) +
+                        (Math.floor(g * 255) << 8) +
+                        Math.floor(b * 255);
+            }
+        </script>
+        <a class="corneredTL" href="#" onclick="updateWidget();">UPDATE</a>
+        <p class="corneredTR" id="intersects"></p>
+    </body>
+</html>
+

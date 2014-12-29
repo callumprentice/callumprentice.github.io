@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+    </style>
+    <script src="pixi.js"></script>
+</head>
+<body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+
+    <script>
+    var backgroundImageWidth = 1280;
+
+    var assetsToLoader = ["data/logo.png",
+                          "data/Boy.anim",
+                          "data/bkg1.jpg",
+                          "data/x.json",
+                          "data/iP4_ground.png"];
+
+    loader = new PIXI.AssetLoader(assetsToLoader);
+    loader.onComplete = onAssetsLoaded;
+    loader.load();
+    var renderer = new PIXI.autoDetectRenderer(1024, 640);
+    var stage = new PIXI.Stage(0xFFFFFF, true);
+
+    var stageContainer = new PIXI.DisplayObjectContainer();
+    stage.addChild(stageContainer);
+
+    var pixelateFilter = new PIXI.PixelateFilter();
+    pixelateFilter.size.x = 1;
+    pixelateFilter.size.y = 1;
+
+    var twistFilter = new PIXI.TwistFilter();
+    twistFilter.angle = 5;
+    twistFilter.radius = 0.5;
+    twistFilter.offset.x = 0.5;
+    twistFilter.offset.y = 0.5;
+
+    //stageContainer.filters = [pixelateFilter,twistFilter];
+
+    renderer.view.style.display = "block";
+    renderer.view.style.width = "100%"
+    renderer.view.style.height = "100%"
+
+    document.body.appendChild(renderer.view);
+
+    var postition = 0;
+    var background;
+    var background2;
+
+    function onAssetsLoaded()
+    {
+        background = PIXI.Sprite.fromImage("data/bkg1.jpg");
+        background2 = PIXI.Sprite.fromImage("data/bkg1.jpg");
+        stageContainer.addChild(background);
+        stageContainer.addChild(background2);
+
+        foreground = PIXI.Sprite.fromImage("data/iP4_ground.png");
+        foreground2 = PIXI.Sprite.fromImage("data/iP4_ground.png");
+        stageContainer.addChild(foreground);
+        stageContainer.addChild(foreground2);
+        foreground.position.y = foreground2.position.y = 640 - foreground2.height + 64;
+
+        var boy = new PIXI.Spine("data/Boy.anim");
+
+        var scale = 1.5;
+
+        boy.position.x = 1024/3;
+        boy.position.y =  582
+
+        boy.scale.x = boy.scale.y = scale;
+
+        stageContainer.addChild(boy);
+
+        boy.stateData.setMixByName("walk", "jump", 0.2);
+        boy.stateData.setMixByName("jump", "walk", 0.4);
+
+        boy.state.setAnimationByName("walk", true);
+
+        stage.mousedown = stage.touchstart = function()
+        {
+            boy.state.setAnimationByName("jump", false);
+            boy.state.addAnimationByName("walk", true);
+        }
+
+        var logo = PIXI.Sprite.fromImage("data/logo.png")
+        stage.addChild(logo);
+
+        logo.anchor.x = 1;
+        logo.position.x = 1024
+        logo.scale.x = logo.scale.y = 0.5;
+        logo.position.y = 640 - 140;
+        logo.setInteractive(true);
+        logo.buttonMode = true;
+        logo.click = logo.tap = function()
+        {
+            window.open("https://google.com", "_blank")
+        }
+
+        requestAnimFrame(animate);
+    }
+
+    function animate() {
+
+        postition += 5;
+
+        background.position.x = -(postition * 0.6);
+        background.position.x %= backgroundImageWidth * 2;
+        if(background.position.x<0)background.position.x += backgroundImageWidth * 2;
+        background.position.x -= backgroundImageWidth;
+
+        background2.position.x = -(postition * 0.6) + backgroundImageWidth;
+        background2.position.x %= backgroundImageWidth * 2;
+        if(background2.position.x<0)background2.position.x += backgroundImageWidth * 2;
+        background2.position.x -= backgroundImageWidth;
+
+        foreground.position.x = -postition;
+        foreground.position.x %= backgroundImageWidth * 2;
+        if(foreground.position.x<0)foreground.position.x += backgroundImageWidth * 2;
+        foreground.position.x -= backgroundImageWidth;
+
+        foreground2.position.x = -postition + backgroundImageWidth;
+        foreground2.position.x %= backgroundImageWidth * 2;
+        if(foreground2.position.x<0)foreground2.position.x += backgroundImageWidth * 2;
+        foreground2.position.x -= backgroundImageWidth;
+
+        requestAnimFrame( animate );
+
+        renderer.render(stage);
+    }
+
+    </script>
+    </body>
+</html>

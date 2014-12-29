@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="keywords" content="time, delta, speed, velocity" />
+    <meta name="description" content="Calculate the difference in time for travel over a selected distance at two different velocities" />
+    <title id='Description'>The Wizard of Time, Speed and Distance</title>
+    <link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" type="text/css" />
+    <style>
+    body {
+        background-color: #eef;
+        outline:none;
+        margin:0;
+        padding:0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    i {
+        color:#339;
+    }
+    b {
+        color:#393;
+    }
+    t {
+        color: #933;
+    }
+    h1 {
+        text-align: center;
+        color: #3c3c3c;
+        font-family: "Verdana";
+        font-weight: 700;
+        font-size: 2em;
+        margin: 0;
+    }
+    h2 {
+        text-align: center;
+        color: #3c3c3c;
+        font-family: "Verdana";
+        font-weight: 600;
+        font-size: 1.5em;
+        margin-top: 5px;
+    }
+    .container{
+        width:800px;
+        height:750px;
+        position:absolute;
+        left:50%;
+        top:50%;
+        margin:-375px 0 0 -400px;
+    }
+    </style>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxchart.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxgauge.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="jqwidgets/jqxslider.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var velocity_1_min = 5;
+        var velocity_1_max = 100;
+        var velocity_1_start = 65;
+        var velocity_2_min = 10;
+        var velocity_2_max = 100;
+        var velocity_2_start = 85;
+        var distance_min = 0;
+        var distance_max = 100;
+        var distance_start = 56;
+
+        $('#velocity_1_gauge').jqxGauge({
+            min: velocity_1_min,
+            max: velocity_1_max,
+            value: velocity_1_start,
+            cap: {
+                size: '10%',
+                style: {
+                    fill: '#000',
+                    stroke: '#2e79bb'
+                }
+            },
+            border: {
+                style: {
+                    fill: '#8e9495',
+                    stroke: '#7b8384',
+                    'stroke-width': 1
+                }
+            },
+            ticksMinor: {
+                interval: 1,
+                size: '5%'
+            },
+            ticksMajor: {
+                interval: 5,
+                size: '10%'
+            },
+            labels: {
+                position: 'outside',
+                interval: 5
+            },
+            pointer: {
+                style: {
+                    fill: '#990000'
+                },
+                width: 10
+            },
+            animationDuration: 250
+        });
+        $('#velocity_1_slider').jqxSlider({
+            min: velocity_1_min,
+            max: velocity_1_max,
+            mode: 'fixed',
+            ticksPosition: 'none',
+            width: 180,
+            value: velocity_1_start,
+            showButtons: true
+        });
+        $('#velocity_1_slider').change(function (e) {
+            $('#velocity_1_gauge').jqxGauge('value', e.args.value);
+            calc();
+        });
+        $('#velocity_1_slider').on('mousewheel', function () {
+            $('#velocity_1_gauge').jqxGauge('value', $('#velocity_1_slider').jqxSlider('value'));
+        });
+
+        $('#velocity_2_gauge').jqxGauge({
+            min: velocity_2_min,
+            max: velocity_2_max,
+            value: velocity_2_start,
+            cap: {
+                size: '10%',
+                style: {
+                    fill: '#000',
+                    stroke: '#2e79bb'
+                }
+            },
+            border: {
+                style: {
+                    fill: '#8e9495',
+                    stroke: '#7b8384',
+                    'stroke-width': 1
+                }
+            },
+            ticksMinor: {
+                interval: 1,
+                size: '5%'
+            },
+            ticksMajor: {
+                interval: 5,
+                size: '10%'
+            },
+            labels: {
+                position: 'outside',
+                interval: 5
+            },
+            pointer: {
+                style: {
+                    fill: '#990000'
+                },
+                width: 10
+            },
+            animationDuration: 250
+        });
+        $('#velocity_2_slider').jqxSlider({
+            min: velocity_2_min,
+            max: velocity_2_max,
+            mode: 'fixed',
+            ticksPosition: 'none',
+            width: 180,
+            value: velocity_2_start,
+            showButtons: true
+        });
+        $('#velocity_2_slider').change(function (e) {
+            $('#velocity_2_gauge').jqxGauge('value', e.args.value);
+            calc();
+        });
+        $('#velocity_2_slider').on('mousewheel', function () {
+            $('#velocity_2_gauge').jqxGauge('value', $('#velocity_2_slider').jqxSlider('value'));
+        });
+
+        $('#distance_gauge').jqxLinearGauge({
+            orientation: 'horizontal',
+            width: 800,
+            height: 150,
+            ticksMajor: {
+                size: '10%',
+                interval: 10
+            },
+            ticksMinor: {
+                size: '5%',
+                interval: 1,
+                style: {
+                    'stroke-width': 1,
+                    stroke: '#aaaaaa'
+                }
+            },
+            ticksPosition: 'far',
+            min: distance_min,
+            max: distance_max,
+            value: distance_start,
+            pointer: {
+                size: '5%'
+            },
+            colorScheme: 'scheme04',
+            labels: {
+                position: 'near',
+                interval: 10,
+                offset: 0
+            },
+            animationDuration: 500
+        });
+        $('#distance_slider').jqxSlider({
+            min: distance_min,
+            max: distance_max,
+            mode: 'fixed',
+            ticksPosition: 'none',
+            width: 780,
+            value: distance_start,
+            showButtons: true
+        });
+        $('#distance_slider').change(function (e) {
+            $('#distance_gauge').jqxLinearGauge('value', e.args.value);
+            calc();
+        });
+        $('#distance_slider').on('mousewheel', function () {
+            $('#distance_gauge').jqxGauge('value', $('#distance_slider').jqxSlider('value'));
+        });
+
+        function calc() {
+            var velocity_1 = $('#velocity_1_slider').jqxSlider('value');
+            var velocity_2 = $('#velocity_2_slider').jqxSlider('value');
+            var distance = $('#distance_slider').jqxSlider('value');
+
+            var velocity_delta_hours = Math.abs(distance * (velocity_1 - velocity_2) / (velocity_1 * velocity_2));
+
+            var velocity_delta_minutes = velocity_delta_hours * 60;
+
+            var hours_display = parseInt(velocity_delta_hours % 60);
+            var minutes_display = parseInt(velocity_delta_minutes - hours_display * 60);
+            var seconds_display = parseInt((velocity_delta_minutes - hours_display * 60 - minutes_display) * 60);
+
+            var output_html = "";
+            output_html += "Time difference over ";
+
+            if (distance === 0) {
+                output_html += "<t>no distance</t> at <br>";
+
+            } else {
+                output_html += "<t>" + distance + "</t>" + " miles at<br>";
+            }
+
+            if (velocity_1 == velocity_2) {
+                output_html += "<b>the same velocity</b> is ";
+
+            } else {
+                output_html += "<b>" + velocity_1 + "</b>" + " mph and ";
+                output_html += "<b>" + velocity_2 + "</b>" + " mph is ";
+            }
+
+            if (velocity_delta_hours < 0.0001) {
+                output_html += "<i>nothing</i>";
+            } else {
+                if (hours_display !== 0)
+                    output_html += "<i>" + hours_display + "h</i> ";
+
+                if (minutes_display !== 0)
+                    output_html += "<i>" + minutes_display + "m</i> ";
+
+                if (seconds_display !== 0)
+                    output_html += "<i>" + seconds_display + "s</i>";
+            }
+
+            $('#time_delta').html(output_html);
+        }
+
+        calc();
+    });
+</script>
+</head>
+<body>
+<div class="container">
+    <div id='velocity_1_title' style="position: absolute; top: 0px; left: 0px; width:400px; height: 40px;">
+        <h2>Velocity 1</h2>
+    </div>
+    <div id='velocity_1_gauge' style="position: absolute; top: 50px; left: 25px;"></div>
+    <div id='velocity_1_slider' style="position: absolute; top: 300px; left: 108px"></div>
+    <div id='velocity_2_title' style="position: absolute; top: 0px; left: 400px; width:400px; height: 40px;">
+        <h2>Velocity 2</h2>
+    </div>
+    <div id='velocity_2_gauge' style="position: absolute; top: 50px; left: 425px"></div>
+    <div id='velocity_2_slider' style="position: absolute; top: 300px; left: 508px"></div>
+    <div id='distance_title' style="position: absolute; top: 430px; left: 0px; width:800px; height: 40px;">
+        <h2>Distance</h2>
+    </div>
+    <div id='distance_gauge' style="position: absolute; top: 480px; left: 0px"></div>
+    <div id='distance_slider' style="position: absolute; top: 580px; left: 9px"></div>
+    <h1 id="time_delta" style="position: absolute; top: 660px; left: 8px; width: 800px"></h1>
+</div>
+</body>
+</html>

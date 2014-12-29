@@ -1,0 +1,168 @@
+* {
+    margin:0;
+    padding:0;
+}
+
+body {
+    background:url(background.jpg);
+    font-family:Raleway, arial, sans-serif;
+    font-weight:200;
+    text-align:justify;
+    text-justify:inter-word;
+}
+
+a {
+    color:#393;
+    text-decoration:none;
+}
+
+i {
+    color:#99e;
+}
+
+h1 {
+    font-size:2em;
+    font-weight:400;
+    margin:10px 0;
+    text-align:left;
+    text-shadow:1px 1px 0 #fff, 2px 2px 0 #bbb;
+}
+
+h2 {
+    font-size:1.2em;
+    font-weight:400;
+    margin:0 0 20px;
+    text-align:justify;
+    text-justify:inter-word;
+}
+
+strong {
+    color:#800;
+}
+
+.centered {
+    text-align:center;
+}
+
+.wrapper {
+    padding:10px 0;
+    width:100%;
+}
+
+.container {
+    margin:0 auto;
+    width:1200px;
+}
+
+ul.grid-nav {
+    font-size:.85em;
+    font-weight:200;
+    list-style:none;
+    text-align:center;
+}
+
+ul.grid-nav li {
+    display:inline-block;
+}
+
+ul.grid-nav li a {
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background:#999;
+    border-radius:4px;
+    color:#fff;
+    display:inline-block;
+    padding:10px 20px;
+    text-decoration:none;
+}
+
+ul.grid-nav li a:hover {
+    background:#7b0;
+}
+
+ul.grid-nav li a.active {
+    background:#333;
+}
+
+.grid-container {
+    display:none;
+}
+
+ul.rig {
+    font-size:0;
+    list-style:none;
+    margin-left:-2.5%;
+}
+
+ul.rig li {
+    -moz-border-radius:8px;
+    -moz-box-sizing:border-box;
+    -webkit-border-radius:8px;
+    -webkit-box-sizing:border-box;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:8px;
+    box-shadow:0 0 5px #ddd;
+    box-sizing:border-box;
+    display:inline-block;
+    font-size:1rem;
+    margin:0 0 2.5% 2.5%;
+    padding:10px;
+    vertical-align:top;
+}
+
+ul.rig li img {
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    border-radius:8px;
+    height:auto;
+    margin:0 0 10px;
+    max-width:100%;
+}
+
+ul.rig li h3 {
+    margin:0 0 5px;
+}
+
+ul.rig li h4 {
+    margin:0;
+    text-align:center;
+}
+
+ul.rig li p {
+    color:#999;
+    font-size:.9em;
+    line-height:1.5em;
+}
+
+ul.rig.columns-4 li {
+    width:22.5%;
+}
+
+ul.rig.columns-8 li {
+    width:10%;
+}
+
+@media (max-width: 1199px) {
+    .container {
+        width: auto;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    ul.grid-nav li {
+        display: block;
+        margin: 0 0 5px;
+    }
+    ul.grid-nav li a {
+        display: block;
+    }
+    ul.rig {
+        margin-left: 0;
+    }
+    ul.rig li {
+        width: 100% !important;
+        margin: 0 0 20px;
+    }
+}

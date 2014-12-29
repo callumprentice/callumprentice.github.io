@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Add Manipulator UI</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://callum.com">
+        <style type="text/css">
+            body {
+                background-color: #000;
+                color: #bbb;
+                font-family: Verdana;
+                line-height: 150%
+            }
+            h4 {
+            	color:#aac;
+            }
+            a {
+                color: #3f3;
+                text-decoration: none;
+            }
+        </style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+    </head>
+    <body>
+
+<h2>amui - Add Manipulator UI</h2>
+
+<p>The idea behind this experiment it to let you add manipulator UI (rotation and scale currently) to any three.js scene in your browser using a JavaScript bookmarklet.</p>
+
+<h4>Concept:</h4>
+<ul>
+<li>Inject a copy of the <a target="_new" href="https://code.google.com/p/dat-gui/">dat.GUI</a> script dynamically</li>
+<li>Find the root 'scene' node, iterate over it and create UI for each existing THREE.Mesh that lets you modify scale and rotation in X,Y,Z for each.</li>
+</ul>
+
+<h4>Suggested usage:</h4>
+<ul>
+<li>The idea of bookmarklets is new to me but this approach seems to work well.</li>
+<li>Create a bookmark in your browser bookmark tool bar, name it and change the URL to this: <br><tt>javascript:(function(){var s=document.createElement('script');s.src='http://callum.com/apps/amui/amui.js';document.body.appendChild(s);})();</tt></li>
+<li>Visit a page containing a three.js scene - some examples:</li>
+<ul>
+	<li><a href="http://callum.com/apps/amui/test_scene/" target="_new">http://callum.com/apps/amui/test_scene/</a></li>
+	<li><a href="http://threejs.org/examples/webgl_geometries" target="_new">http://threejs.org/examples/webgl_geometries</a></li>
+  <li><a href="http://threejs.org/examples/webgl_loader_collada" target="_new">http://threejs.org/examples/webgl_loader_collada</a></li>
+  <li><a href="http://www.clicktorelease.com/code/decal-splatter/" target="_new">http://www.clicktorelease.com/code/decal-splatter/</a></li>
+	<li><a href="http://stemkoski.github.io/Three.js/Refraction.html" target="_new">http://stemkoski.github.io/Three.js/Refraction.html</a></li>
+</ul>
+<li>Trigger the bookmark</li>
+<li>Interact and scale/rotate things or report a bug :)</li>
+</ul>
+
+<h4>Screen shots before and after:</h4>
+<br>
+<a href="before.png" target="_new"><img src="before.png" width="320" height="200"></a>
+<a href="after.png" target="_new"><img src="after.png" width="320" height="200"></a>
+<p>
+<br>
+<h4>Notes:</h4>
+<ul>
+<li>Names of folders in dat.GUI have to be unique so I append the node UUID to the name</li>
+<li>Most examples don't name the mesh nodes so all you see is a UUID.</li>
+<li>Folders are opened by default - maybe that's not good.</li>
+</ul>
+
+<h4>Future ideas:</h4>
+<ul>
+<li>Allow modification of other properties like position, materials etc.</li>
+<li>Better ranges for settings - e.g. scale of 0...10 is purely arbitrary</li>
+<li>Lots more stuff...</li>
+</ul>
+
+<h4>Issues:</h4>
+<ul>
+<li>There has to be a <head> element in the page to attach to</li>
+<li>A UI entry is created for each mesh in the scene so if there are lots, there is going to be a lot of UI. Should probably filter what's added by a regex pattern or something.</li>
+<li>Currently, the dat.GUI is created top right corner which can interfere with existing instances.</li>
+<li>I've only tested it on Chrome - ought to work on other browsers too I imagine.</li>
+<li>UI is not updated with scale/rotation if scene is changing it itself</li>
+<li>Some examples (Stemkoski ones) use https and force a script permissions problem (see console)</li>
+</ul>
+
+<p>
+This is a early proof of concept - feedback, suggestions and pull requests very welcome.
+<p>
+Callum.
+2014-02-19
+    </body>
+</html>

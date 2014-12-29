@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Street Cloud Interactive</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="Street Cloud Interactive - An experiment to render Google Street View &reg; scenes as 3D point clouds using the LiDAR data captured along with the regular panorama images." name="description">
+    <meta content="google,street view,streetview,pointcloud,webgl,three.js,street cloud" name="keywords">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <script type="text/javascript" src="js/three.r68/three.min.js"></script>
+        <script type="text/javascript" src="js/three.r68/OrbitControls.js"></script>
+        <script type="text/javascript" src="js/three.r68/Detector.js"></script>
+        <script type="text/javascript" src="js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.base64.min.js"></script>
+        <script type="text/javascript" src="js/zpipe.min.js"></script>
+        <script type="text/javascript" src="js/GSVPano.js"></script>
+        <script type="text/javascript" src="js/GSVPanoDepth.js"></script>
+        <script type="text/javascript" src="js/streetcloud.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-51404170-1', 'callum.com');
+  ga('send', 'pageview');
+</script>
+    </head>
+    <body onload="app();">
+        <div id="about_button"><a href="#" onclick="show_about(true);"><img src="img/info.png"></a></div>
+        <div id="about_box_bkg" class="hide"></div>
+        <div id="about_box" class="hide">
+<h2>About</h2>
+An experiment to render Google Street View &reg; scenes as 3D point clouds using the LiDAR data captured along with the regular panorama images. A rudimentary navigation system allows you to move between connected locations.
+<h2>Controls</h2>
+Mouse plus left button to rotate around a scene. <strong>&#9679;</strong> Mouse plus right button to pan. <strong>&#9679;</strong> Mouse wheel to zoom in and out. <strong>&#9679;</strong> Click arrows to move to adjacent scene <strong>&#9679;</strong> More options in the UI
+<h2>Future Plans</h2>
+Render multiple views from a single start location and create a much large space to explore. <strong>&#9679;</strong> Calculate a collision mesh and let you explore via a first person navigation interface. <strong>&#9679;</strong> Convert the point data to a single mesh and render in higher quality. <strong>&#9679;</strong> Improve the navigation arrow visuals. <strong>&#9679;</strong> Improve the visual transition from one location to another. <strong>&#9679;</strong> Combine this 3D view with regular Street View and facilitate 3D picking.
+<h2>Credits</h2>
+Contact me: <a href="http://callum.com" target="_blank">here</a><br>
+Data: <a href="https://www.google.com/maps/about/behind-the-scenes/streetview/" target="_blank">Google Street View</a> &reg; (this app not affiliated with or endorsed by Google)<br>
+Inspired by: <a target="_blank" href="http://vimeo.com/89982874">Point Cloud City</a><br>APIs: <a target="_blank" href="http://threejs.org/">three.js</a> <strong>&#9679;</strong> <a target="_blank" href="https://github.com/proog128/GSVPanoDepth.js">GSVPanoDepth</a> <strong>&#9679;</strong> <a target="_blank" href="https://github.com/spite/GSVPano.js">GSVPano</a> <strong>&#9679;</strong> <a target="_blank" href="http://www.inear.se/">Einar's math code</a>
+
+<div id="close_button"><a href="#" onclick="show_about(false);"><img src="img/close.png"></a></div>
+        </div>
+        <div id="title">Street Cloud Interactive</div>
+        <div id="tracker_map"></div>
+        <div id="tracker_marker"></div>
+        <div id="pano_container" class="hide"></div>
+        <div id="depth_container" class="hide"></div>
+        <div id="input_feedback" class="hide">Location not found</div>
+        <input id="input_ctrl" type="text" placeholder="Search anywhere.." onkeydown="hide_input_feedback();" onchange="geocode_address()">
+    </body>
+</html>

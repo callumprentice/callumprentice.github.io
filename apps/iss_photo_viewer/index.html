@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ISS Photo Viewer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Generator" content="https://callum.com">
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/manipulator.js"></script>
+    <script type="text/javascript" src="js/tween.min.js"></script>
+    <script type="text/javascript" src="js/ColladaLoader.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/issloader.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-51404170-1', 'callum.com');
+      ga('send', 'pageview');
+    </script>
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", start_app, false);
+    </script>
+</head>
+<body>
+    <div id="title">ISS Photo Viewer</div>
+    <div id="loading_overlay"><img width="400" height="400" id="loading_overlay_img" src="img/loading.svg">
+        <div id="loading_overlay_text">23/40</div>
+    </div>
+    <div id="drawer_toggle_button">
+        <a href="#" onclick="toggle_ui();"> <img draggable="false" src="img/drawer.png">
+        </a>
+    </div>
+    <div id="help_button">
+        <a href="#" onclick="show_about(true);"> <img draggable="false" src="img/help.png">
+        </a>
+    </div>
+    <div id="ui_full_screen_button">
+        <a href="#" onclick="full_screen();"> <img id="full_screen_button" draggable="false" src="img/full_screen.png">
+        </a>
+    </div>
+    <div id="ui_save_url_button">
+        <a href="#" onclick="save_url();"> <img id="save_url_button" draggable="false" src="img/save_url.png">
+        </a>
+    </div>
+    <div id="settings_container"> Mission Selector
+        <table id="patch_table">
+            <tr>
+                <td><img draggable="false" title="Mission ISS001 lasted from 2000-11-02 to 2001-03-17 (135 days) and captured 474 photographs." id="01_on" onclick="onClickImage(this);" src="img/patches/ex01.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS002 lasted from 2001-03-18 to 2001-08-13 (148 days) and captured 2,976 photographs." id="02_on" onclick="onClickImage(this);" src="img/patches/ex02.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS003 lasted from 2001-08-13 to 2001-12-10 (119 days) and captured 930 photographs." id="03_on" onclick="onClickImage(this);" src="img/patches/ex03.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS004 lasted from 2001-12-10 to 2002-06-07 (179 days) and captured 5,832 photographs." id="04_on" onclick="onClickImage(this);" src="img/patches/ex04.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS005 lasted from 2002-06-07 to 2002-12-02 (178 days) and captured 13,801 photographs." id="05_on" onclick="onClickImage(this);" src="img/patches/ex05.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS006 lasted from 2002-11-25 to 2003-04-28 (154 days) and captured 43,436 photographs." id="06_on" onclick="onClickImage(this);" src="img/patches/ex06.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS007 lasted from 2003-04-28 to 2003-10-27 (182 days) and captured 11,204 photographs." id="07_on" onclick="onClickImage(this);" src="img/patches/ex07.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS008 lasted from 2003-10-20 to 2004-04-26 (189 days) and captured 14,875 photographs." id="08_on" onclick="onClickImage(this);" src="img/patches/ex08.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS009 lasted from 2004-04-26 to 2004-10-22 (179 days) and captured 21,259 photographs." id="09_on" onclick="onClickImage(this);" src="img/patches/ex09.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS010 lasted from 2004-10-22 to 2005-04-17 (177 days) and captured 21,473 photographs." id="10_on" onclick="onClickImage(this);" src="img/patches/ex10.png">
+                </td>
+            </tr>
+            <tr>
+                <td><img draggable="false" title="Mission ISS011 lasted from 2005-04-17 to 2005-10-03 (169 days) and captured 8,516 photographs." id="11_on" onclick="onClickImage(this);" src="img/patches/ex11.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS012 lasted from 2005-10-03 to 2006-04-08 (187 days) and captured 15,622 photographs." id="12_on" onclick="onClickImage(this);" src="img/patches/ex12.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS013 lasted from 2006-04-01 to 2006-09-28 (180 days) and captured 74,397 photographs." id="13_on" onclick="onClickImage(this);" src="img/patches/ex13.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS014 lasted from 2006-09-20 to 2007-04-27 (219 days) and captured 7,906 photographs." id="14_on" onclick="onClickImage(this);" src="img/patches/ex14.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS015 lasted from 2007-04-09 to 2007-10-21 (195 days) and captured 20,883 photographs." id="15_on" onclick="onClickImage(this);" src="img/patches/ex15.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS016 lasted from 2007-10-12 to 2008-04-19 (190 days) and captured 19,550 photographs." id="16_on" onclick="onClickImage(this);" src="img/patches/ex16.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS017 lasted from 2008-04-10 to 2008-10-24 (197 days) and captured 11,023 photographs." id="17_on" onclick="onClickImage(this);" src="img/patches/ex17.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS018 lasted from 2008-10-14 to 2009-04-08 (176 days) and captured 27,870 photographs." id="18_on" onclick="onClickImage(this);" src="img/patches/ex18.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS019 lasted from 2009-04-07 to 2009-05-29 (52 days) and captured 11,143 photographs." id="19_on" onclick="onClickImage(this);" src="img/patches/ex19.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS020 lasted from 2009-05-29 to 2009-10-11 (135 days) and captured 25,258 photographs." id="20_on" onclick="onClickImage(this);" src="img/patches/ex20.png">
+                </td>
+            </tr>
+            <tr>
+                <td><img draggable="false" title="Mission ISS021 lasted from 2009-10-10 to 2009-12-01 (52 days) and captured 25,884 photographs." id="21_on" onclick="onClickImage(this);" src="img/patches/ex21.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS022 lasted from 2009-11-30 to 2010-03-18 (108 days) and captured 88,932 photographs." id="22_on" onclick="onClickImage(this);" src="img/patches/ex22.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS023 lasted from 2010-03-18 to 2010-06-02 (76 days) and captured 45,212 photographs." id="23_on" onclick="onClickImage(this);" src="img/patches/ex23.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS024 lasted from 2010-06-02 to 2010-09-24 (114 days) and captured 5,270 photographs." id="24_on" onclick="onClickImage(this);" src="img/patches/ex24.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS025 lasted from 2010-09-24 to 2010-11-25 (62 days) and captured 12,101 photographs." id="25_on" onclick="onClickImage(this);" src="img/patches/ex25.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS026 lasted from 2010-11-25 to 2011-03-16 (111 days) and captured 24,662 photographs." id="26_on" onclick="onClickImage(this);" src="img/patches/ex26.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS027 lasted from 2011-03-16 to 2011-05-24 (69 days) and captured 26,766 photographs." id="27_on" onclick="onClickImage(this);" src="img/patches/ex27.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS028 lasted from 2011-05-23 to 2011-09-16 (116 days) and captured 31,044 photographs." id="28_on" onclick="onClickImage(this);" src="img/patches/ex28.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS029 lasted from 2011-09-16 to 2011-11-21 (66 days) and captured 32,056 photographs." id="29_on" onclick="onClickImage(this);" src="img/patches/ex29.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS030 lasted from 2011-11-21 to 2012-04-27 (158 days) and captured 261,166 photographs." id="30_on" onclick="onClickImage(this);" src="img/patches/ex30.png">
+                </td>
+            </tr>
+            <tr>
+                <td><img draggable="false" title="Mission ISS031 lasted from 2012-04-27 to 2012-07-01 (65 days) and captured 144,718 photographs." id="31_on" onclick="onClickImage(this);" src="img/patches/ex31.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS032 lasted from 2012-07-01 to 2012-09-16 (77 days) and captured 9,409 photographs." id="32_on" onclick="onClickImage(this);" src="img/patches/ex32.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS033 lasted from 2012-09-16 to 2012-11-19 (64 days) and captured 11,356 photographs." id="33_on" onclick="onClickImage(this);" src="img/patches/ex33.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS034 lasted from 2012-11-19 to 2013-03-15 (116 days) and captured 52,173 photographs." id="34_on" onclick="onClickImage(this);" src="img/patches/ex34.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS035 lasted from 2013-03-15 to 2013-05-13 (59 days) and captured 23,459 photographs." id="35_on" onclick="onClickImage(this);" src="img/patches/ex35.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS036 lasted from 2013-05-13 to 2013-09-10 (120 days) and captured 22,183 photographs." id="36_on" onclick="onClickImage(this);" src="img/patches/ex36.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS037 lasted from 2013-09-10 to 2013-11-10 (61 days) and captured 19,115 photographs." id="37_on" onclick="onClickImage(this);" src="img/patches/ex37.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS038 lasted from 2013-11-10 to 2014-03-11 (121 days) and captured 49,470 photographs." id="38_on" onclick="onClickImage(this);" src="img/patches/ex38.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS039 lasted from 2014-03-11 to 2014-05-13 (63 days) and captured 11,558 photographs." id="39_on" onclick="onClickImage(this);" src="img/patches/ex39.png">
+                </td>
+                <td><img draggable="false" title="Mission ISS040 lasted from 2014-05-13 to 2014-09-10 (120 days) and captured 73,708 photographs." id="40_on" onclick="onClickImage(this);" src="img/patches/ex40.png">
+                </td>
+            </tr>
+            <tr>
+                <td><img draggable="false" title="Mission ISS041 lasted from 2014-09-10 to 2014-11-10 (61 days) and captured 72,003 photographs." id="41_on" onclick="onClickImage(this);" src="img/patches/ex41.png">
+                </td>
+            </tr>
+            <tr>
+                <td><img draggable="false" title="Select none" onclick="set_all(false);" src="img/off.png">
+                </td>
+                <td><img draggable="false" title="Select all" onclick="set_all(true);" src="img/on.png">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="photo_container">
+        <div id="photo_label">Mission 10, Photo 1024</div> <img id="photo_img" onload="photo_loaded()" class="centered" draggable="false" src="" onclick="expandPhoto();">
+        <div class="photo_transport">
+            <div class="trans trans1" onclick="gotoPhoto(-1);"><img class="centered" src="img/step_back.png">
+            </div>
+            <div class="trans trans5" onclick="gotoPhoto(1);"><img class="centered" src="img/step_forward.png">
+            </div>
+        </div>
+    </div>
+    <div id="about_box_bkg" class="hide"></div>
+    <div id="about_box" class="hide">
+    <h2>About</h2>
+    I love looking at photos of the earth and space from the ISS but I was unable to find a site that let me easily browse images and see where they were taken. I did find a really neat page by <a href="http://natronics.github.io/ISS-photo-locations/" target="_blank">Nathan Bergey</a> that shows how he created a pretty 2D visualization but I wanted to make it more of an interactive 3D experience. There is lots of data - in the set of 41 missions there are around 1.4 million photos and each is tagged with (among other things) lat/long and photo roll number. The ISS is rendered at its current position and updated every 30 seconds or so. Many thanks to NASA for making these immensely valuable resources available for free. ( <i>Version 0.1.2014-11-20</i> )
+    <h2>Features and Controls</h2>
+    <ul>
+    <li>The site opens with the earth positioned at the current location of the ISS and displays the nearest photo to that location. If a mission/photo number is specified in the URL, that is used instead</li>
+    <li>The mouse and <i>left</i> button rotates the earth. The scroll wheel zooms in and out</li>
+    <li><i>Right</i> clicking on the earth selects the photo in selected missions closest to the point you clicked</li>
+    <li>Mission data is turned on or off by clicking its mission patch in the controls. You can also select All or None</li>
+    <li>Click on photo to see a full size, high resolution version in a new window</li>
+    <li>Move left and right through all photos for a mission with arrows at bottom of photo</li>
+    <li>Click the bookmark icon in the top right to open the currently selected photo/location in a new window with a URL that you can bookmark</li>
+    <li>Click the full screen icon in the top right to switch to a full screen view</li>
+    <li>Click the drawer icon in the top right to open and close the drawer containing the UI and controls</li>
+    </ul>
+    <h2>Issues and future ideas</h2>
+    <ul>
+    <li>Make things work on mobile devices - anyone have one I can test with?</li>
+    <li>Make things work on smaller screens - issues with lower resolution displays</li>
+    <li>Needs better user interface. I experimented with lots of ideas and what's there was my favorite. I was going to keep experimenting but wanted to get something released</li>
+    <li>Allow users to select sequences of frames and save as a movie - great for the timelapse shots</li>
+    <li>Need a way to browse back and forward through images you've seen - too easy to click around, see a great shot, click again and lose it</li>
+    <li>Chrome (OS X) is my browser of choice so this has been mostly tested there. It seems to work on Firefox too although there are some rough edges. Haven't tried on mobile devices or IE - I probably should find a way to test on both.</li>
+    </ul>
+    <h2>Credits</h2>
+    <ul>
+    <li>The code for the globe is loosely based on code <a href="http://thematicmapping.org" target="_blank">here</a></li>
+    <li>Original page with 2D visualization and data for mission numbers 1-34 can be found <a href="http://natronics.github.io/ISS-photo-locations/" target="_blank">here</a></li>
+    <li>NASA for images and data - many sites but try <a href="http://eol.jsc.nasa.gov/sseop/clickmap/" target="_blank">here</a> first </li>
+    <li>Three.js - <a href="http://threejs.org/" target="_blank">here</a></li>
+    <li>The Open Notify service for tracking position of ISS <a href="http://api.open-notify.org/" target="_blank">here</a></li>
+    <li>Innumerable JavaScript snippets from around the Web - thank you one and all</li>
+    </ul>
+    <h2>Contact</h2>
+    Find my contact details and see more experiments <a href="http://callum.com#contact" target="_blank">here</a> - advice, suggestions and fixes much appareciated along with offers from NASA to visit the ISS :)
+    <div id="close_button_top"><a href="#" onclick="show_about(false);">CLOSE</a></div>
+    <div id="close_button_bottom"><a href="#" onclick="show_about(false);">CLOSE</a></div>
+    </div>
+</body>
+</html>
