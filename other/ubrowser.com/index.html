@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>uBrowser and LLMozLib - an embedded </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="author" content="callum prentice" />
+<meta name="description" content="uBrowser and LLMozLib - embedded Mozilla/Gecko library abstraction." />
+<meta name="keywords" content="ubrowser, llmozlib, mozilla, second life, linden lab, gecko, 3d, opengl, directx" />
+<link rel="shortcut icon" href="http://ubrowser.com/images/favicon.ico">
+<script src="/js-global/FancyZoom.js" type="text/javascript"></script>
+<script src="/js-global/FancyZoomHTML.js" type="text/javascript"></script>
+<style type="text/css">
+body {
+	font-family: Verdana, Geneva, Helvetica, Arial, sans-serif;
+	background-color: #000;
+	color: #fff;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+	color: yellow;
+}
+
+a:hover {
+	color: #f00;
+}
+
+div.container {
+	width:100%;
+ 	background-color: #000;
+ 	color: #fff;
+}
+
+div.header {
+	width: 100%;
+	border: 0;
+	background-color: #000;
+	color: #000;
+	border-bottom: 3px #fff solid;
+}
+
+div.header img {
+	border: 0;
+	align: left;
+	margin: 0;
+	clear: both;
+	padding: 0;
+	display: block;
+ }
+
+div.content {
+	width: 100%;
+	border: 0;
+	margin: 0;
+	background-color: #444;
+	color: #fff;
+}
+
+div.content h1 {
+	border: 0;
+	margin: 0;
+	padding: 8px;
+	background-color: #667;
+	color: #fff;
+}
+
+div.content p {
+	border: 0;
+	margin: 8px;
+	margin-left: 16px;
+	background-color: #444;
+	color: #fff;
+}
+
+div.content li {
+	margin: 8px;
+}
+
+div.content em {
+	color: #0aa;
+}
+
+
+</style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-41116249-1', 'ubrowser.com');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body id="ubrowser" onload="setupZoom()">
+
+<div class="container">
+
+	<div class="header">
+	<img src="images/title.jpg" alt="uBrowser and LLMozLib - embedded Mozilla/Gecko library abstraction." title="uBrowser and LLMozLib - embedded Mozilla/Gecko library abstraction.">
+	</div>
+
+	<div class="content">
+
+		<h1>News</h1>
+		<p>
+		<ul>
+		<li><em>2010-12-20:</em>Time for one of those regular as clockwork 9 month updates. Moved to a new host. About to start a side project with something really cool and related to this. Will update the site when I have something to show. Almost 5 years since I released the first version. Wow!</li>
+		<li><em>2010-03-17:</em>Holy moly - has it really been 18 months since I last updated this site? We switched over to using WebKit in Second Life so that's where I've been focusing my attention recently - source, demos and build instructions for all 3 platforms  <a href="https://wiki.secondlife.com/wiki/LLQtWebKit">here</a> - notice that interactive Flash works now across the board and that we changed the license to GPL to match Second Life. I'll update this site properly soon - in the meantime, everything below is probably wrong. Contact me if you have any questions or comments - details at bottom of this page</li>
+		<li><em>2008-09-29:</em>I see someone <a target="_new" href="http://wordpress.com/tag/awesomium/">else</a> has been working on a Google Chromium based offscreen renderer - early days yet but it looks promising - I ported uBrowser to it (<a href="http://ubrowser.com/downloads/ubrowser_awesomium_bin_2008-09-29_1747.zip">download</a>) and it seems to work mostly - a few crashes but not bad considering it's an early release.</li>
+		<li><em>2008-09-07:</em>I made a version of uBrowser that uses a hacked version of Google Chromium to render the content - exciting stuff - I'll release everything once I get it working properly.</li>
+		<li><em>2008-09-02:</em>Google announces <a target="_new" href="http://www.google.com/chrome">Chrome</a> today (well, yesterday those of us living in Singapore :) ) and it looks like it'll really shake things up - I wonder if they're going to announce an embedding API eventually - might be easier than using WebKit directly.. </li>
+		<li><em>2008-08-24:</em>I've been playing around with a Win32 specific version of uBrowser that renders content using an embedded instance of Internet Explorer or the Flash player instead of Gecko. There are two versions and they both share a massively cheesy code name! <a target="_new" href="http://ubrowser.com/downloads/animal_logic_flash.exe">Animal Logic - Flash</a> only plays back Flash (specifically SWF) files while <a target="_new" href="http://ubrowser.com/downloads/animal_logic_ie.exe">Animal Logic - IE</a> plays Web content including most embedded Flash applications like YouTube. Both are tiny (320KB) Windows executables - no viruii, trojans or other nasties AFAICT but use at your own risk. Many things work, many things work a bit and some things don't work at all - I have no idea right now how to fix the things that are broken. For example, some Flash content in the IE version doesn't work as well as it does in the SWF version. It's very unoptimized and updates each page constantly so I've limited it to a single browser for now. Give it a try and let me know what you think. I included a few bookmarked sites in both versions - the <a target="_new" href="http://ubrowser.com/downloads/animal_logic_flash.exe">Flash</a> one for example has a working MAME emulator that already handles quite a few games - who's going to make a 3D virtual arcade :)
+		<li><em>2008-07-12:</em>Nuanti made some great progress on putting together a WebKit port called <a target="_new" href="http://meta.nuanti.com">Meta</a> that works with uBrowser - no updates for a long time though - Anyone know where Alp has gone? </li>
+<li><em>2006-02-02:</em>Released the first version</li>
+		</ul>
+		</p>
+		<br>
+
+		<h1>What</h1>
+		<p>
+		<ul>
+		<li>LLMozLib is a library that makes it a little easier to embed the Mozilla Gecko rendering engine into your application</li>
+		<li>It consists of a single static library, a C++ header file and some run time files required by Mozilla</li>
+		<li>LLMozLib is available for  Windows, Mac OSX and Linux</li>
+		<li>For the Windows version, there are solution/project files for VC7 (2003) and VC8 (2005)</li>
+		<li>I changed the name to LLMozLib2 when I moved from Firefox 1.x code (Gecko 1.8.0) to Firefox 2.x code (Gecko 1.8.1). That might have been a confusing blunder although it seemed like a good idea at the time. Perhaps I should revert it?</li>
+		<li>In order to get some things to work - drop down menus for example - a patch is applied to the Mozilla source.</li>
+		<li>uBrowser is the test 'mule' application that I use for testing LLMozLib</li>
+		<li>I don't provide a prebuilt version of LLMozLib - you have to build it yourself - the <a target="_new" href="http://wiki.secondlife.com/wiki/LLMozLib2#Getting_the_necessary_Mozilla_code.2C_building_it_and_then_building_LLMozLib2">instructions</a> work if you follow the 'recipe'</li>
+		<li>I do provide a prebuilt Windows version of the test mules - currently uBrowser and the much simpler testGL. As far as I know, they're virus and trojan free - if you don't trust me, build them yourself.</li>
+		<li>LLMozLib and uBrowser were originally written for use in the <a target="_new" href="http://secondlife.com">Second Life</a> 3D online virtual world</li>
+		<li>The code was open sourced under a very <a target="_new" href="http://www.mozilla.org/MPL/MPL-1.1.html">unrestrictive license</a> and is now used in many different applications.</li>
+		<li>uBrowser is not meant to be a browser - it's a test application. Don't email me and ask why I bothered wasting my time making such a worthless browser. Oh, too late.</li>
+		<li>Several things don't work including plugins, notification dialogs, and focus. I don't have solutions for these so any help is appreciated.</li>
+		<li>This version is built against similar code to Firefox 2.0 (Gecko 1.8.1). One day I want to make it build against code similar to what's used in Firefox 3.0 (Gecko 1.9) but that means a lot of big changes.</li>
+		<li>The first version was released in February 2006 - not nearly enough progress in 2.5 years unfortunately</li>
+		<li>I work for <a target="_new" href="http://lindenlab.com">Linden Lab</a> - I used to live in San Francisco but now I live in Singapore.</li>
+		</ul>
+		</p>
+		<br>
+
+		<h1>Visuals</h1>
+		<p>
+		<a href="screenshots/screenshot01.jpg" title="The basic cube"><img src="screenshots/thumb01.jpg"></a>
+		<a href="screenshots/screenshot02.jpg" title="Canvascape in 3D in 3D"><img src="screenshots/thumb02.jpg"></a>
+		<a href="screenshots/screenshot03.jpg" title="Capture the Tetris flag"><img src="screenshots/thumb03.jpg"></a>
+		<a href="screenshots/screenshot04.jpg" title="Canvas Animation Kit Experiment"><img src="screenshots/thumb04.jpg"></a>
+		<a href="screenshots/screenshot05.jpg" title="Various UI elements including XUL"><img src="screenshots/thumb05.jpg"></a>
+		<a href="screenshots/screenshot06.jpg" title="Lemmings in the third dimension"><img src="screenshots/thumb06.jpg"></a>
+		<a href="screenshots/screenshot07.jpg" title="Google maps in a whole new light"><img src="screenshots/thumb07.jpg"></a>
+		<a href="screenshots/screenshot08.jpg" title="Shared whiteboard application"><img src="screenshots/thumb08.jpg"></a>
+		<a href="screenshots/screenshot09.jpg" title="Web based 'operating systems' work mostly. "><img src="screenshots/thumb09.jpg"></a>
+		<a href="screenshots/screenshot10.jpg" title="The News Cube"><img src="screenshots/thumb10.jpg"></a>
+		<a href="screenshots/screenshot11.jpg" title="Productivity Loss 101"><img src="screenshots/thumb11.jpg"></a>
+		<a href="screenshots/screenshot12.jpg" title="Tron - Inside Looking Out"><img src="screenshots/thumb12.jpg"></a>
+		<a href="screenshots/screenshot13.jpg" title="Color picker alternative"><img src="screenshots/thumb13.jpg"></a>
+		<a href="screenshots/screenshot14.jpg" title="Online docs - word processing and spreadsheets"><img src="screenshots/thumb14.jpg"></a>
+		<a href="screenshots/screenshot15.jpg" title="Streetviewr - best site on the net :)"><img src="screenshots/thumb15.jpg"></a>
+		</p>
+		<br>
+
+		<h1>Where</h1>
+		<p>
+		<ul>
+		<li>A Wiki page that describes how to build LLMozLib on Windows, Mac OSX and Linux can be found <a target="_new" href="http://wiki.secondlife.com/wiki/LLMozLib2">here</a> - it's a bit Second Life specific but everything you need is there.</li>
+		<p>
+		<li>Prebuilt Win32 version of uBrowser and testGL can found <a target="_new" href="http://ubrowser.com/downloads/ubrowser_win32_bin_2008_08_04.zip">here</a>.</li>
+		<p>
+		<li>Mac OSX and Linux binaries will appear here too - I'm just not able to build them myself.</li>
+		<p>
+		<li>You can browse the source code directly in the Second Life SVN repository <a target="_new" href="http://svn.secondlife.com/trac/llmozlib/browser/trunk/llmozlib2">here</a>.</li>
+		</ul>
+		</p>
+		<br>
+
+		<h1>Who</h1>
+		<p>You can contact me, Callum Prentice by sending email <a href="mailto:callum@NO_SP@M___gmail.com?subject=UBrowser_Web_Inquiry">here</a> (don't forget to remove the anti-spam gibberish)</p>
+		<br>
+
+	</div>
+
+</div>
+
+</body>
+</html>
+
