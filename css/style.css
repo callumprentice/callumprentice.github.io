@@ -150,6 +150,14 @@ img.srcicon {
     height:32px;
     width:32px;
 }
+
+img.srcicon:after {
+    margin:0;
+    padding:0;
+    height:32px;
+    width:32px;
+}
+
 @media (max-width: 1199px) {
     .container {
         width: auto;
