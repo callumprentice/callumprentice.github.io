@@ -143,6 +143,13 @@ ul.rig.columns-8 li {
     width:10%;
 }
 
+img.srcicon {
+    margin:0;
+    padding:0;
+    content:url("../img/githubsrc.png");
+    height:32px;
+    width:32px;
+}
 @media (max-width: 1199px) {
     .container {
         width: auto;
