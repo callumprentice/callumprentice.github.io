@@ -37,7 +37,7 @@ globe_manipulator = function(params) {
     };
     var motion_scaling_factor = 0.1;
     var _smoothing_factor = 0.1;
-    var _wheel_scaling = 0.001;
+    var _wheel_scaling = 0.1;
     var _navigation_enabled = true;
     var _mesh = params.mesh;
     var camera_target = new THREE.Vector3(0, 0, 0);
@@ -162,8 +162,8 @@ globe_manipulator = function(params) {
 
     function _on_mouse_wheel(event) {
         if (!_navigation_enabled) return;
-        var delta = event.wheelDeltaY;
-        _distance_target -= delta * _wheel_scaling;
+
+        _distance_target -= ( event.deltaY && event.deltaY / Math.abs(event.deltaY) ) * _wheel_scaling;
         _distance_target = _distance_target > _max_distance ? _max_distance : _distance_target;
         _distance_target = _distance_target < _min_distance ? _min_distance : _distance_target;
     }
@@ -180,6 +180,6 @@ globe_manipulator = function(params) {
     }
     _dom_object.addEventListener('mousedown', _on_mouse_down, false);
     document.addEventListener('keydown', this._on_key_down, false);
-    document.addEventListener('mousewheel', _on_mouse_wheel, false);
+    document.addEventListener('wheel', _on_mouse_wheel, false);
     this.reset();
 }
