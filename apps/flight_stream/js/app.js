@@ -20,6 +20,7 @@ var flight_point_size = 0.015;
 var earth_img = 0;
 var elevation_img = 0;
 var water_img = 0;
+var is_loading = false;
 
 function start_app() {
     init();
@@ -347,9 +348,11 @@ function show_about(visible) {
 
 function show_loading(visible) {
     if (visible) {
+        is_loading = true;
         document.getElementById("loading_overlay").className = "show";
         document.getElementById("loading_overlay").style.pointerEvents = "all";
     } else {
+        is_loading = false;
         document.getElementById("loading_overlay").className = "hide";
         document.getElementById("loading_overlay").style.pointerEvents = "none";
     }
@@ -362,7 +365,7 @@ function handle_about() {
 function animate(time) {
     requestAnimationFrame(animate);
 
-    if ( earth_img && elevation_img && water_img ) {
+    if ( ! is_loading ) {
         controls.update();
         update_flights();
     }
