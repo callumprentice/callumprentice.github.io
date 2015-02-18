@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flight Stream</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://callum.com">
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/Detector.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="js/flights_one.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="x-shader/x-vertex" id="vertexshader">
+            attribute float size;
+            attribute vec3 customColor;
+
+            varying vec3 vColor;
+
+            void main() {
+                vColor = customColor;
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 color;
+            uniform sampler2D texture;
+
+            varying vec3 vColor;
+
+            void main() {
+                gl_FragColor = vec4( color * vColor, 0.5 );
+                gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+            }
+        </script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", start_app, false);
+        </script>
+        <div id="title">Flight Stream</div>
+        <div id="loading_overlay" class="hide"><img width="400" height="400" id="loading_overlay_img" src="images/loading.svg"></div>
+        <div id="about_box_bkg" class="hide"></div>
+        <div id="about_box" class="hide">
+        <h2>About</h2>
+        Experiment to map many of the airline flights between world airports. It's <strong>not</strong> showing real time positions (which would be amazing but I don't have that data) but rather, great-circle routes between major airports based on flight data from the <a href="http://openflights.org/data.html" target="_blank">Open Flights</a> site. As a visualization, I think it fails since there is so much data that around major airportse, it just blurs into a mess. Still, it was fun to do and looks kind of pretty (for some definition of pretty).
+        <h2>Credits</h2>
+        <ul>
+        <a href="http://www.shadedrelief.com/natural3/pages/extra.html" target="_blank">Globe textures</a> &#9679; <a href="http://threejs.org" target="_blank">Three.js</a> &#9679; <a href="http://www.movable-type.co.uk/scripts/latlong.html" target="_blank">Lat/long calculations</a>  &#9679; <a href="http://openflights.org/data.html" target="_blank">Airport/route data</a>
+        </ul>
+        <h2>Contact</h2>
+        Find my contact details and see more experiments <a href="http://callum.com#contact" target="_blank">here</a> - advice, suggestions and fixes appreciated.
+        <div id="close_button_top"><a href="#" onclick="show_about(false);">CLOSE</a></div>
+        </div>
+    </body>
+</html>
