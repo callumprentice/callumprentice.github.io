@@ -173,7 +173,7 @@ function render_street_view_by_id(pano_id) {
     svs.getPanoramaById(pano_id,
         function (data, status) {
             if (status === google.maps.StreetViewStatus.OK) {
-                pano_loader.load(new google.maps.LatLng(data.location.latLng.k, data.location.latLng.B));
+                pano_loader.load(new google.maps.LatLng(data.location.latLng.lat(), data.location.latLng.lng()));
             } else {
                 console.error("Unable to get starting pano ID ");
             }
@@ -186,12 +186,12 @@ function render_street_view_by_id(pano_id) {
         pano_container.appendChild(this.canvas);
         img_canvas_context = this.canvas.getContext('2d');
         tracker_map.setCenter({
-            lat: this.data.location.latLng.k,
-            lng: this.data.location.latLng.B
+            lat: this.data.location.latLng.lat(),
+            lng: this.data.location.latLng.lng()
         });
         main_rotation = this.data.tiles.centerHeading;
-        cur_lat = this.data.location.latLng.k;
-        cur_lng = this.data.location.latLng.B;
+        cur_lat = this.data.location.latLng.lat();
+        cur_lng = this.data.location.latLng.lng();
         if (this.data.links.length > 0) {
             for (var i = 0; i < this.data.links.length; ++i) {
                 var helper_geometry_base = new THREE.Object3D();
