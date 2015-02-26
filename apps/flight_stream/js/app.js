@@ -9,6 +9,7 @@ var positions, sizes;
 var flight_path_lines;
 var flight_point_start_time = [];
 var flight_point_end_time = [];
+var flight_distance = [];
 var start_flight_idx = 0;
 var end_flight_idx = flights.length;
 var flight_point_speed_changed = false;
@@ -143,6 +144,9 @@ function generateControlPoints(radius) {
         var spline = new THREE.SplineCurve3(points);
 
         flight_path_splines.push(spline);
+        
+        var arc_length = spline.getLength();        
+        flight_distance.push(arc_length);
 
         setFlightTimes(f);
     }
@@ -306,8 +310,8 @@ function easeOutQuadratic(t, b, c, d) {
 function setFlightTimes(index) {
     var scaling_factor = (flight_point_speed_scaling - flight_point_speed_min_scaling) /
                             (flight_point_speed_max_scaling - flight_point_speed_min_scaling);
-    var duration = 1000 + 8000 * (1 - scaling_factor) + Math.random() * 4000;
-
+    var duration = (1-scaling_factor) * flight_distance[index] * 80000;
+   
     var start_time = Date.now() + Math.random() * 5000
     flight_point_start_time[index] = start_time;
     flight_point_end_time[index] = start_time + duration;
