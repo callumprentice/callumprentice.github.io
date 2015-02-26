@@ -1,0 +1,67 @@
+==================================================================
+https://keybase.io/callum
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://callumprentice.github.io
+  * I am callum (https://keybase.io/callum) on keybase.
+  * I have a public key with fingerprint 3FB3 7EE1 3DF8 B15E 9E81  D96D 01F5 C7DD 4D76 3B4A
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "3fb37ee13df8b15e9e81d96d01f5c7dd4d763b4a",
+            "host": "keybase.io",
+            "key_id": "01f5c7dd4d763b4a",
+            "kid": "0101b8abe5b7076d4f611f252854e9fb2a106a571d71754aef8043067b90959014180a",
+            "uid": "4d1c39dbb90939fbd720474946b94519",
+            "username": "callum"
+        },
+        "service": {
+            "hostname": "callumprentice.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1424912459,
+    "expire_in": 157680000,
+    "prev": "bdc9aece1187d57857dbe170fcd7c35a015fe4022ea5e8da42958ec23251457b",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.7
+Comment: https://keybase.io/crypto
+
+yMIfAnicbVJrSBRBHD8fF3U9KDWLFLItI8RsZ3dmZ/eCIpJeFkUYEpnnzs7suT72
+zr29MxFB06iMCgsqqT4kRRmCPYjCL76xqIwSi4qoEKoPPYwKIovaLfsQNF+G+b3+
+8//z75+e4PHFDet7OndeuALibvfkRT3578N5NRwJ0WrOX8OVsd+XbphBZoUtw7Q5
+PyfqRMSMAZHqMgGIKUwGVJEoD3SkYUohxZJIoMplcyWhiOtwYogaYTlGyMGcR8Cg
+DvoffdkEwQMiq4QhgnksUahLAOgCEmQEmaITQQW8pCIMKAYYQZXpMg9FXsJE4RWk
+8AACmXfjor/jIAWaqFDisqJjp1jgIYYKlIgCEVBcYYRZplrBHLWmlpdHK7jabM7B
+YobG3AG4ffzDhy1m2g6ZEzTskij501nYCtkhLVTuqEpsOxzxuyl2ddi1VTESmAgM
+EMOkzkQdR4xZESNkcn7gKDXbcCsAKEAFCBAp2RzbFTYsFjBcBcKSzDvHrcNiTiSh
+mqIyjQEgY4qwjDAlDGBe1yjWRKTyAOkM8oLAVMRkqkJBQTLTBFFAACJMOLfFSjPE
++aHzTTXoREaMoKnaUYtxtb3dhYmeOJ9nkjfe3QmPb8rMv5uy5ONkT2P7upXdpzs/
+7DiSPFC4oqf5kN3W4R0YPMGk7UXPFw/tXXs/bX6D5G3YWlzX9HBR8BXJ3DfvwWgv
+/3Ra5bKs8+ndG+KbDmTE73355fKtqWsez/CuftbYkmsOtMQyW8zUhbWfmgvat3yV
+mud5JWV61bZZn2tKjgbrXiS0+jas82yOvRufVn91dGVHz6rc1oM87vuJfvQP1i3/
+HshPH31CfKVLk7oOX095XZN1aWxNTvEZpd4aGykXqgvunf15LmN1hj08NPeAvSf2
+ZhUc7EpKHl9wJ/tUaUNOWlvbpm/rx7XZpW83Xjz2NfHG3WdC0e7iqr7+lONP9zc+
+OnnNQHZR6pzm1pGbvwBZTSjz
+=vZ0A
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/callum
+
+==================================================================
