@@ -1,0 +1,22 @@
+TODO List for Saturday/Sunday
+
+* Get globe working with stars
+* Get manipulator working and supporting goto/pick lat/lng (check Chrome and FF)
+* Grab data from NASA for missions 1-43
+* Compress data
+* Write loader to load compressed data
+* Display mission data per mission with shader (correct or pleasing height above earth)
+* Decide if feasible to use photo color for point color or same color per mission
+* Grab mission logos and convert to buttons for mission selectors
+* Allow user to turn on/off missions plus all on/off
+* Decide on UI to move (a) move globe and (b) choose photo
+* Helper geometry to indicate what is selected and where you clicked
+* Let user navigate through a mission's photos with arrow keys
+* Click on smaller photo to go to full size in another window
+* Full screen option for presentations
+* Bookmark a photo via a URL
+* Help pages
+* Credits
+
+
+
