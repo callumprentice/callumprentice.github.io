@@ -434,7 +434,8 @@
          class="hide">
         <h2><a href="#"
            onclick="showHelpContents('about_text');">About</a> &#9679; <a href="#"
-           onclick="showHelpContents('controls_text');">Controls</a> &#9679; <a href="#"
+           onclick="showHelpContents('controls_text_1');">Controls 1</a> &#9679; <a href="#"
+           onclick="showHelpContents('controls_text_2');">Controls 2</a> &#9679; <a href="#"
            onclick="showHelpContents('future_text');">Future</a> &#9679; <a href="#"
            onclick="showHelpContents('credits_text');">Credits</a> &#9679; <a href="#"
            onclick="showHelpContents('contact_text');">Contact</a> &#9679; <a href="#"
@@ -458,32 +459,47 @@
         </div>
 
         <div class="hide help_contents"
-             id="controls_text">
+             id="controls_text_1">
             <ul>
-                <li>The application opens with the earth positioned at the current location of the ISS and displays the nearest photo to that location.</li>
+                <li>The application opens with the earth positioned at the current location of the International Space Station and displays the nearest photo to that location</li>
 
-                <li>If a mission/photo number is specified in the URL, that is used instead</li>
+                <li>If a mission/photo number is specified in the URL, that is used instead - <a href="http://callumprentice.github.io/apps/iss_photo_explorer/index.html?m=42&p=14428" target="_new">example</a></li>
 
-                <li>The mouse and <i>left</i> button rotates the earth.</li>
+                <li>Press the <i>left</i> button and move the mouse to rotate the globe</li>
 
-                <li>The <i>scroll wheel</i> zooms in and out</li>
+                <li>Use the <i>scroll wheel</i> to zoom in and out</li>
 
-                <li><i>Right</i> clicking on the earth selects the photo in missions that are enabled which is closest to the point you clicked</li>
+                <li>Click the <i>right</i> button anywhere on the globe and the photo which is closest to the point you clicked will be displayed</li>
 
-                <li>Photographs for missions are enabled or disabled by left clicking the mission patch in the controls. You can also right click to turn them all on or off</li>
+                <li>If a mission is disabled (dimmed) then you won't see its photos or photo locations</li>
 
-                <li>Click on photo to see a full size, high resolution version in a new window</li>
+                <li>Missions are enabled or disabled by <i>left</i> clicking the patches in the Mission Selector. You can also <i>right</i> click to turn them all on or off</li>
 
-                <li>Move left and right through all photos for a mission with arrows at bottom of photo</li>
+                <li><i>Left</i> click on photo to see a full size, very high resolution version in a new window</li>
 
-                <li>Click the <b>Window Switch</b> icon to swap the globe and photo graph windows - useful if you would rather see large images and small controls. <em>Important:</em> LARGE images are requested when the windows are swapped because of the extra space and that may be slow to load for some people.</li>
-
-                <li>Click the <b>Full Screen</b> icon to switch to a full screen view</li>
-
-                <li>Click the <b>Share</b> icon to open the currently selected photo/location in a new window with a URL that you can be bookmarked or shared with your friends</li>
-
-                <li>Click the <b>Goto ISS</b> icon to rotate the globe to the current location of the ISS</li>
+                <li>Move left and right through all photos for a mission with the arrows at the bottom of each photo</li>
             </ul>
+        </div>
+
+        <div class="hide help_contents"
+             id="controls_text_2">
+                <table>
+                <tr>
+                <td valign="top"><img src="img/swap_window.png"></td><td>Click the <b>Window Switch</b> icon to swap the globe and photograph windows - useful if you would rather see large images and small controls. <br><em>Important:</em> Large images are requested when the windows are swapped because of the extra space and that may be slow to load for some people</td>
+                </tr>
+                <tr>
+                <td valign="top"><img src="img/full_screen.png"></td><td>Click the <b>Full Screen</b> icon to switch to a full screen view. Press the Escape key to return to normal afterwards</td>
+                </tr>
+                <tr>
+                <td valign="top"><img src="img/share.png"></td><td>Click the <b>Share</b> icon to open the currently selected photo/location in a new window with a URL that you can be bookmarked or shared with your friends</td>
+                </tr>
+                <tr>
+                <td valign="top"><img src="img/view_iss.png"></td><td>Click the <b>Goto ISS</b> icon to rotate the globe to the current location of the ISS and see the closest photo to it</td>
+                </tr>
+                <tr>
+                <td valign="top" align="center"><img src="img/twitter.png"></td><td>Click the <b>Twitter</b> button to Tweet the current mission and photograph to your time line</td>
+                </tr>
+                </table>
         </div>
 
         <div class="hide help_contents"

@@ -589,7 +589,8 @@ function showAbout(visible) {
 
 function showHelpContents(id) {
     document.getElementById('about_text').className = "hide help_contents mouse_off";
-    document.getElementById('controls_text').className = "hide help_contents mouse_off";
+    document.getElementById('controls_text_1').className = "hide help_contents mouse_off";
+    document.getElementById('controls_text_2').className = "hide help_contents mouse_off";
     document.getElementById('future_text').className = "hide help_contents mouse_off";
     document.getElementById('credits_text').className = "hide help_contents mouse_off";
     document.getElementById('contact_text').className = "hide help_contents mouse_off";
