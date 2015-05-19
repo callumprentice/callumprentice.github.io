@@ -5,7 +5,7 @@
 var camera, scene, renderer, controls, stats;
 var radius = 0.995;
 var base_globe = 0;
-var projector;
+
 var intersected_object = 0;
 var overlay_element = 0;
 var hover_scale = 1.01;
@@ -99,8 +99,6 @@ function init() {
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     document.body.appendChild(stats.domElement);
-
-    projector = new THREE.Projector();
 
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('mousemove', onDocumentMouseMove, false);
