@@ -1,0 +1,132 @@
+body {
+    background-color: #000;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 0;
+    color: #000;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+a {
+    color: orange;
+    text-decoration: none;
+}
+
+i {
+    color: #fff;
+}
+
+strong {
+    color: #ff0;
+}
+
+#title {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    top: 8px;
+    text-align: center;
+    z-index: 10;
+    font-size: 2.0em;
+    color: #0f0;
+    pointer-events: none;
+}
+
+#planet_selector {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 160px;
+    bottom: 0;
+    background-color: rgba(0.0,0.0,0.0,1.0);
+    text-align: center;
+}
+
+#planet_selector_description {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    top: 0px;
+    color: #ff0;
+    background-color: rgba(0.0,0.0,0.0,1.0);
+    text-align: center;
+    font-size: 1.2em;
+}
+
+#planet_selector a {
+    color: #ff0;
+}
+
+#about_box_icon {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  overflow: hidden;
+  z-index: 1900;
+}
+
+#about_box_bkg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 1900;
+  background-color: rgba(100,100,100,0.7);
+  pointer-events:none;
+}
+
+#about_box {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -250px;
+  overflow: hidden;
+  padding: 18px;
+  color: #fff;
+  text-align: justify;
+  z-index: 2000;
+  background-color: rgba(100,100,100,0.9);
+  border-radius: 16px;
+  font-size: 0.70em;
+  border: #999 4px solid;
+  pointer-events:none;
+}
+
+.help_contents {
+  position: absolute;
+  top: 64px;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  font-size: 2.0em;
+  z-index: 4010;
+}
+
+.mouse_off {
+  pointer-events:all;
+}
+
+.mouse_off {
+  pointer-events:none;
+}
+
+.hide {
+  opacity: 0;
+  transition: opacity .5s ease-out;
+}
+
+.show {
+  opacity: 1;
+  transition: opacity .5s ease-out;
+}
+

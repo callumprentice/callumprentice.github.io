@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Planet Compare</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="js/three.r72dev.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/stats.min.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    </head>
+    <body onload="app()">
+        <table id="planet_selector">
+            <tr>
+                <td><a href="#" onClick="select('MERCURY');"><img src='img/mercury_thumb.png'></td>
+                <td><a href="#" onClick="select('VENUS');"><img src='img/venus_thumb.png'></a></td>
+                <td><a href="#" onClick="select('EARTH');"><img src='img/earth_thumb.png'></a></td>
+                <td><a href="#" onClick="select('MARS');"><img src='img/mars_thumb.png'></a></td>
+                <td><a href="#" onClick="select('JUPITER');"><img src='img/jupiter_thumb.png'></a></td>
+                <td><a href="#" onClick="select('SATURN');"><img src='img/saturn_thumb.png'></a></td>
+                <td><a href="#" onClick="select('URANUS');"><img src='img/uranus_thumb.png'></a></td>
+                <td><a href="#" onClick="select('NEPTUNE');"><img src='img/neptune_thumb.png'></a></td>
+                <td><a href="#" onClick="select('PLUTO');"><img src='img/pluto_thumb.png'></a></td>
+            </tr>
+            <tr>
+                <td><a href="#" onClick="select('MERCURY');">MERCURY</a></td>
+                <td><a href="#" onClick="select('VENUS');">VENUS</a></td>
+                <td><a href="#" onClick="select('EARTH');">EARTH</a></td>
+                <td><a href="#" onClick="select('MARS');">MARS</a></td>
+                <td><a href="#" onClick="select('JUPITER');">JUPITER</a></td>
+                <td><a href="#" onClick="select('SATURN');">SATURN</a></td>
+                <td><a href="#" onClick="select('URANUS');">URANUS</a></td>
+                <td><a href="#" onClick="select('NEPTUNE');">NEPTUNE</a></td>
+                <td><a href="#" onClick="select('PLUTO');">PLUTO</a></td>
+            </tr>
+        </table>
+        <table id="planet_selector_description">
+        <tr><td id="planet_selector_description_cell">CLICK ON A PLANET &#9679; LEFT MOUSE BUTTON TO MOVE</td></tr>
+        </table>
+
+<div id="about_box_icon"><a href="#" onclick='showAbout(true);'><img src="img/about.png"></a></div>
+  <div id="about_box_bkg"
+         class="hide"></div>
+
+    <div id="about_box"
+         class="hide">
+        <h2><a href="#"
+           onclick="showHelpContents('about_text');">About</a> &#9679; <a href="#"
+           onclick="showHelpContents('controls_text_1');">Controls</a> &#9679; <a href="#"
+           onclick="showHelpContents('future_text');">Future</a> &#9679; <a href="#"
+           onclick="showHelpContents('credits_text');">Credits</a> &#9679; <a href="#"
+           onclick="showHelpContents('contact_text');">Contact</a> &#9679; <a href="#"
+           onclick="showAbout(false);">Close</a></h2>
+
+        <div class="show help_contents" id="about_text">
+             <ul>
+            <li>A Simple way to compare the sizes of our solar system's planets.</li>
+            <br>
+            <li>You can compare them side by side or with the smaller planet positioned on the surface of the larger one.</li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents"
+             id="controls_text_1">
+            <ul>
+                <li>Press the <i>left</i> button and move the mouse to rotate the planets</li>
+                <br>
+                <li>After you have selected two planets, double click the <i>left</i> button anywhere on the larger planet and the smaller one will be positioned at that location</li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents"
+             id="future_text">
+            <ul>
+                <li>Get better maps of the planet surface - especially Pluto!</li>
+                <br>
+                <li>Probably much, much more I haven't thought of yet</li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents"
+             id="credits_text">
+            <ul>
+                <li>NASA data and image sites - many different ones but try <a target="_new"
+                   href="http://eol.jsc.nasa.gov//">here</a> first</li>
+            <br>
+
+
+                <li>Some of the planet texture maps come from <a href="http://planetpixelemporium.com/earth.html"
+                   target="_new">JHT's Planetary Pixel Emporium</a></li>
+            <br>
+
+                <li><a href="http://threejs.org/"
+                   target="_new">three.js</a> - a very nice WebGL library</li>
+            <br>
+
+                <li>Innumerable JavaScript snippets from around the Web - thank you one and all</li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents"
+             id="contact_text">
+             <ul>
+                <li>Visit my page at <a target="_new" href="http://callum.com">http://callum.com</a> to see other examples of my work and contact information</li>
+                <br>
+                <li>The source code for this project is <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/planet_compare"
+                   target="_new">available</a> along with source for everything else I've made <a href="https://github.com/callumprentice" target="_new">here</a></li>
+                <br>
+                <li>Advice, suggestions, bug reports much appreciated</li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    </body>
+</html>
