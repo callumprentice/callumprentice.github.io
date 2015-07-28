@@ -15,9 +15,11 @@
     <body onload="app()">
         <table id="planet_selector">
             <tr>
+                <td><a href="#" onClick="select('SUN');"><img src='img/sun_thumb.png'></td>
                 <td><a href="#" onClick="select('MERCURY');"><img src='img/mercury_thumb.png'></td>
                 <td><a href="#" onClick="select('VENUS');"><img src='img/venus_thumb.png'></a></td>
                 <td><a href="#" onClick="select('EARTH');"><img src='img/earth_thumb.png'></a></td>
+                <td><a href="#" onClick="select('MOON');"><img src='img/moon_thumb.png'></a></td>
                 <td><a href="#" onClick="select('MARS');"><img src='img/mars_thumb.png'></a></td>
                 <td><a href="#" onClick="select('JUPITER');"><img src='img/jupiter_thumb.png'></a></td>
                 <td><a href="#" onClick="select('SATURN');"><img src='img/saturn_thumb.png'></a></td>
@@ -26,9 +28,11 @@
                 <td><a href="#" onClick="select('PLUTO');"><img src='img/pluto_thumb.png'></a></td>
             </tr>
             <tr>
+                <td><a href="#" onClick="select('SUN');">SUN</a></td>
                 <td><a href="#" onClick="select('MERCURY');">MERCURY</a></td>
                 <td><a href="#" onClick="select('VENUS');">VENUS</a></td>
                 <td><a href="#" onClick="select('EARTH');">EARTH</a></td>
+                <td><a href="#" onClick="select('MOON');">MOON</a></td>
                 <td><a href="#" onClick="select('MARS');">MARS</a></td>
                 <td><a href="#" onClick="select('JUPITER');">JUPITER</a></td>
                 <td><a href="#" onClick="select('SATURN');">SATURN</a></td>
@@ -38,7 +42,7 @@
             </tr>
         </table>
         <table id="planet_selector_description">
-        <tr><td id="planet_selector_description_cell">CLICK ON A PLANET &#9679; LEFT MOUSE BUTTON TO MOVE</td></tr>
+        <tr><td id="planet_selector_description_cell">CLICK ON A CELESTIAL BODY &#9679; LEFT MOUSE BUTTON TO MOVE</td></tr>
         </table>
 
 <div id="about_box_icon"><a href="#" onclick='showAbout(true);'><img src="img/about.png"></a></div>
@@ -57,25 +61,27 @@
 
         <div class="show help_contents" id="about_text">
              <ul>
-            <li>A Simple way to compare the sizes of our solar system's planets.</li>
+            <li>A simple way to compare the sizes of our solar system's planets, the sun and the moon.</li>
             <br>
-            <li>You can compare them side by side or with the smaller planet positioned on the surface of the larger one.</li>
+            <li>You can compare them side by side or with the smaller object positioned on the surface of the larger one.</li>
             </ul>
         </div>
 
         <div class="hide help_contents"
              id="controls_text_1">
             <ul>
-                <li>Press the <i>left</i> button and move the mouse to rotate the planets</li>
+                <li>Press the <i>left</i> button and move the mouse to rotate</li>
                 <br>
-                <li>After you have selected two planets, double click the <i>left</i> button anywhere on the larger planet and the smaller one will be positioned at that location</li>
+                <li>After you have selected two objects, double click the <i>left</i> button anywhere on the larger one and the smaller one will be positioned at that location</li>
             </ul>
         </div>
 
         <div class="hide help_contents"
              id="future_text">
             <ul>
-                <li>Get better maps of the planet surface - especially Pluto!</li>
+                <li>Get better texture maps of the surface - especially Pluto!</li>
+                <br>
+                <li>Investigate using shaders to make the planets more realistic - e.g. the Sun</li>
                 <br>
                 <li>Probably much, much more I haven't thought of yet</li>
             </ul>
@@ -95,9 +101,11 @@
 
                 <li><a href="http://threejs.org/"
                    target="_new">three.js</a> - a very nice WebGL library</li>
-            <br>
+                <br>
 
                 <li>Innumerable JavaScript snippets from around the Web - thank you one and all</li>
+                <br>
+                <li><a href="https://news.ycombinator.com/user?id=ChrisGranger" target="_new">Chris Granger</a> on Hacker News for some great feedback</li>
             </ul>
         </div>
 

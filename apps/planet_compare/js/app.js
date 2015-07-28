@@ -9,11 +9,21 @@ var firstPlanet = '';
 var secondPlanet = '';
 var first_index = -1;
 var second_index = -1;
-var uiHeight = 192;
+var uiHeight = 132;
 
 var radius_earth = 3963.1676;  // TODO - find this from data
 
 var planet_data = [
+    {
+        name: 'SUN',
+        radius: 432700 ,
+        surface_texture: 'img/sun_surface.jpg',
+        elevation_texture: '',
+        specular_texture: '',
+        mesh: 0,
+        length_of_day: 0,
+        rotation: 0
+    },
     {
         name: 'MERCURY',
         radius: 1515.9593,
@@ -42,6 +52,16 @@ var planet_data = [
         specular_texture: 'img/earth_specular.png',
         mesh: 0,
         length_of_day: 1,
+        rotation: 0
+    },
+    {
+        name: 'MOON',
+        radius: 1079.57031,
+        surface_texture: 'img/moon_surface.jpg',
+        elevation_texture: '',
+        specular_texture: '',
+        mesh: 0,
+        length_of_day: 0,
         rotation: 0
     },
     {
@@ -277,17 +297,17 @@ function select(name) {
     if ( firstPlanet.length > 0 && secondPlanet.length > 0) {
         var swapped = setVisible(firstPlanet, secondPlanet);
         if ( ! swapped ) {
-            output = "COMPARING &nbsp;<i>" + firstPlanet + "</i> &nbsp;WITH &nbsp;<i>" + secondPlanet + "</i><br>DOUBLE CLICK ON &nbsp;<i>" + firstPlanet + "</i>&nbsp; TO POSITION <i>" + secondPlanet + "</i> ON ITS' SURFACE";
+            output = "COMPARING &nbsp;<i>" + firstPlanet + "</i> &nbsp;WITH &nbsp;<i>" + secondPlanet + "</i><br>DOUBLE CLICK ON &nbsp;<i>" + firstPlanet + "</i>&nbsp; TO POSITION <i>" + secondPlanet + "</i> ON ITS SURFACE";
         } else {
-            output = "COMPARING &nbsp;<i>" + secondPlanet + "</i> &nbsp;WITH &nbsp;<i>" + firstPlanet + "</i><br>DOUBLE CLICK ON &nbsp;<i>" + secondPlanet + "</i>&nbsp; TO POSITION <i>" + firstPlanet + "</i> ON ITS' SURFACE";
+            output = "COMPARING &nbsp;<i>" + secondPlanet + "</i> &nbsp;WITH &nbsp;<i>" + firstPlanet + "</i><br>DOUBLE CLICK ON &nbsp;<i>" + secondPlanet + "</i>&nbsp; TO POSITION <i>" + firstPlanet + "</i> ON ITS SURFACE";
         }
     } else
     if ( firstPlanet.length > 0 && secondPlanet.length === 0) {
-        output = "<i>" + firstPlanet + "</i>&nbsp; SELECTED - CHOOSE A PLANET TO COMPARE IT TO";
+        output = "<i>" + firstPlanet + "</i>&nbsp; SELECTED - CHOOSE SOMETHING TO COMPARE IT TO";
         setVisible(firstPlanet, secondPlanet);
     } else
     if ( firstPlanet.length === 0 && secondPlanet.length === 0) {
-        output = "SELECT A PLANET";
+        output = "SELECT A CELESTIAL BODY";
     }
 
     document.getElementById("planet_selector_description").innerHTML = output;
