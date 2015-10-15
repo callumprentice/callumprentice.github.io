@@ -1,0 +1,376 @@
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: Exo, sans-serif;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+}
+
+a {
+  color: orange;
+  text-decoration: none;
+}
+
+em {
+  color: #f99;
+  text-decoration: none;
+}
+
+i {
+  color: #9f9;
+}
+
+b {
+  color: #6699dd;
+}
+
+h2 {
+  color: yellow;
+}
+
+ul {
+  margin-left: 16px;
+  padding: 0;
+}
+
+li {
+  padding-bottom: 6px;
+}
+
+input:focus {
+    outline: 0;
+}
+
+::-webkit-input-placeholder {
+ font-size: 14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+:-moz-placeholder { /* older Firefox*/
+ font-size:14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+::-moz-placeholder { /* Firefox 19+ */
+ font-size: 14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+:-ms-input-placeholder {
+ font-size: 14px;
+ color: #d0cdfa;
+ text-transform: uppercase;
+ text-align: center;
+ font-weight: bold;
+}
+
+#title {
+    font-size: 2.0em;
+    font-weight: 400;
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: 512px;
+    height: 64px;
+    overflow: hidden;
+    margin: 0;
+    color: #ff9;
+    background-color: rgba(0.0, 0.0, 0.0, 0.0);
+}
+
+#loading_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #66a;
+    z-index: 3000;
+}
+.sk-cube-grid {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    height: 400px;
+    margin-left: -200px;
+    margin-top: -200px;
+    text-align: center;
+}
+.sk-cube-grid .sk-cube {
+    width: 33%;
+    height: 33%;
+    background-color: #99f;
+    float: left;
+    -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+}
+.sk-cube-grid .sk-cube1 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+.sk-cube-grid .sk-cube2 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+.sk-cube-grid .sk-cube3 {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+.sk-cube-grid .sk-cube4 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+.sk-cube-grid .sk-cube5 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+.sk-cube-grid .sk-cube6 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+.sk-cube-grid .sk-cube7 {
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+}
+.sk-cube-grid .sk-cube8 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+.sk-cube-grid .sk-cube9 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+@-webkit-keyframes sk-cubeGridScaleDelay {
+    0%, 70%, 100% {
+        -webkit-transform: scale3D(1, 1, 1);
+        transform: scale3D(1, 1, 1);
+    }
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
+}
+@keyframes sk-cubeGridScaleDelay {
+    0%, 70%, 100% {
+        -webkit-transform: scale3D(1, 1, 1);
+        transform: scale3D(1, 1, 1);
+    }
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
+}
+.fast_hide {
+    opacity: 1;
+    transition: opacity .25s ease-out;
+}
+.hide {
+    opacity: 0;
+    transition: opacity .5s ease-out;
+}
+.show {
+    opacity: 1;
+    transition: opacity .5s ease-out;
+}
+
+#ui_container {
+    z-index: 100;
+    background-color: rgba(255,255, 255,0.15);
+    height: 48px;
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#name_filter {
+    position: absolute;
+    bottom: 6px;
+    left: 800px;
+    width: 200px;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: 200;
+    z-index: 20;
+}
+
+#name_filter_input {
+    height: 32px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-style: none;
+    background-color: #68A1D6;
+    color: #06a;
+}
+
+#date_slider,#wind_speed_slider {
+    position: absolute;
+    bottom: 6px;
+    height: 16px;
+}
+
+#date_slider_label a,#wind_speed_slider_label a {
+    color: #39f;
+    text-decoration: none;
+}
+
+#date_slider_label,#wind_speed_slider_label {
+    color: #ddd;
+    font-size: 0.9em;
+    font-weight: 100;
+    position: absolute;
+    overflow: hidden;
+    height: 18px;
+    top: 4px;
+}
+
+#date_slider, #date_slider_label {
+    left: 20px;
+    width: 380px;
+}
+
+#date_slider {
+    background: -moz-linear-gradient(left,  #005b00 0%, #b4ddb4 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#005b00), color-stop(100%,#b4ddb4));
+    background: -webkit-linear-gradient(left,  #005b00 0%,#b4ddb4 100%);
+    background: -ms-linear-gradient(left,  #005b00 0%,#b4ddb4 100%);
+    background: linear-gradient(to right,  #005b00 0%,#b4ddb4 100%);
+}
+
+#wind_speed_slider, #wind_speed_slider_label {
+    left: 430px;
+    width: 250px;
+}
+
+#wind_speed_slider {
+    background: -moz-linear-gradient(left, #5cb9fe 0%, #00f9f4 17%, #ffffcd 33%, #ffe777 50%, #ffc244 66%, #ff9126 82%, #ff6461 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#5cb9fe), color-stop(17%,#00f9f4), color-stop(33%,#ffffcd), color-stop(50%,#ffe777), color-stop(66%,#ffc244), color-stop(82%,#ff9126), color-stop(100%,#ff6461));
+    background: -webkit-linear-gradient(left, #5cb9fe 0%,#00f9f4 17%,#ffffcd 33%,#ffe777 50%,#ffc244 66%,#ff9126 82%,#ff6461 100%);
+    background: -ms-linear-gradient(left, #5cb9fe 0%,#00f9f4 17%,#ffffcd 33%,#ffe777 50%,#ffc244 66%,#ff9126 82%,#ff6461 100%);
+    background: linear-gradient(to right, #5cb9fe 0%,#00f9f4 17%,#ffffcd 33%,#ffe777 50%,#ffc244 66%,#ff9126 82%,#ff6461 100%);
+}
+
+#guides_checkbox,#spin_checkbox,#earth_visible_checkbox {
+    position: absolute;
+    bottom: 4px;
+    height: 22px;
+}
+
+#guides_checkbox {
+    left: 700px;
+}
+
+#guides_checkbox_icon {
+    position: absolute;
+    left: 700px;
+    bottom: 22px;
+}
+
+#spin_checkbox {
+    left: 730px;
+}
+
+#spin_checkbox_icon {
+    position: absolute;
+    bottom: 22px;
+    left: 730px;
+}
+
+#earth_visible_checkbox {
+    left: 760px;
+}
+
+#earth_visible_checkbox_icon {
+    position: absolute;
+    bottom: 22px;
+    left: 760px;
+}
+
+input[type=checkbox]
+{
+  -ms-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+  padding: 10px;
+}
+
+#help {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width:52px;
+    height:52px;
+}
+
+#full_screen {
+    position: absolute;
+    top: 8px;
+    right: 72px;
+    width:52px;
+    height:52px;
+}
+
+#about_box_bkg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 1900;
+  background-color: rgba(100,100,100,0.7);
+  pointer-events:none;
+}
+
+#about_box {
+  width: 500px;
+  height: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -250px;
+  overflow: hidden;
+  padding: 18px;
+  color: #fff;
+  text-align: justify;
+  z-index: 2000;
+  background-color: rgba(100,100,100,0.9);
+  border-radius: 16px;
+  font-size: 0.70em;
+  box-shadow: 4px 4px 4px #333;
+  border: #999 4px solid;
+  pointer-events:none;
+}
+
+.mouse_off {
+  pointer-events:none;
+}
+
+.help_contents {
+  position: absolute;
+  top: 64px;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  font-size: 1.5em;
+  z-index: 4010;
+}

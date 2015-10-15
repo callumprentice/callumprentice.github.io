@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Buffer Geometry Selective Draw</title>
+        <style>
+            body { background-color: #000; margin: 0; font-family: Courier; overflow: hidden; }
+            a { text-decoration:none; color: #99f;}
+            #ui { position:absolute; left:0; top:0; padding: 2px; width:100%; height:20px; background-color:#ff9;}
+        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+        <script type="x-shader/x-vertex" id="vertexshader">
+            attribute float visible;
+            varying float vVisible;
+            attribute vec3 vertColor;
+            varying vec3 vColor;
+
+            void main() {
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+                vColor = vertColor;
+                vVisible = visible;
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            varying float vVisible;
+            varying vec3 vColor;
+
+            void main() {
+                if ( vVisible > 0.0 ) {
+                    gl_FragColor = vec4( vColor, 1.0 );
+                } else {
+                    discard;
+                }
+            }
+        </script>
+    </head>
+    <body onload="app();">
+        <div id="ui">&#x25a0; <a href="#" onclick="hide_lines();">HIDE LINES</a> &#x25a0; <a href="#" onclick="show_all_lines();">SHOW ALL LINES</a> &#x25a0;</div>
+    </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Storm Tracks WebGL Too</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://callum.com">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1000, initial-scale=1.0, maximum-scale=1.0">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+        <link href="css/nouislider_mod.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/Detector.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+        <script type="text/javascript" src="js/papaparse.min.js"></script>
+        <script type="text/javascript" src="js/nouislider.min.js"></script>
+        <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+
+        <script type="x-shader/x-vertex" id="track_vertexshader">
+            attribute float visible;
+            varying float vVisible;
+            attribute vec3 vertcolor;
+            varying vec3 vColor;
+
+            void main() {
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+                vColor = vertcolor;
+                vVisible = visible;
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="track_fragmentshader">
+            varying float vVisible;
+            varying vec3 vColor;
+
+            void main() {
+                if ( vVisible > 0.0 ) {
+                    gl_FragColor = vec4( vColor, 1.0 );
+                } else {
+                    discard;
+                }
+            }
+        </script>
+    </head>
+    <body onload="app();">
+        <div id="title"><a target="_new" href="http://callum.com">Storm Tracks WebGL Too</a></div>
+        <div id="loading_overlay" class="fast_hide">
+            <div class="sk-cube-grid">
+              <div class="sk-cube sk-cube1"></div>
+              <div class="sk-cube sk-cube2"></div>
+              <div class="sk-cube sk-cube3"></div>
+              <div class="sk-cube sk-cube4"></div>
+              <div class="sk-cube sk-cube5"></div>
+              <div class="sk-cube sk-cube6"></div>
+              <div class="sk-cube sk-cube7"></div>
+              <div class="sk-cube sk-cube8"></div>
+              <div class="sk-cube sk-cube9"></div>
+            </div>
+        </div>
+        <div id="help"><a href="#" onclick="show_help(true)"><img src="images/help.png"></a></div>
+        <div id="full_screen"><a href="#" onclick="full_screen()";><img src="images/full_screen.png"></a></div>
+        <div id="ui_container">
+            <div id="date_slider"></div>
+            <div id="date_slider_label"></div>
+            <div id="wind_speed_slider"></div>
+            <div id="wind_speed_slider_label"></div>
+            <div id="name_filter">
+                <input type="search" id="name_filter_input" results="10" placeholder="Filter by name">
+            </div>
+            <div id="guides_checkbox"><input type="checkbox" checked onclick='toggle_guides(this)'></div>
+            <div id="guides_checkbox_icon"><img src="images/guides.png"></div>
+            <div id="spin_checkbox"><input id="spin_checkbox_id" type="checkbox" onclick='toggle_spin(this)'></div>
+            <div id="spin_checkbox_icon"><img src="images/spin.png"></div>
+            <div id="earth_visible_checkbox"><input type="checkbox" checked onclick='toggle_earth(this)'></div>
+            <div id="earth_visible_checkbox_icon"><img src="images/earth_visible.png"></div>
+        </div>
+
+<div id="about_box_bkg"
+         class="hide"></div>
+
+    <div id="about_box"
+         class="hide">
+        <h2><a href="#"
+           onclick="showHelpContents('about_text');">About</a> &#9679; <a href="#"
+           onclick="showHelpContents('controls_text');">Controls</a> &#9679; <a href="#"
+           onclick="showHelpContents('future_text');">Future</a> &#9679; <a href="#"
+           onclick="showHelpContents('credits_text');">Credits</a> &#9679; <a href="#"
+           onclick="showHelpContents('contact_text');">Contact</a> &#9679; <a href="#"
+           onclick="show_help(false);">Close</a></h2>
+        <div class="show help_contents"
+             id="about_text">
+             <ul>
+            <li><i>Storm Tracks WebGL Too</i> is an updated version of a <a target="_new"
+                 href="http://callumprentice.github.io/apps/storm_tracks_webgl/index.html">previous experiment</a> I made years ago to plot the tracks of all storms since 1850 to the present day.
+            <li>Now uses much more efficient technology to render the tracks</li>
+            <li>Updated list of storms with improved historical data as well as storm data up to the middle of October 2015</li>
+            <li>More than 9,100 storms and almost 250,000 track points</li>
+            <li>Notice how storms never cross the equator - I'd love to know why...</li>
+            </ul>
+        </div>
+        <div class="hide help_contents"
+             id="controls_text">
+            <ul>
+                <li>Press the <i>left</i> button and move the mouse to rotate the rotate</li>
+                <li>Use the <i>scroll wheel</i> to zoom in and out</li>
+                <li>Use the green slider to select the first year to plot storms for</li>
+                <li>Use the multicolor slider representing the <a target="_new"
+                 href="https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_hurricane_wind_scale">Saffir–Simpson hurricane wind scale</a> to select the maximum wind speed in knots displayed</li>
+                 <li>Use the <img src="images/guides.png"> check box to turn on or off the guidelines</li>
+                 <li>Use the <img src="images/spin.png"> check box to turn on or off the auto spin feature</li>
+                 <li>Use the <img src="images/earth_visible.png"> check box to turn on or off the earth and view the storms as a beautiful hair ball..</li>
+                 <li>Use the <img src="images/full_screen.png" width="18" height="18"> control to enter full screen mode and view the experiment on your 102" LCD TV in all its glory. Press the ESC key to revert to normal</li>
+
+                 <li>Enter names or parts of a name in the filter box to restrict the storms plotted. E.G. <i>katrina</i> or <i>joaquin</i></li>
+            </ul>
+        </div>
+        <div class="hide help_contents"
+             id="future_text">
+            <ul>
+                <li>Test more thoroughly on other browsers and OSs - I use Chrome on OS X and have not managed much testing outside of this configuration</li>
+                <li>Get it working on mobile browsers now that they all support WebGL</li>
+                <li>Implement a feature that allows users to click on a track and find out the name, peak wind speed, dates etc.</li>
+                <li>Figure out why antialiasing is off on Firefox and fix it - it looks horrible</li>
+                <li>Remove the dependency on JQuery - it's great but I only need it in one place to deal with the name filter input widget in a cross browser fashion</li>
+                <li>Probably much, much more I haven't thought of yet</li>
+            </ul>
+        </div>
+        <div class="hide help_contents"
+             id="credits_text">
+            <ul>
+                <li>The UNISYS hurricane <a target="_new"
+                   href="http://weather.unisys.com/hurricane/">data archive</a></li>
+                <li>The NOAA's <a target="_new"
+                   href="http://www.ncdc.noaa.gov/ibtracs/index.php?name=ibtracs-data">International Best Track Archive for Climate Stewardship</a> (IBTrACS)</li>
+                <li><a href="http://threejs.org/"
+                   target="_new">three.js</a> - a very nice WebGL library</li>
+                <li>Innumerable JavaScript snippets from around the Web - thank you one and all</li>
+            </ul>
+        </div>
+        <div class="hide help_contents"
+             id="contact_text">
+             <ul>
+                <li>Visit my page at <a target="_new" href="http://callum.com">http://callum.com</a> to see other examples of my work and contact information</li>
+                <li>The source code for this project is <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/storm_tracks_webgl_too"
+                   target="_new">available</a> along with source for everything else I've made <a href="https://github.com/callumprentice" target="_new">here</a></li>
+                <li>Advice, suggestions, bug reports much appreciated</li>
+            </ul>
+        </div>
+    </div>
+    </body>
+</html>
