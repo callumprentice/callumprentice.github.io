@@ -20,6 +20,12 @@ i {
     color:#99e;
 }
 
+u {
+    color:#e99;
+    font-weight: 1600;
+    text-decoration: none;
+}
+
 h1 {
     font-size:2em;
     font-weight:400;
