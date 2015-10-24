@@ -1,0 +1,318 @@
+ .menu-sun-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 0%;
+     bottom: 16px;
+ }
+ .menu-sun a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-sun i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-sun:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-mercury-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 10%;
+     bottom: 16px;
+ }
+ .menu-mercury a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-mercury i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-mercury:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-venus-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 20%;
+     bottom: 16px;
+ }
+ .menu-venus a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-venus i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-venus:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-earth-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 30%;
+     bottom: 16px;
+ }
+ .menu-earth a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-earth:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-earth i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-earth:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-earth:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-mars-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 40%;
+     bottom: 16px;
+ }
+ .menu-mars a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-mars i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-mars:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-jupiter-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 50%;
+     bottom: 16px;
+ }
+ .menu-jupiter a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-jupiter:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-jupiter:hover a:nth-child(2) {
+     transform: translate(0, -132px);
+ }
+ .menu-jupiter:hover a:nth-child(3) {
+     transform: translate(0, -198px);
+ }
+ .menu-jupiter:hover a:nth-child(4) {
+     transform: translate(0, -264px);
+ }
+ .menu-jupiter i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-jupiter:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-jupiter:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-jupiter:hover i:nth-child(3) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-jupiter:hover i:nth-child(4) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 60%;
+     bottom: 16px;
+ }
+ .menu-saturn-2 a {
+     position: absolute;
+     left: calc(50% - 101px);
+ }
+ .menu-saturn a {
+     position: absolute;
+     left: calc(50% - 102px);
+     transition: all 0.3s ease;
+ }
+ .menu-saturn:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-saturn:hover a:nth-child(2) {
+     transform: translate(0, -132px);
+ }
+ .menu-saturn:hover a:nth-child(3) {
+     transform: translate(0, -198px);
+ }
+ .menu-saturn:hover a:nth-child(4) {
+     transform: translate(0, -264px);
+ }
+ .menu-saturn:hover a:nth-child(5) {
+     transform: translate(0, -330px);
+ }
+ .menu-saturn:hover a:nth-child(6) {
+     transform: translate(0, -396px);
+ }
+ .menu-saturn:hover a:nth-child(7) {
+     transform: translate(0, -462px);
+ }
+ .menu-saturn i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-saturn:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(3) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(4) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(5) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(6) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-saturn:hover i:nth-child(7) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-uranus-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 70%;
+     bottom: 16px;
+ }
+ .menu-uranus a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-uranus:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-uranus:hover a:nth-child(2) {
+     transform: translate(0, -132px);
+ }
+ .menu-uranus:hover a:nth-child(3) {
+     transform: translate(0, -198px);
+ }
+ .menu-uranus:hover a:nth-child(4) {
+     transform: translate(0, -264px);
+ }
+ .menu-uranus:hover a:nth-child(5) {
+     transform: translate(0, -330px);
+ }
+ .menu-uranus i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-uranus:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-uranus:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-uranus:hover i:nth-child(3) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-uranus:hover i:nth-child(4) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-uranus:hover i:nth-child(5) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-neptune-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 80%;
+     bottom: 16px;
+ }
+ .menu-neptune a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-neptune:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-neptune:hover a:nth-child(2) {
+     transform: translate(0, -132px);
+ }
+ .menu-neptune:hover a:nth-child(3) {
+     transform: translate(0, -198px);
+ }
+ .menu-neptune i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-neptune:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-neptune:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-neptune:hover i:nth-child(3) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-pluto-container {
+     position: absolute;
+     height: 64px;
+     width: 10%;
+     left: 90%;
+     bottom: 16px;
+ }
+ .menu-pluto a {
+     position: absolute;
+     left: calc(50% - 32px);
+     transition: all 0.3s ease;
+ }
+ .menu-pluto:hover a:nth-child(1) {
+     transform: translate(0, -66px);
+ }
+ .menu-pluto i {
+     position: absolute;
+     color: rgba(255, 255, 160, 0.0);
+     left: calc(50% - 32px);
+ }
+ .menu-pluto:hover i:nth-child(1) {
+     color: rgba(255, 255, 160, 1.0);
+ }
+ .menu-pluto:hover i:nth-child(2) {
+     color: rgba(255, 255, 160, 1.0);
+ }

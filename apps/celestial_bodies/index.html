@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Celestial Bodies</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="css/body_menu.css" />
+    <link href='http://fonts.googleapis.com/css?family=Muli:300' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/TrackballControls.js"></script>
+    <script type="text/javascript" src="js/body_data.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    </head>
+    <body onload="app()">
+        <div class="menu-sun-container">
+            <div class="menu-sun">
+                <a href="#" onclick="select('sun');"><img src="thumbs/sun_thumb.png"><i>Sun</i></a>
+            </div>
+        </div>
+        <div class="menu-mercury-container">
+            <div class="menu-mercury">
+                <a href="#" onclick="select('mercury');"><img src="thumbs/mercury_thumb.png"><i>Mercury</i></a>
+            </div>
+        </div>
+        <div class="menu-venus-container">
+            <div class="menu-venus">
+                <a href="#" onclick="select('venus');"><img src="thumbs/venus_thumb.png"><i>Venus</i></a>
+            </div>
+        </div>
+        <div class="menu-earth-container">
+            <div class="menu-earth">
+                <a href="#" onclick="select('moon');"><img src="thumbs/moon_thumb.png"><i>Moon</i></a>
+                <a href="#" onclick="select('earth');"><img src="thumbs/earth_thumb.png"><i>Earth</i></a>
+            </div>
+        </div>
+        <div class="menu-mars-container">
+            <div class="menu-mars">
+                <a href="#" onclick="select('mars');"><img src="thumbs/mars_thumb.png"><i>Mars</i></a>
+            </div>
+        </div>
+        <div class="menu-jupiter-container">
+            <div class="menu-jupiter">
+                <a href="#" onclick="select('callisto');"><img src="thumbs/callisto_thumb.png"><i>Callisto</i></a>
+                <a href="#" onclick="select('ganymede');"><img src="thumbs/ganymede_thumb.png"><i>Ganymede</i></a>
+                <a href="#" onclick="select('europa');"><img src="thumbs/europa_thumb.png"><i>Europa</i></a>
+                <a href="#" onclick="select('io');"><img src="thumbs/io_thumb.png"><i>Io</i></a>
+                <a href="#" onclick="select('jupiter');"><img src="thumbs/jupiter_thumb.png"><i>Jupiter</i></a>
+            </div>
+        </div>
+        <div class="menu-saturn-container">
+            <div class="menu-saturn">
+                <a href="#" onclick="select('mimas');"><img src="thumbs/mimas_thumb.png"><i>Mimas</i></a>
+                <a href="#" onclick="select('enceladus');"><img src="thumbs/enceladus_thumb.png"><i>Enceladus</i></a>
+                <a href="#" onclick="select('tethys');"><img src="thumbs/tethys_thumb.png"><i>Tethys</i></a>
+                <a href="#" onclick="select('dione');"><img src="thumbs/dione_thumb.png"><i>Dione</i></a>
+                <a href="#" onclick="select('rhea');"><img src="thumbs/rhea_thumb.png"><i>Rhea</i></a>
+                <a href="#" onclick="select('iapetus');"><img src="thumbs/iapetus_thumb.png"><i>Iapetus</i></a>
+                <a href="#" onclick="select('titan');"><img src="thumbs/titan_thumb.png"><i>Titan</i></a>
+                <a href="#" onclick="select('saturn');"><img src="thumbs/saturn_thumb.png"><i>Saturn</i></a>
+            </div>
+        </div>
+        <div class="menu-uranus-container">
+            <div class="menu-uranus">
+                <a href="#" onclick="select('miranda');"><img src="thumbs/miranda_thumb.png"><i>Miranda</i></a>
+                <a href="#" onclick="select('ariel');"><img src="thumbs/ariel_thumb.png"><i>Ariel</i></a>
+                <a href="#" onclick="select('umbriel');"><img src="thumbs/umbriel_thumb.png"><i>Umbriel</i></a>
+                <a href="#" onclick="select('titania');"><img src="thumbs/titania_thumb.png"><i>Titania</i></a>
+                <a href="#" onclick="select('oberon');"><img src="thumbs/oberon_thumb.png"><i>Oberon</i></a>
+                <a href="#" onclick="select('uranus');"><img src="thumbs/uranus_thumb.png"><i>Uranus</i></a>
+            </div>
+        </div>
+        <div class="menu-neptune-container">
+            <div class="menu-neptune">
+                <a href="#" onclick="select('nereid');"><img src="thumbs/nereid_thumb.png"><i>Nereid</i></a>
+                <a href="#" onclick="select('proteus');"><img src="thumbs/proteus_thumb.png"><i>Proteus</i></a>
+                <a href="#" onclick="select('triton');"><img src="thumbs/triton_thumb.png"><i>Triton</i></a>
+                <a href="#" onclick="select('neptune');"><img src="thumbs/neptune_thumb.png"><i>Neptune</i></a>
+            </div>
+        </div>
+        <div class="menu-pluto-container">
+            <div class="menu-pluto">
+                <a href="#" onclick="select('charon');"><img src="thumbs/charon_thumb.png"><i>Charon</i></a>
+                <a href="#" onclick="select('pluto');"><img src="thumbs/pluto_thumb.png"><i>Pluto</i></a>
+            </div>
+        </div>
+        <div id="body_selector_description"></div>
+        <div id="about_box_icon">
+            <a href="#" onclick='showAbout(true);'><img src="images/about.png"></a>
+        </div>
+        <div id="share_icon">
+            <a href="#" onclick='share();'><img src="images/share.png"></a>
+        </div>
+        <div id="about_box_bkg" class="hide"></div>
+        <div id="about_box" class="hide">
+            <h3><a href="#"
+                   onclick="showHelpContents('about_text');">About</a> &#9679; <a href="#"
+                   onclick="showHelpContents('controls_text_1');">Controls</a> &#9679; <a href="#"
+                   onclick="showHelpContents('future_text');">Future</a> &#9679; <a href="#"
+                   onclick="showHelpContents('credits_text');">Credits</a> &#9679; <a href="#"
+                   onclick="showHelpContents('contact_text');">Contact</a> &#9679; <a href="#"
+                   onclick="showAbout(false);">Close</a></h2>
+            <div class="show help_contents" id="about_text">
+                <ul>
+                    <h3><i>Celestial Bodies</i></h3>
+                    <li>A simple way to compare the sizes of our solar system's sun, planets and moons.</li>
+                    <br>
+                    <li>You can compare them side by side or with the smaller body positioned on the surface of the larger one.</li>
+                </ul>
+            </div>
+            <div class="hide help_contents" id="controls_text_1">
+                <ul>
+                    <li>Press the <i>left</i> button and move the <i>mouse</i> to rotate</li>
+                    <br>
+                    <li>After you have selected two bodies, <i>double click</i> the <i>left</i> button anywhere on the larger one and the smaller one will be positioned at that location</li>
+                    <br>
+                    <li>After you have selected two bodies, you can click on the <img height="16" width="16" src="images/share.png"> button to open a URL in a new tab or window that you can share.</li>
+                </ul>
+            </div>
+            <div class="hide help_contents" id="future_text">
+                <ul>
+                    <li>Get better texture maps of the surface - especially Pluto!</li>
+                    <br>
+                    <li>Investigate using shaders to make the bodies more realistic - e.g. the Sun</li>
+                    <br>
+                    <li>Probably much, much more I haven't thought of yet</li>
+                </ul>
+            </div>
+            <div class="hide help_contents" id="credits_text">
+                <ul>
+                    <li>NASA data and image sites - many different ones but try <a target="_new" href="http://eol.jsc.nasa.gov//">here</a> first</li>
+                    <br>
+                    <li>Some of the texture maps come from <a href="http://planetpixelemporium.com/earth.html" target="_new">JHT's Planetary Pixel Emporium</a></li>
+                    <br>
+                    <li><a href="http://threejs.org/" target="_new">three.js</a> - a very nice WebGL library</li>
+                    <br>
+                    <li>Innumerable JavaScript snippets from around the Web - thank you one and all</li>
+                </ul>
+            </div>
+            <div class="hide help_contents" id="contact_text">
+                <ul>
+                    <li>Visit my page at <a target="_new" href="http://callum.com">http://callum.com</a> to see other examples of my work and contact information</li>
+                    <br>
+                    <li>The source code for this project is <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/celestial_bodies" target="_new">available</a> along with source for everything else I've made <a href="https://github.com/callumprentice" target="_new">here</a></li>
+                    <br>
+                    <li>Advice, suggestions, bug reports much appreciated</li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
