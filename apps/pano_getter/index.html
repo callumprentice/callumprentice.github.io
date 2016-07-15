@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Google Street View &reg; Depth and Image Pano Getter</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8">
+        <script src="http://maps.google.com/maps/api/js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.base64.min.js"></script>
+        <script type="text/javascript" src="js/zpipe.min.js"></script>
+        <script type="text/javascript" src="js/GSVPano.js"></script>
+        <script type="text/javascript" src="js/GSVPanoDepth.js"></script>
+    </head>
+    <body onload="app()">
+        <div id="title-container">
+            Google Street View &reg; Depth and Image Pano Getter
+        </div>
+        <div id="image-pano-container">
+            <a id="download-image">
+                <div id="image-pano"></div>
+            </a>
+        </div>
+        <div id="depth-pano-container">
+            <a id="download-depth">
+                <div id="depth-pano"></div>
+            </a>
+        </div>
+        <div id="map-container"></div>
+        <div id="streetview-container"></div>
+        <div id="controls-container">
+            <div id="search_text">Search for a location</div>
+            <form id="map_form">
+                <input type="text" name="address" id="address" />
+                <input type="submit" id="searchButton" value="▶"></button>
+            </form>
+
+        </div>
+        <div id="status-container"></div>
+        <div id="credits-container">
+                Author: <a target=="new" href="http:callum.com">Callum</a> ● Image and depth pano code based on work by <a target=="new" href="http://clicktorelease.com">Spite</a> &amp; <a target=="new" href="https://github.com/proog128/GSVPanoDepth.js">proog128</a> - thanks!
+
+        </div>
+    </body>
+</html>
