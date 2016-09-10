@@ -1,1 +1,161 @@
-<html>HELLO</html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Global Temperature Change WebGL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="css/nouislider.css" />
+
+    <!-- Facebook Open Graph configuration -->
+    <meta property="fb:app_id"        content="1459363770983337" />
+    <meta property="og:url"           content="http://callumprentice.github.io/apps/global_temperature_change_webgl/index.html" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Global Temperature changes 1850-2016" />
+    <meta property="og:description"   content="Global Temperature Change WebGL</i> is an experiment that tries to illustrate how global temperatures on earth have changed between 1850 and 2016." />
+
+    <script type="text/javascript" src="js/three.min.js"></script>
+    <script type="text/javascript" src="js/Detector.js"></script>
+    <script type="text/javascript" src="js/nouislider.min.js"></script>
+    <script type="text/javascript" src="js/tween.min.js"></script>
+    <script type="text/javascript" src="js/yearly_anomalies.js"></script>
+    <script type="text/javascript" src="js/globe_controls.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+</head>
+
+
+<body onload="app()">
+    <!-- Facebook Like/Share button -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1459363770983337";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+    <div id="fb_like">
+        <div class="fb-like" data-href="http://callumprentice.github.io/apps/global_temperature_change_webgl/index.html" data-width="64" data-layout="box_count" data-action="like" data-size="large" data-show-faces="false" data-share="true"></div>
+    </div>
+
+    <!-- Twitter Tweet button -->
+    <div id="tweet">
+        <a href="https://twitter.com/intent/tweet?text=Global%20temperature%20changes%201850%20-%202016%20visualized%20in%20WebGL%0A&amp;via=callumprentice" class="twitter-mention-button" data-size="large" data-text="" data-show-count="false">Tweet</a>
+        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+
+    <div id="date_slider"></div>
+    <div id="date_slider_label"></div>
+    <div id="date_slider_year_label">YEAR</div>
+    <div id="about">
+        <a href="javascript:show_help(true);"><img src="img/about.png"></a>
+    </div>
+    <div id="full_screen">
+        <a href="javascript:full_screen();"><img src="img/full_screen.png"></a>
+    </div>
+    <div id="share">
+        <a href="javascript:share();"><img src="img/share.png"></a>
+    </div>
+    <div id="make_sphere">
+        <a id="make_sphere_link" href="javascript:set_to_sphere_verts();"><img id="make_sphere_img" src="img/make_sphere.png"></a>
+    </div>
+    <div id="make_plane">
+        <a id="make_plane_link" href="javascript:set_to_plane_verts();"><img id="make_plane_img" src="img/make_plane.png"></a>
+    </div>
+    <div id="anim_globe">
+        <a id="anim_globe_link" href="javascript:anim_globe(true);"><img id="anim_globe_img" src="img/anim_globe.png"></a>
+    </div>
+    <div id="anim_date">
+        <a id="anim_date_link" href="javascript:anim_date(1);"><img id="anim_date_img" src="img/anim_date_1.png"></a>
+    </div>
+
+
+    <div id="about_box_bkg" class="hide"></div>
+
+    <div id="about_box" class="hide">
+        <h2><a href="#" onclick="showHelpContents('about_text');">About</a> &#9679;
+            <a href="#" onclick="showHelpContents('controls_text');">Controls</a> &#9679; <a href="#" onclick="showHelpContents('future_text');">Future</a> &#9679; <a href="#" onclick="showHelpContents('credits_text');">Credits</a>
+        </h2>
+
+        <div class="show help_contents" id="about_text">
+            <h3>About</h3>
+            <ul>
+                <li><i>Global Temperature Change WebGL</i> is an experiment that tries to illustrate how global temperatures on earth have changed between 1850 and 2016.</li>
+                <li>The data is generously provided by <a href="http://www.metoffice.gov.uk/climate-guide/science/science-behind-climate-change/hadley" target="_new">UK Met Office Hadley Centre for Climate Change</a></li>
+                <li>There is a data point for every 5 degrees of latitude and longitude</li>
+                <li>If the temperature in any year for a point is cooler relative to a 1961-1990 reference period, the square is colored blue; if the temperature is warmer, the square is colored red. The more intense the color of red or blue, the greater the difference to the reference period</li>
+                <li>Inspired by the great <a href="http://www.climate-lab-book.ac.uk/2016/mapping-global-temperature-change" target="_new">work</a> of <a href="http://www.met.reading.ac.uk/~ed/home/index.php" target="_new">Ed Hawkings</a>, a climate scientist in the <a href="https://www.ncas.ac.uk/index.php/en/" target="_new">National Centre for Atmospheric Science (NCAS)</a> at the University of Reading</a></li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents" id="controls_text">
+            <h3>Controls</h3>
+            <ul>
+                <li>Spin the display by dragging the mouse</li>
+                <li>Change the year using the slider at the bottom of the screen</li>
+                <table cellpadding="4">
+                    <tr>
+                        <td><img width="32" height="32" src="img/make_sphere.png"></td>
+                        <td>Change the display to a globe</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/make_plane.png"></td>
+                        <td>Change the display to a flat plane</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/anim_globe.png"></td>
+                        <td>Spin the globe automatically. Drag the globe to stop</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/anim_date_1.png"></td>
+                        <td>Aninmate the year selector. Click again to go faster. Click once more to stop.</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/share.png"></td>
+                        <td>Share with a URL to current date &amp; display type</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/full_screen.png"></td>
+                        <td>Switch to full screen (ESC to exit)</td>
+                    </tr>
+                    <tr>
+                        <td><img width="32" height="32" src="img/about.png"></td>
+                        <td>Show this help</td>
+                    </tr>
+                </table>
+            </ul>
+        </div>
+
+        <div class="hide help_contents" id="future_text">
+            <h3>Future Work</h3>
+            <ul>
+
+                <li>Test more thoroughly on other browsers and OSs - I use Chrome on OS X and have not managed much testing outside of this configuration although I have noticed some problems on Firefox. Anyone want to help me fix that?</li>
+                <li>Get it working on mobile browsers now that they all support WebGL</li>
+                <li>Take advantage of the medium and add more interactive tools such as being able to click on a data point and see details or counts of cooler and warmer values for each year. Lots of possibilities there</li>
+                <li>Better written, more robust python script to convert the HadCRUT4 source data into something I can consume</li>
+                <li>Probably much, much more I haven't thought of yet</li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents" id="credits_text">
+            <h3>Credits</h3>
+            <ul>
+                <li><a href="http://callum.com" target="_new">Me</a> - all my experiments are <a href="https://github.com/callumprentice" target="_new">here</a> with source code</li>
+                <li>Contact me <a href="http://callumprentice.github.io/#contact" target="_new">here</a>. Feedback and comments are very welcome</li>
+                <li><a href="http://www.met.reading.ac.uk/~ed/home/index.php" target="_new">Ed Hawkings'</a> inspiring work <a href="http://www.climate-lab-book.ac.uk/2016/mapping-global-temperature-change" target="_new">here</a> and <a href="http://www.climate-lab-book.ac.uk/2016/spiralling-global-temperatures/" target="_new">here</a></li>
+
+                <li><a href="https://crudata.uea.ac.uk/cru/data/temperature/" target="_new">HadCRUT4 </a>source data - thank you</li>
+                <li><a href="http://threejs.org/" target="_new">three.js</a> - a very nice WebGL library</li>
+                <li>Innumerable JavaScript snippets and example code from around the web - thank you one and all</li>
+            </ul>
+        </div>
+        <div id="close_btn">
+            <a href="#" onclick="show_help(false);"><img src="img/close_btn.png"></a>
+        </div>
+    </div>
+</body>
+
+</html>
