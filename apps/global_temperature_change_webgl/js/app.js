@@ -304,7 +304,7 @@ function create_mesh(radius, data_set) {
 
     data_mesh_material = new THREE.MeshBasicMaterial({
         transparent: true,
-        opacity: 0.65,
+        opacity: 0.45,
         side: THREE.FrontSide,
         vertexColors: THREE.VertexColors
     });
