@@ -53,8 +53,8 @@ GLOBE_CONTROLS = function (parameters) {
         _mouse_x = event.clientX - window.innerWidth / 2;
         _mouse_y = event.clientY - window.innerHeight / 2;
 
-        _target_rotation_y = _target_rotation_on_mouse_down_t + (_mouse_y - _mouse_y_on_mouse_down) * 0.02;
-        _target_rotation_x = _target_rotation_on_mouse_down_x + (_mouse_x - _mouse_x_on_mouse_down) * 0.02;
+        _target_rotation_y = _target_rotation_on_mouse_down_t + (_mouse_y - _mouse_y_on_mouse_down) * 0.01;
+        _target_rotation_x = _target_rotation_on_mouse_down_x + (_mouse_x - _mouse_x_on_mouse_down) * 0.01;
 
     }
 
@@ -92,10 +92,10 @@ GLOBE_CONTROLS = function (parameters) {
             event.preventDefault();
 
             _mouse_x = event.touches[0].pageX - window.innerWidth / 2;
-            _target_rotation_x = _target_rotation_on_mouse_down_x + (_mouse_x - _mouse_x_on_mouse_down) * 0.05;
+            _target_rotation_x = _target_rotation_on_mouse_down_x + (_mouse_x - _mouse_x_on_mouse_down) * 0.005;
 
             _mouse_y = event.touches[0].pageY - window.innerHeight / 2;
-            _target_rotation_y = _target_rotation_on_mouse_down_t + (_mouse_y - _mouse_y_on_mouse_down) * 0.05;
+            _target_rotation_y = _target_rotation_on_mouse_down_t + (_mouse_y - _mouse_y_on_mouse_down) * 0.005;
         }
     }
 
