@@ -461,6 +461,7 @@ function calculate_min_max_anomalies() {
     max_anomalies_val = sd2_positive_max;
 }
 
+
 function init_date_slider() {
 
     var slider = document.getElementById('date_slider');
@@ -481,6 +482,26 @@ function init_date_slider() {
 
         document.getElementById('date_slider_label')
             .innerHTML = year
+    });
+}
+
+function init_transparency_slider() {
+
+    var slider = document.getElementById('transparency_slider');
+
+    noUiSlider.create(slider, {
+        start: 0.45,
+        range: {
+            'min': 0.0,
+            'max': 1.0
+        },
+        step: 0.01
+    });
+
+    slider.noUiSlider.on('update', function (values, handle) {
+
+        var opacity = values[handle];
+        data_mesh_material.opacity = opacity;
     });
 }
 
@@ -670,6 +691,7 @@ function init() {
     }
 
     init_date_slider();
+    init_transparency_slider();
 
     enable_sphere_button(false);
     enable_plane_button(false);
@@ -721,6 +743,30 @@ function init() {
             earth_plane.position.z = -0.01;
             earth_plane.visible = false;
             group.add(earth_plane)
+
+            create_sphere_verts();
+            create_plane_verts();
+
+            calculate_min_max_anomalies();
+
+            create_mesh(radius);
+
+            if (geom_type === 'p') {
+                set_to_plane_verts();
+            } else {
+                set_to_sphere_verts();
+            }
+
+            window.addEventListener('resize', onWindowResize, false);
+
+            globe_controls = new GLOBE_CONTROLS({
+                renderer: renderer
+            });
+
+            if (!localStorage.getItem("runOnce")) {
+                localStorage.setItem("runOnce", true);
+                show_help(true);
+            }
         });
 
     loader.load(
@@ -736,29 +782,7 @@ function init() {
             ))
         });
 
-    create_sphere_verts();
-    create_plane_verts();
 
-    calculate_min_max_anomalies();
-
-    create_mesh(radius);
-
-    if (geom_type === 'p') {
-        set_to_plane_verts();
-    } else {
-        set_to_sphere_verts();
-    }
-
-    window.addEventListener('resize', onWindowResize, false);
-
-    globe_controls = new GLOBE_CONTROLS({
-        renderer: renderer
-    });
-
-    if (!localStorage.getItem("runOnce")) {
-        localStorage.setItem("runOnce", true);
-        show_help(true);
-    }
 }
 
 function onWindowResize() {

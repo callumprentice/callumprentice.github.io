@@ -99,6 +99,15 @@ strong {
     pointer-events:none;
 }
 
+#transparency_slider {
+    position: absolute;
+    left: 16px;
+    width: 290px;
+    bottom: 128px;
+    height: 16px;
+    z-index: 10;
+}
+
 #make_sphere {
     position: absolute;
     left: 8px;
