@@ -21,6 +21,7 @@ var max_anomalies_val = 0;
 var data_first_year = yearly_anomalies_data_params.start_year;
 var data_last_year = yearly_anomalies_data_params.end_year;
 var start_year = parseInt(data_first_year + Math.random() * (data_last_year - data_first_year + 1));
+var start_opacity = 0.45;
 var manager = new THREE.LoadingManager();
 var loader = new THREE.TextureLoader(manager);
 var globe_controls;
@@ -304,7 +305,7 @@ function create_mesh(radius, data_set) {
 
     data_mesh_material = new THREE.MeshBasicMaterial({
         transparent: true,
-        opacity: 0.45,
+        opacity: start_opacity,
         side: THREE.FrontSide,
         vertexColors: THREE.VertexColors
     });
@@ -490,7 +491,7 @@ function init_transparency_slider() {
     var slider = document.getElementById('transparency_slider');
 
     noUiSlider.create(slider, {
-        start: 0.45,
+        start: start_opacity,
         range: {
             'min': 0.0,
             'max': 1.0
@@ -672,12 +673,15 @@ function getQueryParameterByName(name) {
 
 function share() {
 
-    var slider = document.getElementById('date_slider');
-    var year = parseInt(slider.noUiSlider.get());
+    var dslider = document.getElementById('date_slider');
+    var year = parseInt(dslider.noUiSlider.get());
 
     var geom_type = sphere_verts_enabled ? 'p' : 's';
 
-    var url = "?year=" + year + "&type=" + geom_type;
+    var tslider = document.getElementById('transparency_slider');
+    var opacity = tslider.noUiSlider.get();
+
+    var url = "?year=" + year + "&type=" + geom_type + "&opacity=" + opacity;
     window.open(url);
 }
 
@@ -689,8 +693,14 @@ function init() {
     if (year >= data_first_year && year <= data_last_year) {
         start_year = year;
     }
-
     init_date_slider();
+
+    var opacity = parseFloat(getQueryParameterByName("opacity"));
+
+        console.log("opacity = ", opacity)
+    if (opacity >=0.0 && opacity <= 1.0) {
+        start_opacity = opacity;
+    }
     init_transparency_slider();
 
     enable_sphere_button(false);
