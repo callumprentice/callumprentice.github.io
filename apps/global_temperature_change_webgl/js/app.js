@@ -462,7 +462,6 @@ function calculate_min_max_anomalies() {
     max_anomalies_val = sd2_positive_max;
 }
 
-
 function init_date_slider() {
 
     var slider = document.getElementById('date_slider');
@@ -697,7 +696,6 @@ function init() {
 
     var opacity = parseFloat(getQueryParameterByName("opacity"));
 
-        console.log("opacity = ", opacity)
     if (opacity >=0.0 && opacity <= 1.0) {
         start_opacity = opacity;
     }
@@ -791,8 +789,6 @@ function init() {
                 })
             ))
         });
-
-
 }
 
 function onWindowResize() {
