@@ -157,6 +157,14 @@ img.srcicon {
     width:32px;
 }
 
+img.bbsrcicon {
+    margin:0;
+    padding:0;
+    content:url("../img/bitbucketsrc.png");
+    height:32px;
+    width:32px;
+}
+
 img.srcicon:after {
     margin:0;
     padding:0;
