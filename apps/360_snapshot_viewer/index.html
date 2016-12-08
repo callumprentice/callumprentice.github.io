@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Second Life 360 Snapshot</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta charset="utf-8">
+    <meta content="initial-scale=1.0, maximum-scale=1.0" name="viewport">
+    <link href='https://fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="js/three.min.js" type="text/javascript"></script>
+    <script src="js/tween.min.js" type="text/javascript"></script>
+    <script src="js/jszip.min.js" type="text/javascript"></script>
+    <script src="js/jszip-utils.min.js" type="text/javascript"></script>
+    <script src="js/jpeg_encoder_basic.js" type="text/javascript"></script>
+    <script src="js/CubemapToEquirectangular.js" type="text/javascript"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/isMobile.min.js"></script>
+    <script src="js/app.js" type="text/javascript"></script>
+</head>
+
+<body onload="app();">
+    <div id="loading_holder"><img alt="Loading..." id="loading_image" src="img/loading.svg"></div>
+
+    <div id="help_div">
+        <a href="#" onclick="show_help(true);">
+            <img alt="Help" id="help_img" src="img/help.png"></a>
+    </div>
+    <div id="export_equirectangular_div">
+        <a href="#" onclick="export_equirectangular();">
+            <img alt="Export equirectangular" id="export_equirectangular_button" src="img/export_equirectangular.png"></a>
+    </div>
+    <div id="settings_div">
+        <a href="#" onclick="toggle_ui();">
+            <img alt="Settings" id="settings_button" src="img/settings_closed.png"></a>
+    </div>
+
+    <div id="full_screen_div">
+        <a href="#" onclick="full_screen();">
+            <img alt="Full screen" id="full_screen_button" src="img/full_screen.png"></a>
+    </div>
+
+    <div id="title_div">
+        <div id="title_img_div">
+            <a href="#" target="_new" id="title_link">
+                <img id="title_img" src="img/sl.png">
+            </a>
+        </div>
+        <div id="title_text_div">
+        360 Snapshot
+        </div>
+    </div>
+
+    <div id="ui_div">
+        <div id="ui_contents">
+        <h3>User settings</h3>
+            Currently this settings panel/drawer just contains a list of the composite images. You need to drag the scroll bar to see them vs use the mouse wheel because of some mouse event leakage from the main application.
+            <p>Much more to come.
+        </div>
+        <div id="image_list_div"></div>
+    </div>
+
+
+    <div id="about_box_bkg" class="hide"></div>
+
+    <div id="about_box" class="hide">
+        <h2>
+            <a href="#" onclick="show_help_contents('about_app_text');">About</a>&nbsp; &#9679; &nbsp;
+            <a href="#" onclick="show_help_contents('about_snap_text');">Snapshot</a>&nbsp; &#9679; &nbsp;
+            <a href="#" onclick="show_help_contents('controls_text');">Controls</a>
+        </h2>
+        <div class="show help_contents" id="about_app_text">
+            <h3>About this app</h3>
+            <ul>
+                <li><i>Second Life 360 Snapshot</i> allows you to experience regions from Second Life in your browser.</li>
+                <li>Version 0.0.0.3</li>
+                <li>lots more to come here</li>
+            </ul>
+        </div>
+
+        <div class="show help_contents" id="about_snap_text">
+            <h3>Snapshot info:</h3>
+            <ul>
+                <li id="snap_info_title"></li>
+                <li id="snap_info_url"></li>
+                <li id="snap_info_version"></li>
+                <li id="snap_info_capture_time"></li>
+                <li id="snap_info_format"></li>
+            </ul>
+        </div>
+
+        <div class="hide help_contents" id="controls_text">
+            <h3>Controls</h3>
+            <ul>
+                <li>Look around the 360 Snapshot by dragging the mouse</li>
+                <table cellpadding="4">
+                    <tr>
+                        <td><img width="40" height="40" src="img/sl.png"></td>
+                        <td>Visit the region in Second Life</td>
+                    </tr>
+                    <tr>
+                        <td><img width="40" height="40" src="img/full_screen.png"></td>
+                        <td>Switch to full screen (ESC to exit)</td>
+                    </tr>
+                    <tr>
+                        <td><img width="40" height="40" src="img/settings_closed.png"></td>
+                        <td>Open the settings panel</td>
+                    </tr>
+                    <tr>
+                        <td><img width="40" height="40" src="img/export_equirectangular.png"></td>
+                        <td>Export image in equirectangular format that is compatible with sites like Facebook, Flickr and others.</td>
+                    </tr>
+                    <tr>
+                        <td><img width="40" height="40" src="img/help.png"></td>
+                        <td>Show this help</td>
+                    </tr>
+                </table>
+            </ul>
+        </div>
+        <div id="close_btn">
+            <a href="#" onclick="show_help(false);"><img src="img/close.png"></a>
+        </div>
+    </div>
+</body>
+</html>

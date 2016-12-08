@@ -1,0 +1,270 @@
+body {
+    background-color: #333;
+    color: #fff;
+    margin: 0;
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    font-family: Lato;
+}
+.error_msg_bkg {
+    background-color: rgba(140, 80, 80, 0.9);
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    padding: 0;
+    left: 0;
+    width: 100%;
+    top: 0;
+    pointer-events: all;
+    z-index: 5000;
+}
+
+.fatal_error_msg {
+    width: 700px;
+    height: 300px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -350px;
+    margin-top: -150px;
+    overflow: hidden;
+    padding: 18px;
+    font-size:1.5em;
+    color: #fff;
+    text-align: left;
+    z-index: 2000;
+    background-color: rgba(80, 80, 100, 0.9);
+    border-radius: 16px;
+    border: #999 2px solid;
+    z-index: 5000;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.75);
+}
+
+#title_div {
+    background-color: rgba(80, 80, 80, 0.5);
+    height: 50px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    font-size: 38px;
+    padding-left: 16px;
+    left: 0px;
+    width: 50%;
+    border-bottom-right-radius: 32px;
+    top: 0px;
+}
+#title_img_div {
+    position: absolute;
+    left: 8px;
+    right: 0px;
+    top: 4px;
+}
+#title_text_div {
+    position: absolute;
+    left: 58px;
+    right: 0;
+    top: 0;
+}
+#settings_div {
+    height: 40px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    width: 40px;
+    -webkit-animation: rotation 10s infinite linear;
+    -webkit-animation-play-state: paused;
+}
+#settings_div:hover {
+    -webkit-animation-play-state: running;
+}
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+    }
+}
+#help_div {
+    height: 40px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 152px;
+    top: 4px;
+    width: 40px;
+}
+
+#export_equirectangular_div {
+    height: 40px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 104px;
+    top: 4px;
+    width: 40px;
+}
+
+#full_screen_div {
+    height: 40px;
+    margin: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 56px;
+    top: 4px;
+    width: 40px;
+}
+#ui_div {
+    background-color: #aaa;
+    background-image: url(../img/fiber.png);
+    background-repeat: repeat;
+    bottom: 0;
+    box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.75);
+    height: 0;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+}
+#ui_contents {
+    top: 16px;
+    left: 16px;
+    overflow: hidden;
+    position: absolute;
+    width: 50%;
+}
+h3 {
+    color:yellow;
+}
+#image_list_div {
+    background-color: #999;
+    top: 16px;
+    right: 20px;
+    width: 420px;
+    bottom: 20px;
+    overflow-y: auto;
+    overflow-x: block;
+    position: absolute;
+    border: 2px #000 solid;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.75);
+}
+.hide {
+    opacity: 0;
+    transition: opacity .2s ease-out;
+}
+.show {
+    opacity: 1;
+    transition: opacity .2s ease-out;
+}
+a {
+    color: #ffcc33;
+    text-decoration: none;
+}
+i {
+    color: #cc0;
+}
+h2 {
+    text-align: center;
+}
+h3 {
+    text-align: left;
+}
+li {
+    padding-bottom: 14px;
+}
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}
+strong {
+    color: #ff0;
+}
+#about {
+    position: absolute;
+    right: 8px;
+    overflow: block;
+    top: 8px;
+    background-color: rgba(0, 0, 0, 0)
+}
+#about_box_bkg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    z-index: 1900;
+    background-color: rgba(100, 100, 100, 0.9);
+    pointer-events: none;
+}
+#about_box {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -250px;
+    overflow: hidden;
+    padding: 18px;
+    color: #fff;
+    text-align: justify;
+    z-index: 2000;
+    background-color: rgba(80, 80, 100, 0.9);
+    border-radius: 16px;
+    border: #999 2px solid;
+    pointer-events: none;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.75);
+
+}
+#close_btn {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: -12px;
+    top: 10px;
+}
+.help_contents {
+    font-size: 18px;
+    position: absolute;
+    top: 64px;
+    left: 16px;
+    right: 32px;
+    bottom: 16px;
+    z-index: 4010;
+}
+.mouse_off {
+    pointer-events: all;
+}
+.mouse_off {
+    pointer-events: none;
+}
+#loading_holder {
+    background-color: rgba(128, 128, 128, 0.8);
+    display: block;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+#loading_image {
+    display: block;
+    height: 300px;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+    position: absolute;
+    top: 50%;
+    width: 300px;
+    z-index: 1001;
+}
