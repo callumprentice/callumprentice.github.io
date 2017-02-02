@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stack Overflowing</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="Generator" content="https://callum.com">
+        <link type="text/css" rel="stylesheet" href="css/style.css" />
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+        <script type="text/javascript" src="js/three.min.js"></script>
+        <script type="text/javascript" src="js/Detector.js"></script>
+        <script type="text/javascript" src="js/stats.min.js"></script>
+        <script type="text/javascript" src="js/TrackballControls.js"></script>
+        <script type="text/javascript" src="js/dat.gui.min.js"></script>
+        <script type="text/javascript" src="js/data.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="x-shader/x-vertex" id="vertexshader">
+            attribute float size;
+            attribute vec3 customColor;
+            varying vec3 vColor;
+
+            void main() {
+                vColor = customColor;
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 color;
+            uniform sampler2D texture;
+            uniform float opacity;
+
+            varying vec3 vColor;
+
+            void main() {
+                gl_FragColor = vec4( color * vColor, opacity );
+                gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+            }
+        </script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", start_app, false);
+        </script>
+        <div id="title">Stack Overflowing</div>
+        <div id="loading_overlay" class="hide"><img width="400" height="400" id="loading_overlay_img" src="images/loading.svg"></div>
+        <div id="about_box_bkg" class="hide"></div>
+        <div id="about_box" class="hide">
+        <h2>About</h2>
+        An interesting <a href="http://stackoverflow.blog/2017/01/Developers-without-Borders-The-Global-Stack-Overflow-Network/"target="_blank">blog post</a> from David Robinson (a data scientist at Stack Overflow) inspired me to revisit an old experiment I made called <a href="http://callumprentice.github.io/apps/flight_stream/index.html" target="_blank">Flight Stream</a>. I wanted to make it more generally useful for illustrating flow between sets of points on the earth and also make it support lots more points. David was kind enough to share the source data from his post with me and I used it to make the changes. As per the blog post, this visualization represents a days worth of global information exchange on Stack Overflow (data is anonymized).
+        <p>
+        Use the mouse plus left-button to spin or mouse wheel to zoom. The Controls panel lets you experiment with the visuals.
+        <h2>Credits</h2>
+        <ul>
+        <a href="http://www.shadedrelief.com/natural3/pages/textures.html" target="_blank">Globe textures</a> &#9679; <a href="http://threejs.org" target="_blank">Three.js</a> &#9679; <a href="http://www.movable-type.co.uk/scripts/latlong.html" target="_blank">Lat/long calculations</a>  &#9679; <a href="http://samherbert.net/svg-loaders/" target="_blank">SVG Loader</a>
+        </ul>
+        <h2>Contact</h2>
+        Find my contact details and see more experiments <a href="http://callum.com#contact" target="_blank">here</a> - advice, suggestions and fixes appreciated.
+        <div id="close_button_top"><a href="#" onclick="show_about(false);">CLOSE</a></div>
+        </div>
+    </body>
+</html>
