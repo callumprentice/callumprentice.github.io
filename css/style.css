@@ -126,6 +126,11 @@ ul.rig li img {
     max-width:100%;
 }
 
+.img_border {
+    border: 1px #999 solid;
+    box-shadow:5px 5px 25px rgba(0,0,0,0.25);
+}
+
 ul.rig li h3 {
     margin:0 0 5px;
 }
