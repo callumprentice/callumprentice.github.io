@@ -155,5 +155,45 @@ var body_data = [{
         radius: 376,
         surface_texture: 'surface_textures/pluto/charon.jpg',
         mesh: 0
-    },
+    }, {
+        name: 'trappist-1',
+        radius: 49280,
+        surface_texture: 'surface_textures/trappist/trappist-1.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-b',
+        radius: 1.086 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-b.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-c',
+        radius: 1.056 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-c.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-d',
+        radius: 0.772 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-d.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-e',
+        radius: 0.918 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-e.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-f',
+        radius: 1.045 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-f.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-g',
+        radius: 1.127 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-g.jpg',
+        mesh: 0
+    }, {
+        name: 'trappist-h',
+        radius: 0.755 * 3959,
+        surface_texture: 'surface_textures/trappist/trappist-h.jpg',
+        mesh: 0
+    }
 ];

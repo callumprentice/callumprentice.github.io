@@ -1,6 +1,6 @@
 /**
  * Celestial Body Compare
- * @author Callum Prentice (2015) / http://callum.com/
+ * @author Callum Prentice (2017) / http://callum.com/
  */
 var camera, scene, renderer, controls;
 var firstBody = '';
