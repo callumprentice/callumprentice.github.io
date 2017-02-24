@@ -19,6 +19,16 @@ i {
     color: #ff0;
     font-style: normal;
 }
+#hl_off {
+    color: #999;
+    font-style: normal;
+    font-size:0.8em;
+}
+#hl_on {
+    color: #ff0;
+    font-style: normal;
+    font-size:0.8em;
+}
 b {
     color: #7f7;
     font-style: normal;
@@ -26,17 +36,6 @@ b {
 }
 strong {
     color: #fff;
-}
-#title {
-    position: absolute;
-    left: 0px;
-    width: 100%;
-    top: 8px;
-    text-align: center;
-    z-index: 10;
-    font-size: 2.0em;
-    color: #0f0;
-    pointer-events: none;
 }
 #body_selector {
     position: absolute;
@@ -61,19 +60,17 @@ strong {
 #planet_selector a {
     color: #ff0;
 }
-#about_box_icon {
+#info_display {
     position: absolute;
-    right: 8px;
+    left: 16px;
     top: 8px;
+    width: 500px;
+    height: 75%;
     overflow: hidden;
-    z-index: 1900;
-}
-#share_icon {
-    position: absolute;
-    right: 54px;
-    top: 8px;
-    overflow: hidden;
-    z-index: 1900;
+    z-index: 2000;
+    font-size: 1.2em;
+    margin: 0;
+    color: #ff0;
 }
 #about_box_bkg {
     width: 100%;
