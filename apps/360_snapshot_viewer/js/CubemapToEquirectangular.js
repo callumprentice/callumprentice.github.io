@@ -163,7 +163,7 @@ CubemapToEquirectangular.prototype.dataURItoBlob = function(dataURI) {
     return new Blob([ia], {type:mimeString});
 }
 
-CubemapToEquirectangular.prototype.convert = function( cubeCamera, suggested_filename ) {
+CubemapToEquirectangular.prototype.convert = function( cubeCamera, suggested_filename, name, url) {
 
 	this.quad.material.uniforms.map.value = cubeCamera.renderTarget.texture;
 	this.renderer.render( this.scene, this.camera, this.output, true );
@@ -174,7 +174,7 @@ CubemapToEquirectangular.prototype.convert = function( cubeCamera, suggested_fil
 	var imageData = new ImageData( new Uint8ClampedArray( pixels ), this.width, this.height );
 
 	var encoder = new JPEGEncoder(90);
-	var jpegURI = encoder.encode(imageData, 90);
+	var jpegURI = encoder.encode(imageData, 90, name, url);
 	var blob = this.dataURItoBlob(jpegURI);
 
 	var url = URL.createObjectURL(blob);
@@ -191,7 +191,7 @@ CubemapToEquirectangular.prototype.convert = function( cubeCamera, suggested_fil
 	}, 1 );
 }
 
-CubemapToEquirectangular.prototype.update = function( camera, scene, suggested_filename ) {
+CubemapToEquirectangular.prototype.update = function( camera, scene, suggested_filename, name, url  ) {
 
 	var autoClear = this.renderer.autoClear;
 	this.renderer.autoClear = true;
@@ -199,7 +199,7 @@ CubemapToEquirectangular.prototype.update = function( camera, scene, suggested_f
 	this.cubeCamera.updateCubeMap( this.renderer, scene );
 	this.renderer.autoClear = autoClear;
 
-	this.convert( this.cubeCamera, suggested_filename );
+	this.convert( this.cubeCamera, suggested_filename, name, url );
 
 }
 

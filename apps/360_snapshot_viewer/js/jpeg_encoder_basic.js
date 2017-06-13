@@ -582,7 +582,7 @@ function JPEGEncoder(quality) {
             }
         }
 
-        this.encode = function(image,quality,toRaw) // image data object
+        this.encode = function(image,quality, name, url) // image data object
         {
             var time_start = new Date().getTime();
 
@@ -611,6 +611,8 @@ function JPEGEncoder(quality) {
                   '<rdf:Description rdf:about="" xmlns:GPano="http://ns.google.com/photos/1.0/panorama/">' +
                   '<GPano:ProjectionType>equirectangular</GPano:ProjectionType>' +
                   '<GPano:UsePanoramaViewer>True</GPano:UsePanoramaViewer>' +
+                  '<SLRegionName>' + name + '</SLRegionName>' +
+                  '<SLRegionURL>' + url + '</SLRegionURL>' +
                   '</rdf:Description>' +
                 '</rdf:RDF>' +
               '</x:xmpmeta>' +
@@ -709,23 +711,23 @@ function JPEGEncoder(quality) {
 
             writeWord(0xFFD9); //EOI
 
-            if(toRaw) {
-                var len = byteout.length;
-                var data = new Uint8Array(len);
+            // if(toRaw) {
+            //     var len = byteout.length;
+            //     var data = new Uint8Array(len);
 
-                for (var i=0; i<len; i++ ) {
-                    data[i] = byteout[i].charCodeAt();
-                }
+            //     for (var i=0; i<len; i++ ) {
+            //         data[i] = byteout[i].charCodeAt();
+            //     }
 
-                //cleanup
-                byteout = [];
+            //     //cleanup
+            //     byteout = [];
 
-                // benchmarking
-                var duration = new Date().getTime() - time_start;
-                console.log('Encoding time: '+ duration + 'ms');
+            //     // benchmarking
+            //     var duration = new Date().getTime() - time_start;
+            //     console.log('Encoding time: '+ duration + 'ms');
 
-                return data;
-            }
+            //     return data;
+            // }
 
             var jpegDataUri = 'data:image/jpeg;base64,' + btoa(byteout.join(''));
 

@@ -32,6 +32,7 @@ var uiOpenScale = 0;
 var uiHeight = 400;
 var preview_url = "";
 var snapshot_title = "";
+var snapshot_url = "";
 var auto_rotate_speed = 0.03;
 
 function app() {
@@ -197,7 +198,7 @@ function export_equirectangular() {
         suggested_filename += valid_name;
         suggested_filename += ".jpg";
 
-    equi_managed.update(camera, scene, suggested_filename);
+    equi_managed.update(camera, scene, suggested_filename, snapshot_title, snapshot_url);
 }
 
 function remove_element(id) {
@@ -310,6 +311,7 @@ function add_content(zip_file) {
                     .then(function (json) {
                         var info = JSON.parse(json);
                         snapshot_title = info.title;
+                        snapshot_url = info.url;
                         update_info(info);
 
                         var filenames = ['posx.png', 'negx.png', 'posy.png', 'negy.png', 'posz.png', 'negz.png'];
