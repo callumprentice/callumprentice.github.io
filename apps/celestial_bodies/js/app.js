@@ -288,6 +288,15 @@ function removeBody(name) {
     }
 }
 
+function toggleBody(name) {
+    for (var i = 0; i < body_data.length; ++i) {
+        if (body_data[i].name === name) {
+            if (bodies_list.indexOf(body_data[i]) === -1) addBody(name);
+            else removeBody(name);
+            break;
+        }   
+}
+
 function removeAllBodies() {
 
     bodies_list = [];
