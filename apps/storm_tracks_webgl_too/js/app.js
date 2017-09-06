@@ -1,10 +1,10 @@
 /*
- * Storm Tracks WebGL Too
+ * Storm Tracks WebGL Too - 2017
  * @author Callum Prentice - http://callum.com/
  * @license: MIT / http://opensource.org/licenses/MIT
  */
 var camera, scene, renderer;
-var controls, stats;
+var globe_manipulator;
 var storm_data;
 var parent_obj = 0;
 var earth_mesh = 0;
@@ -17,6 +17,11 @@ var name_filter = "";
 var start_year = new Date().getFullYear() - 100;
 var max_allowed_slider_wind_speed = 150;
 var start_wind_speed = 10;
+var start_latitude = 25.591203;
+var start_longitude = -74.657239;
+var latlng_set = false;
+var start_distance = 1.5;
+var marker_opacity = 0.25;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -42,6 +47,9 @@ function init() {
 
     if (getQueryParameterByName("windspeed") !== "") {
         start_wind_speed = getQueryParameterByName("windspeed");
+        if ( start_wind_speed < 0) {
+            start_wind_speed = 0;
+        }
         if ( start_wind_speed > max_allowed_slider_wind_speed) {
             start_wind_speed = max_allowed_slider_wind_speed;
         }
@@ -58,6 +66,20 @@ function init() {
         if ( start_year > last_year) {
             start_year = last_year;
         }
+    }
+
+    if (getQueryParameterByName("latlng") !== "") {
+        var lat = parseFloat(getQueryParameterByName("latlng").toString().split(",")[0])
+        var lng = parseFloat(getQueryParameterByName("latlng").toString().split(",")[1])
+        if (lat >= -90.0 && lat <= 90.0 && lng >= -180.0 && lng <= 180.0) {
+            start_latitude = lat;
+            start_longitude = lng;
+            latlng_set = true;
+        }
+    }
+
+    if (getQueryParameterByName("startdistance") !== "") {
+        start_distance = getQueryParameterByName("startdistance");
     }
 
     renderer = new THREE.WebGLRenderer({
@@ -125,22 +147,19 @@ function init() {
         });
     });
 
-    controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.rotateSpeed = 0.3;
-    controls.noZoom = false;
-    controls.noPan = true;
-    controls.staticMoving = false;
-    controls.dynamicDampingFactor = 0.1;
-    controls.minDistance = 0.75;
-    controls.maxDistance = 3.0;
-
-    // Off for release
-    // stats = new Stats();
-    // stats.domElement.style.position = 'absolute';
-    // stats.domElement.style.right = '0px';
-    // stats.domElement.style.top = '0px';
-    // stats.domElement.style.zIndex = 100;
-    // document.body.appendChild(stats.domElement);
+    globe_manipulator = new globeManipulator({
+        dom_object: renderer.domElement,
+        camera: camera,
+        radius: radius,
+        auto_rotate: false,
+        right_click_to_select: false,
+        start_lat: start_latitude,
+        start_lng: start_longitude,
+        start_distance: start_distance,
+        min_distance: 0.75,
+        max_distance: 3.0,
+        mesh: earth_mesh
+    });
 
     window.addEventListener('resize', on_window_resize, false);
 }
@@ -172,14 +191,7 @@ function animate() {
 
     requestAnimationFrame(animate);
 
-    controls.update();
-
-    // off for release
-    //stats.update();
-
-    if (spin) {
-        parent_obj.rotation.y += spin_speed;
-    }
+    globe_manipulator.update();
 
     renderer.render(scene, camera);
 }
@@ -194,7 +206,6 @@ function load_storm_data() {
         header: false,
         dynamicTyping: false,
         delimiter: ",",
-        //preview: 30,
         skipEmptyLines: true,
         fastMode: true,
         download: true,
@@ -354,7 +365,9 @@ function add_lat_marker_geometry(radius, lat, size, color) {
 
     geometry = new THREE.TorusGeometry(radius * Math.cos(lat / 180 * Math.PI), size, 8, 64);
     material = new THREE.MeshBasicMaterial({
-        color: color
+        color: color,
+        transparent: true,
+        opacity: marker_opacity
     });
     mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.x = Math.PI / 2.0;
@@ -368,7 +381,9 @@ function add_lng_marker_geometry(radius, lng, size, color) {
 
     geometry = new THREE.TorusGeometry(radius, size, 8, 64);
     material = new THREE.MeshBasicMaterial({
-        color: color
+        color: color,
+        transparent: true,
+        opacity: marker_opacity
     });
     mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.y = lng * Math.PI / 180.0;
@@ -411,6 +426,7 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
     var num_storms = 0;
     var name_filter_match = false;
     var lower_case_name_filter = name_filter.toLowerCase();
+    var storm_index = -1;
 
     for (var s = 0; s < storm_data.length; ++s) {
 
@@ -435,6 +451,8 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
 
             num_storms++;
 
+            storm_index = s;
+
             for (var i = 0; i < (num_spline_control_points - 1) * 2; ++i) {
 
                 line_geometry.attributes.visible.array[start + i] = 1.0;
@@ -448,6 +466,24 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
                 line_geometry.attributes.visible.array[start + i] = 0;
             }
             line_geometry.attributes.visible.needsUpdate = true;
+        }
+    }
+
+    if ( num_storms === 1) {
+
+        var average_lat = 0.0;
+        var average_lng = 0.0;
+        for (var e = 5; e < storm_data[storm_index].length - 3; e += 4) {
+            average_lat += parseFloat(storm_data[storm_index][e + 0]);
+            average_lng += parseFloat(storm_data[storm_index][e + 1]);
+        }
+        
+        var num_track_points = (storm_data[storm_index].length - 6)/4;
+        average_lat = average_lat / num_track_points;
+        average_lng = average_lng / num_track_points;
+
+        if ( latlng_set === false) {
+            globe_manipulator.set_lat_lng(average_lat, average_lng)
         }
     }
 
@@ -542,6 +578,7 @@ function toggle_guides(cb) {
 //
 function toggle_spin(cb) {
     spin = cb.checked ? true : false;
+    globe_manipulator.enable_auto_rotate(spin);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
