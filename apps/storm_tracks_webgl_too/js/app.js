@@ -14,6 +14,9 @@ var num_spline_control_points = 40;
 var spin_speed = 0.001;
 var spin = false;
 var name_filter = "";
+var start_year = new Date().getFullYear() - 100;
+var max_allowed_slider_wind_speed = 150;
+var start_wind_speed = 10;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -31,6 +34,31 @@ function init() {
     }
 
     show_loading(true);
+
+    if (getQueryParameterByName("stormname") !== "") {
+        name_filter = getQueryParameterByName("stormname");
+        $("#name_filter_input").val(name_filter);
+    }
+
+    if (getQueryParameterByName("windspeed") !== "") {
+        start_wind_speed = getQueryParameterByName("windspeed");
+        if ( start_wind_speed > max_allowed_slider_wind_speed) {
+            start_wind_speed = max_allowed_slider_wind_speed;
+        }
+    }
+
+    if (getQueryParameterByName("startyear") !== "") {
+        
+        var first_year = parseInt(storm_data[0][1]) / 10000;
+        var last_year = parseInt(storm_data[storm_data.length-1][1]) / 10000;
+        start_year = getQueryParameterByName("startyear");
+        if ( start_year < first_year) {
+            start_year = first_year;
+        }
+        if ( start_year > last_year) {
+            start_year = last_year;
+        }
+    }
 
     renderer = new THREE.WebGLRenderer({
         antialias: true
@@ -98,7 +126,7 @@ function init() {
     });
 
     controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.rotateSpeed = 0.4;
+    controls.rotateSpeed = 0.3;
     controls.noZoom = false;
     controls.noPan = true;
     controls.staticMoving = false;
@@ -430,25 +458,23 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
 //
 function create_ui() {
 
-    var start_year = new Date().getFullYear() - 100;
     var date_slider = document.getElementById('date_slider');
     noUiSlider.create(date_slider, {
         start: start_year,
         step: 1,
         range: {
             'min': storm_data[0][1] / 10000,
-            'max': new Date().getFullYear() - 1
+            'max': storm_data[storm_data.length-1][1] / 10000
         }
     });
 
-    var start_wind_speed = 10;
     var wind_speed_slider = document.getElementById('wind_speed_slider');
     noUiSlider.create(wind_speed_slider, {
         start: start_wind_speed,
         step: 1,
         range: {
             'min': 0,
-            'max': 135
+            'max': max_allowed_slider_wind_speed
         }
     });
 
@@ -571,5 +597,19 @@ function show_help(visible) {
         document.getElementById("about_box").className = "hide";
         document.getElementById("about_box").style.pointerEvents = "none";
         showHelpContents("none")
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+function getQueryParameterByName(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.search);
+    if (results === null) {
+        return "";
+    } else {
+        return decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 }
