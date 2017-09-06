@@ -160,7 +160,7 @@ function animate() {
 //
 function load_storm_data() {
 
-    var filename = "data/storms_2015-10.csv";
+    var filename = "data/storms.csv";
 
     Papa.parse(filename, {
         header: false,
