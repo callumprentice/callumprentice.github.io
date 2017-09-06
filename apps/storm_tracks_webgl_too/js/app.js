@@ -471,19 +471,22 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
 
     if ( num_storms === 1) {
 
-        var average_lat = 0.0;
-        var average_lng = 0.0;
+        var min_lat = Infinity;
+        var max_lat = -Infinity;
+        var min_lng = Infinity;
+        var max_lng = -Infinity;
         for (var e = 5; e < storm_data[storm_index].length - 3; e += 4) {
-            average_lat += parseFloat(storm_data[storm_index][e + 0]);
-            average_lng += parseFloat(storm_data[storm_index][e + 1]);
+            var lat = parseFloat(storm_data[storm_index][e + 0]);
+            var lng = parseFloat(storm_data[storm_index][e + 1]);
+
+            if ( lat < min_lat) min_lat = lat;
+            if ( lat > max_lat) max_lat = lat;
+            if ( lng < min_lng) min_lng = lng;
+            if ( lng > max_lng) max_lng = lng;
         }
-        
-        var num_track_points = (storm_data[storm_index].length - 6)/4;
-        average_lat = average_lat / num_track_points;
-        average_lng = average_lng / num_track_points;
 
         if ( latlng_set === false) {
-            globe_manipulator.set_lat_lng(average_lat, average_lng)
+            globe_manipulator.set_lat_lng((min_lat + max_lat)/2, (min_lng + max_lng)/2);
         }
     }
 
