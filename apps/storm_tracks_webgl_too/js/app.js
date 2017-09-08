@@ -47,23 +47,23 @@ function init() {
 
     if (getQueryParameterByName("windspeed") !== "") {
         start_wind_speed = getQueryParameterByName("windspeed");
-        if ( start_wind_speed < 0) {
+        if (start_wind_speed < 0) {
             start_wind_speed = 0;
         }
-        if ( start_wind_speed > max_allowed_slider_wind_speed) {
+        if (start_wind_speed > max_allowed_slider_wind_speed) {
             start_wind_speed = max_allowed_slider_wind_speed;
         }
     }
 
     if (getQueryParameterByName("startyear") !== "") {
-        
+
         var first_year = parseInt(storm_data[0][1]) / 10000;
-        var last_year = parseInt(storm_data[storm_data.length-1][1]) / 10000;
+        var last_year = parseInt(storm_data[storm_data.length - 1][1]) / 10000;
         start_year = getQueryParameterByName("startyear");
-        if ( start_year < first_year) {
+        if (start_year < first_year) {
             start_year = first_year;
         }
-        if ( start_year > last_year) {
+        if (start_year > last_year) {
             start_year = last_year;
         }
     }
@@ -146,7 +146,7 @@ function init() {
             });
         });
     });
-    
+
     globe_manipulator = new globeManipulator({
         dom_object: renderer.domElement,
         camera: camera,
@@ -206,7 +206,7 @@ function load_storm_data() {
         header: false,
         dynamicTyping: false,
         delimiter: ",",
-        //preview: 30,
+        //preview: 10,
         skipEmptyLines: true,
         fastMode: true,
         download: true,
@@ -470,7 +470,7 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
         }
     }
 
-    if ( num_storms === 1) {
+    if (num_storms === 1) {
 
         var min_lat = Infinity;
         var max_lat = -Infinity;
@@ -480,15 +480,13 @@ function filter_storms(max_slider_year, max_slider_wind_speed) {
             var lat = parseFloat(storm_data[storm_index][e + 0]);
             var lng = parseFloat(storm_data[storm_index][e + 1]);
 
-            if ( lat < min_lat) min_lat = lat;
-            if ( lat > max_lat) max_lat = lat;
-            if ( lng < min_lng) min_lng = lng;
-            if ( lng > max_lng) max_lng = lng;
+            if (lat < min_lat) min_lat = lat;
+            if (lat > max_lat) max_lat = lat;
+            if (lng < min_lng) min_lng = lng;
+            if (lng > max_lng) max_lng = lng;
         }
 
-        if ( latlng_set === false) {
-            globe_manipulator.set_lat_lng((min_lat + max_lat)/2, (min_lng + max_lng)/2);
-        }
+        globe_manipulator.set_lat_lng((min_lat + max_lat) / 2, (min_lng + max_lng) / 2);
     }
 
     return num_storms;
@@ -504,7 +502,7 @@ function create_ui() {
         step: 1,
         range: {
             'min': storm_data[0][1] / 10000,
-            'max': storm_data[storm_data.length-1][1] / 10000
+            'max': storm_data[storm_data.length - 1][1] / 10000
         }
     });
 
@@ -574,32 +572,6 @@ function create_ui() {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-function toggle_guides(cb) {
-    if (!cb.checked) {
-        marker_mesh.scale.set(0.0001, 0.0001, 0.0001);
-    } else {
-        marker_mesh.scale.set(1, 1, 1);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-function toggle_spin(cb) {
-    globe_manipulator.enable_auto_rotate(cb.checked ? true : false);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-function toggle_earth(cb) {
-    if (!cb.checked) {
-        earth_mesh.scale.set(0.0001, 0.0001, 0.0001);
-    } else {
-        earth_mesh.scale.set(1, 1, 1);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
 function full_screen() {
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
@@ -621,11 +593,11 @@ function build_url() {
 
     url += "&startyear=" + cur_year;
 
-    var distance = (parseInt(globe_manipulator.get_distance() * 100))/100;
+    var distance = (parseInt(globe_manipulator.get_distance() * 100)) / 100;
     url += "&startdistance=" + distance;
 
     var filter_name = $("#name_filter_input").val();
-    if ( filter_name.length > 0){
+    if (filter_name.length > 0) {
         url += "&stormname=" + filter_name;
     }
 
@@ -639,7 +611,7 @@ function build_url() {
 //
 function update_url() {
     var url = build_url();
-    window.history.pushState({},"", url);
+    window.history.pushState({}, "", url);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
