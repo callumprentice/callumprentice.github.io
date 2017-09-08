@@ -30,7 +30,7 @@ globeManipulator = function(params) {
     var _start_distance = params.start_distance;
     var _auto_rotate = params.auto_rotate;
     var _distance = 0;
-    var _distance_target = 0;
+    var _distance_target = parseFloat(params.start_distance);
     var _rotation = {
         x: 0.0,
         y: 0.0
@@ -41,7 +41,7 @@ globeManipulator = function(params) {
     };
     var motion_scaling_factor = 0.01;
     var _smoothing_factor = 0.1;
-    var _wheel_scaling = 0.25;
+    var _wheel_scaling = 0.1;
     var _navigation_enabled = true;
     var _mesh = params.mesh;
     var camera_target = new THREE.Vector3(0, 0, 0);
@@ -84,8 +84,20 @@ globeManipulator = function(params) {
         _target.x = (lng + 90) * Math.PI / 180.0;
         _target.y = lat * Math.PI / 180.0;
     }
+    this.get_lat_lng = function() {
+        
+        var lat = _target.y * 180.0 / Math.PI;
+        var lng  = ((_target.x * 180.0)/Math.PI) - 90.0;
+        return {
+            lat: lat,
+            lng: lng
+        }
+    }
     this.set_distance = function(distance) {
         _distance_target = distance;
+    }
+    this.get_distance = function() {
+        return _distance_target;
     }
 
     function _on_mouse_down(event) {
@@ -120,6 +132,8 @@ globeManipulator = function(params) {
         _target.y = _target_on_down.y + (pos.y - _mouse_pos_on_down.y) * motion_scaling;
         _target.y = _target.y > Math.PI / 2 ? Math.PI / 2 : _target.y;
         _target.y = _target.y < -Math.PI / 2 ? -Math.PI / 2 : _target.y;
+        
+        update_url();
     }
 
     function lat_lng_from_mouse_pos(event) {
@@ -175,9 +189,11 @@ globeManipulator = function(params) {
     function _on_mouse_wheel(event) {
         if (!_navigation_enabled) return;
 
-        _distance_target -= ( event.deltaY && event.deltaY / Math.abs(event.deltaY) ) * _wheel_scaling;
+        _distance_target += ( event.deltaY && event.deltaY / Math.abs(event.deltaY) ) * _wheel_scaling;
         _distance_target = _distance_target > _max_distance ? _max_distance : _distance_target;
         _distance_target = _distance_target < _min_distance ? _min_distance : _distance_target;
+
+        update_url();
     }
     this._on_key_down = function(event) {
         if (!_navigation_enabled) return;

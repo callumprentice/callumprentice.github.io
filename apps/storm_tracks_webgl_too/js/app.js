@@ -11,12 +11,12 @@ var earth_mesh = 0;
 var line_geometry;
 var marker_mesh;
 var num_spline_control_points = 40;
-var spin_speed = 0.001;
-var spin = false;
 var name_filter = "";
 var start_year = new Date().getFullYear() - 100;
+var cur_year = start_year;
 var max_allowed_slider_wind_speed = 150;
-var start_wind_speed = 10;
+var start_wind_speed = 40;
+var cur_windspeed = 0;
 var start_latitude = 25.591203;
 var start_longitude = -74.657239;
 var latlng_set = false;
@@ -79,7 +79,7 @@ function init() {
     }
 
     if (getQueryParameterByName("startdistance") !== "") {
-        start_distance = getQueryParameterByName("startdistance");
+        start_distance = parseFloat(getQueryParameterByName("startdistance"));
     }
 
     renderer = new THREE.WebGLRenderer({
@@ -146,7 +146,7 @@ function init() {
             });
         });
     });
-
+    
     globe_manipulator = new globeManipulator({
         dom_object: renderer.domElement,
         camera: camera,
@@ -206,6 +206,7 @@ function load_storm_data() {
         header: false,
         dynamicTyping: false,
         delimiter: ",",
+        //preview: 30,
         skipEmptyLines: true,
         fastMode: true,
         download: true,
@@ -518,14 +519,15 @@ function create_ui() {
     });
 
     date_slider.noUiSlider.on('slide', function (value) {
+        update_url();
         update_date(value);
     });
 
     function update_date(value) {
         var num_storms = filter_storms(value[0], wind_speed_slider.noUiSlider.get());
+        cur_year = parseInt(value, 10);
         update_date_label(value, num_storms);
     }
-
 
     function numberWithCommas(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -539,11 +541,13 @@ function create_ui() {
     update_date(start_year);
 
     wind_speed_slider.noUiSlider.on('slide', function (value) {
+        update_url();
         update_wind_speed(value[0]);
     });
 
     function update_wind_speed(value) {
         var num_storms = filter_storms(date_slider.noUiSlider.get(), value);
+        cur_windspeed = parseInt(value, 10);
         var label = 'Max wind speed above ' + parseInt(value, 10) + '(kts)';
         document.getElementById('wind_speed_slider_label').innerHTML = label;
 
@@ -553,6 +557,7 @@ function create_ui() {
     update_wind_speed(start_wind_speed);
 
     $("#name_filter_input").keyup(function (event) {
+        update_url();
         if (event.which !== 13) {
             name_filter = $("#name_filter_input").val();
             var num_storms = filter_storms(date_slider.noUiSlider.get(), wind_speed_slider.noUiSlider.get());
@@ -580,8 +585,7 @@ function toggle_guides(cb) {
 ///////////////////////////////////////////////////////////////////////////////
 //
 function toggle_spin(cb) {
-    spin = cb.checked ? true : false;
-    globe_manipulator.enable_auto_rotate(spin);
+    globe_manipulator.enable_auto_rotate(cb.checked ? true : false);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -606,6 +610,42 @@ function full_screen() {
     } else if (document.documentElement.msRequestFullscreen) {
         document.documentElement.msRequestFullscreen();
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+function build_url() {
+    var url = "index.html?"
+
+    url += "windspeed=" + cur_windspeed;
+
+    url += "&startyear=" + cur_year;
+
+    var distance = (parseInt(globe_manipulator.get_distance() * 100))/100;
+    url += "&startdistance=" + distance;
+
+    var filter_name = $("#name_filter_input").val();
+    if ( filter_name.length > 0){
+        url += "&stormname=" + filter_name;
+    }
+
+    var cur_lat_lng = globe_manipulator.get_lat_lng();
+    url += "&latlng=" + cur_lat_lng.lat + "," + cur_lat_lng.lng;
+
+    return url;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+function update_url() {
+    var url = build_url();
+    window.history.pushState({},"", url);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+function share_url() {
+    window.open(build_url());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
