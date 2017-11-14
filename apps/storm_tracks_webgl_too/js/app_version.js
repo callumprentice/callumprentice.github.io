@@ -1,1 +1,1 @@
-console.log('Storm data updated Mon Oct 16 13:37:55 PDT 2017')
+console.log('Storm data updated Tue Nov 14 08:36:00 PST 2017')
