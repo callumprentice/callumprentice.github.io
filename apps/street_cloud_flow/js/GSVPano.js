@@ -101,6 +101,7 @@ GSVPANO.PanoLoader = function (parameters) {
         var self = this;
         _panoClient.getPanoramaById(id, function (result, status) {
             if (status === google.maps.StreetViewStatus.OK) {
+                var location = result.location.latLng;
                 if( self.onPanoramaData ) self.onPanoramaData( result );
                 var h = google.maps.geometry.spherical.computeHeading(location, result.location.latLng);
                 //console.log("data=",result)
