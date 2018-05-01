@@ -1,0 +1,36 @@
+body {
+    background-color: #000;
+    font-family: 'PT Sans', 'Verdana','Open Sans', sans-serif;
+    margin: 0;
+    color: #000;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+a {
+    color: yellow;
+    text-decoration: none;
+}
+
+i {
+    color: #9a9;
+}
+
+strong {
+    color: #ff0;
+}
+
+#title {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    top: 8px;
+    text-align: center;
+    z-index: 10;
+    font-size: 2.0em;
+    color: #0f0;
+}
