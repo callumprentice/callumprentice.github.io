@@ -1,0 +1,40 @@
+body {
+    background-color: #000;
+    font-family: 'Encode Sans Condensed', sans-serif;
+    margin: 0;
+    color: #000;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    font-size: 2.5vw;
+}
+
+a {
+    color: #aa0;
+    text-decoration: none;
+}
+
+em {
+    color: #a00;
+}
+
+#title {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    top: 8px;
+    text-align: center;
+    z-index: 10;
+    color: #0a0;
+}
+
+#gui {
+    position: absolute;
+    right: 0px;
+    width: 100%;
+    bottom: 0;
+    z-index: 20;
+}
