@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Climate Temperature Change</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Generator" content="https://callum.com">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type='text/css' rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100">
+    <link href='http://fonts.googleapis.com/css?family=Exo' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/app.css" />
+    <script type="text/javascript" src="js/third_party/Detector.js"></script>
+    <script type="text/javascript" src="js/third_party/three.min.js"></script>
+    <script type="text/javascript" src="js/third_party/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/third_party/stats.min.js"></script>
+    <script type="text/javascript" src='js/third_party/LineSegmentsGeometry.js'></script>
+    <script type="text/javascript" src='js/third_party/LineGeometry.js'></script>
+    <script type="text/javascript" src='js/third_party/LineMaterial.js'></script>
+    <script type="text/javascript" src='js/third_party/LineSegments2.js'></script>
+    <script type="text/javascript" src='js/third_party/Line2.js'></script>
+    <script type="text/javascript" src='js/third_party/BufferGeometryUtils.js'></script>
+    <script type="text/javascript" src="js/third_party/chroma.js"></script>
+    <script type="text/javascript" src="js/third_party/Tween.min.js"></script>
+    <script type="text/javascript" src="js/third_party/nouislider.min.js"></script>
+    <script type="text/javascript" src="js/data.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+</head>
+<body onload="app()">
+    <div id="container3d"></div>
+    <div id="title"></div>
+    <div id="help_box_bkg" class="hide"></div>
+    <div id="help_box" class="hide">
+        <h2>Climate Temperature Change</h2>
+        <h3>Description</h3>
+        <p>This is an experiment that investigates ways of visualizing the average worldwide monthly temperature anomalies from 1850 to 2017 via data from the <a href="https://www.metoffice.gov.uk/" target=_new">UK Met Office</a>. You may have seen the renowned <a href="https://www.climate-lab-book.ac.uk/spirals/" target="_new">Climate Spiral</a> images created by UK scientist <a href="https://www.climate-lab-book.ac.uk/about/" target="_new">Ed Hawkings</a> - this is a modest attempt to explore other ways of visualizing that same sobering data using modern web technologies such as WebGL.</p>
+        <p>Moreover, I purposely made a point of using different techniques for each - colored WebGL lines, irregular stacked polygons, CatmullRom splines etc. so that I could explore new ways of rendering this kind of data.</p>
+        <p>There are 4 different visualizations in this initial release and since the source code, data etc. is all freely available under a non-restrictive MPL license, I am hoping that others will pitch in and create new ones or improve the existing ones.
+        </p>
+
+        <h3>Visualizations</h3>
+        <p>
+            All of them try to show the temperature in a vertical stack with the year 1850 at the bottom and the present day (currently 2017) at the top. Each year is nominally divided into 12 months and the magnitude of global temperature anomalies are plotted as a function of distance from the center line and a color from blue (cool) to red (hot). It seems pretty clear that the global world temperature is rising.
+        </p>
+        <p>
+            I take the freely available source data from the UK Met Office (HadCRUT 4) and create a larger smoothed dataset, either on a yearly basis for the Rings, Slices and Blob or for the whole time period for the Spiral. The code plots the data based on the settings you choose. I am well aware that this interpolation introduces inaccuracies in the data when viewed as a precise measure of temperature for a given year / month and whilst that is one of the things I wanted to explore, this experiment is more about making something visually interesting than letting you find an exact values. The current visualizations are:
+        </p>
+        <p><em>Rings</em> - Each year is represented by a single ring.</p>
+        <p><em>Spiral</em> - Each 'loop' of the spiral represents a year so in that sense, it is similar to the Rings - the difference is that the value for January in a given year smoothly follows the one for December in the previous year - just like the real world - as opposed to a sudden change for the Rings.</p>
+        <p><em>Slices</em> - Each slice in the stack represents a year so this one is similar to Rings but I liked the way the stack looked.</p>
+        <p><em>Blob</em> - This version is a bit like the slices except the values are smoothed out vertically as well as horizontally. It might be interesting to consider 3D printing a small version of this in color and give it out at climate conferences as a reminder of the scary things that are happening.</p>
+
+        <h3>Legend</h3>
+        <p>The legend shows the months of the year and the magnitude of temperature anomalies. It can be moved up and down through the visualization using the slider on the right side of the screen. You can toggle it on and off using the settings controls described below.
+        <br>
+        <img src="img/legend_thumb.png" class="legend_img">
+        </p>
+
+        <h3>Controls</h3>
+        <p>You can examine, rotate and zoom each visualization using the mouse and mouse wheel (or touch / pinch on mobile devices)
+        </p>
+        <p>The controls on the main page are:
+            <ul>
+                <li><img src="img/settings_closed.png" class="help_img"> opens the settings drawer (see below)</li>
+                <li><img src="img/share.png" class="help_img"> opens a new browser window with current settings that you can bookmark or share</li>
+                <li><img src="img/help.png" class="help_img"> opens this page</li>
+                <li><img src="img/rings.png" class="help_img"> select Rings visualization</li>
+                <li><img src="img/spiral.png" class="help_img"> select Spiral visualization</li>
+                <li><img src="img/slices.png" class="help_img"> select Slices visualization</li>
+                <li><img src="img/blob.png" class="help_img"> select Blob visualization</li>
+            </ul>
+            <p>The settings drawer options are:</p>
+            <ul>
+                <li><em>Smoothed points</em> - number of smoothed points to generate from source data</li>
+                <li><em>Line thickness</em> - thickness of the line to use for the Rings and Spiral versions</li>
+                <li><em>Fit camera</em> - when enabled, keeps the camera positioned so the visualization fills the screen</li>
+                <li><em>Colors</em> - switches between hot/col temperature (red/blue) colors and a pleasing rainbow effect</li>
+                <li><em>Auto rotate</em> - enables or disables auto rotation of the visualization</li>
+                <li><em>Enable legend</em> - enables or disables the legend that shows the months / temperatures along with associated controls</li>
+            </ul>
+        </p>
+        <h3>Acknowledgments</h3>
+        <ul>
+            <li><a href="https://www.climate-lab-book.ac.uk/about/" target="_new">Ed Hawkins</a> - made initial <a href="http://blogs.reading.ac.uk/climate-lab-book/files/2016/06/spiral_2017_large-1.gif" target="_new">version</a> in 2012</li>
+            <li><a href="https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.monthly_ns_avg.txt" target="_new">UK Met Office</a> - HadCRUT 4 source data</li>
+            <li><a href="https://threejs.org" target="_new">three.js</a> - A nice JavaScript WebGL library</li>
+            <li><a href="https://github.com/gka/chroma.js/" target="_new">Chroma.js</a> - a nice JavaScript library for working with colors</li>
+            <li><a href="https://refreshless.com/nouislider/" target="_new">noUiSlider.js</a> - a nice JavaScript UI/Slider library</li>
+            <li><a href="https://github.com/sole/tween.js" target="_new">tween.js</a> - a nice tweening library</li>
+        </ul>
+        <h3>Contact</h3>
+        <ul>
+            <li>Visit my page at <a target="_new" href="http://callum.com">http://callum.com</a> to see other experiments and find contact information</li>
+            <li>The source code for this project is <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/climate_temperature_change" target="_new">available</a> along with source for everything else I've made <a href="https://github.com/callumprentice" target="_new">here</a></li>
+            <li>Advice, suggestions, bug reports, pull requests etc. much appreciated</li>
+        </ul>
+        You can close this Help box by clicking anywhere else on the screen...
+    </div>
+    <div id="settings_div">
+        <a href="#" onclick="toggleUI();">
+            <img alt="Settings" id="settings_button" src="img/settings_closed.png">
+        </a>
+        <a href="#" onclick="shareURL();">
+            <img alt="Share" id="share_button" src="img/share.png">
+        </a>
+        <a href="#" onclick="showHelp(true);">
+            <img alt="Help" id="help_button" src="img/help.png">
+        </a>
+    </div>
+    <div id="viz_selector">
+        <a href="#" onclick="params.viz_type='Rings';selectVisualization(params)">
+            <img alt="Rings" id="rings_button" src="img/rings.png"></a>
+        <br>
+        <a href="#" onclick="params.viz_type='Spiral';selectVisualization(params)">
+            <img alt="Spiral" id="spiral_button" src="img/spiral.png"></a>
+        <br>
+        <a href="#" onclick="params.viz_type='Slices';selectVisualization(params)">
+            <img alt="Slices" id="slices_button" src="img/slices.png"></a>
+        <br>
+        <a href="#" onclick="params.viz_type='Blob';selectVisualization(params)">
+            <img alt="Blob" id="blob_button" src="img/blob.png"></a>
+    </div>
+    <div id="legend_year_slider_container"><div id="legend_year_slider"></div></div>
+    <div id="ui_div">
+        <table id="settings_ui_table">
+            <tr>
+                <td id="num_points_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td>
+                    <div id="num_points_slider">
+                </td>
+            </tr>
+            <tr>
+                <td id="line_thickness_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td class="quarter_width">
+                    <div id="line_thickness_slider">
+                </td>
+            </tr>
+            <tr>
+                <td id="fit_to_screen_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td class="quarter_width">
+                    <div id="fit_to_screen_slider">
+                </td>
+            </tr>
+            <tr>
+                <td id="alt_colors_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td class="quarter_width">
+                    <div id="alt_colors_slider">
+                </td>
+            </tr>
+            <tr>
+                <td id="auto_rotate_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td class="quarter_width">
+                    <div id="auto_rotate_slider">
+                </td>
+            </tr>
+            <tr>
+                <td id="enable_legend_slider_label" class="half_width"></td>
+                <td class="spacer"></td>
+                <td class="quarter_width">
+                    <div id="enable_legend_slider">
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

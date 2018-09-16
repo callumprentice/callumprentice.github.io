@@ -1,0 +1,209 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  font-family: Exo;
+  user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+strong {
+  color: #ccf;
+}
+
+em {
+  color: #cfc;
+}
+
+a {
+  color: #ffc;
+  text-decoration: none;
+}
+
+p {
+  margin-top: 2px;
+  margin-left: 16px;
+}
+
+ul {
+  margin-top: 0px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-bottom: 2px;
+}
+
+h2 {
+  color: #aaf;
+}
+
+h3 {
+  color: #ddf;
+}
+
+h4 {
+  color: #ddf;
+  margin-left: 12px;
+}
+
+img.help_img {
+  position: relative;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+}
+
+img.legend_img {
+  width: 128px;
+  height: 128px;
+}
+
+#container3d {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+#settings_div {
+  height: 170px;
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  width: 50px;
+  z-index: 4;
+}
+
+#viz_selector {
+  position: absolute;
+  left: 8px;
+  top: 200px;
+  z-index: 2;
+}
+
+#ui_div {
+  background-color: #669;
+  background-repeat: repeat;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  box-shadow: inset 0px 10px 40px -10px rgba(0, 0, 0, 0.75);
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  z-index: 8;
+}
+
+#title {
+  top: 8px;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  overflow: hidden;
+  position: absolute;
+  font-size: 2em;
+  text-align: center;
+  color: #ff0;
+  z-index: 2;
+}
+
+#ui_contents {
+  top: 16px;
+  left: 16px;
+  overflow: hidden;
+  position: absolute;
+  height: 100%;
+}
+
+#settings_ui_table {
+  font-size: 1.1em;
+  font-weight: bold;
+  height: 100%;
+  width: 80%;
+}
+
+.half_width {
+  width: 60%;
+  text-align: right;
+}
+
+.spacer {
+  width: 18px;
+}
+
+#fit_to_screen_slider,
+#alt_colors_slider,
+#auto_rotate_slider,
+#enable_legend_slider {
+  width: 50px;
+}
+
+.noUi-vertical .noUi-handle {
+width: 48px;
+height: 32px;
+left: -18px;
+top: -11px;
+border: 1px solid transparent;
+}
+
+
+.hide {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.show {
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+#help_box_bkg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 100;
+  background-color: rgba(100, 100, 100, 0.9);
+}
+
+#help_box {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 10%;
+  bottom: 10%;
+  padding: 18px;
+  color: #fff;
+  text-align: justify;
+  z-index: 110;
+  background-color: rgba(50, 50, 100, 0.3);
+  font-size: 1.2em;
+  box-shadow: 4px 4px 4px #333;
+  border: #999 2px solid;
+  overflow: scroll;
+}
+
+#legend_year_slider {
+  z-index: 4;
+  position: absolute;
+  right: 0px;
+  width: 32px;
+  top: 0;
+  bottom: 0;
+  background-image: linear-gradient(to bottom, #0f0, #efe);
+  overflow: hidden;
+}
