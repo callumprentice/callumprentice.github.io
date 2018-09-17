@@ -533,7 +533,7 @@ function selectVisualization(params, update_camera) {
         document.getElementById('rings_button').src = 'img/rings.png';
         document.getElementById('blob_button').src = 'img/blob.png';
         document.getElementById('slices_button').src = 'img/slices.png';
-        document.getElementById('spiral_button').src = 'img/spiral_selected';
+        document.getElementById('spiral_button').src = 'img/spiral_selected.png';
         updateTitle();
 
         const num_divs = climateData.length;
@@ -548,7 +548,7 @@ function selectVisualization(params, update_camera) {
         document.getElementById('rings_button').src = 'img/rings.png';
         document.getElementById('spiral_button').src = 'img/spiral.png';
         document.getElementById('slices_button').src = 'img/slices.png';
-        document.getElementById('blob_button').src = 'img/blob_selected';
+        document.getElementById('blob_button').src = 'img/blob_selected.png';
         updateTitle();
 
         const num_divs = 12;
@@ -563,7 +563,7 @@ function selectVisualization(params, update_camera) {
         document.getElementById('rings_button').src = 'img/rings.png';
         document.getElementById('spiral_button').src = 'img/spiral.png';
         document.getElementById('blob_button').src = 'img/blob.png';
-        document.getElementById('slices_button').src = 'img/slices_selected';
+        document.getElementById('slices_button').src = 'img/slices_selected.png';
         updateTitle();
 
         const num_divs = 12;
