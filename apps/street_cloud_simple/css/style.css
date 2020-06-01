@@ -1,0 +1,138 @@
+:root {
+    --settings-transition-time: 0.5s;
+    --settings-height-percent: 35%;
+}
+
+body {
+    background-color: #aaa;
+    font-family: "Baloo Tamma 2", cursive;
+    overflow: hidden;
+}
+a {
+    color: #ddc;
+    text-decoration: none;
+}
+#loading_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #66a;
+    z-index: 100;
+}
+
+#loading_overlay img {
+    width:30%;
+    height:30%;
+    padding:35%;
+}
+
+.hide {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+.show {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+#webgl {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    transition: bottom var(--settings-transition-time) ease;
+    background-color: #000;
+    overflow: hidden;
+}
+
+#webgl.expanded {
+    bottom: var(--settings-height-percent);
+}
+
+#settings {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    right: 0;
+    bottom: 0;
+    transition: top var(--settings-transition-time) ease;
+    background-color: #88e;
+    overflow: hidden;
+    border-top: 2px grey solid;
+}
+
+#settings.expanded {
+    top: calc(100% - var(--settings-height-percent))
+}
+
+.drag_drop_highlight {
+    outline: 3px dotted rgba(0, 255, 0, 0.75);
+    outline-offset: -24px;
+}
+
+#toggle_settings_btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    background-color:rgba(255, 255,0, 0.4);
+    z-index: 1;
+    border-radius: 32px;
+}
+
+#toggle_settings_btn:hover {
+    background-color:rgba(255, 255,0, 0.8);
+}
+
+#toggle_settings_btn img {
+    width:80%;
+    height:80%;
+    padding:10%;
+}
+.curve_button {
+    box-shadow: 0px 10px 14px -7px #276873;
+    background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+    background-color:#599bb3;
+    border-radius:28px;
+    border:2px solid #29668f;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:20px;
+    font-weight:bold;
+    padding:13px 22px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #3d768a;
+}
+.curve_button:hover {
+    background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+    background-color:#408c99;
+}
+.curve_button:active {
+    position:relative;
+    top:1px;
+}
+
+#text_overlay {
+    position:absolute;
+    left: 16px;
+    top: 16px;
+    height: 24px;
+    width: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+#text_overlay_text {
+    position:absolute;
+    left: 8px;
+    top: -16px;
+    color: #ff0;
+}

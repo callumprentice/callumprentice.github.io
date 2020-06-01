@@ -8,14 +8,6 @@
     <link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-51404170-1', 'callum.com');
-  ga('send', 'pageview');
-</script>
     <div class="wrapper">
         <div class="container">
             <h1>About</h1>
@@ -25,15 +17,24 @@
                 <h1>WebGL, WebVR and C++ apps, experiments and code</h1>
                 <ul class="rig columns-4">
                     <li>
+                        <a href="apps/street_cloud_simple/index.html" target="_blank">
+                            <img class="img_border" src="thumbs/street_cloud_simple.jpeg" />
+                        </a>
+                        <h3>Street Cloud Simple</h3>
+                        <p>
+                        This experiment is an update to earlier ones (Street Cloud Interactive and Street Cloud Flow) after they stopped working because of extensive changes to the Google Maps Street View API. It renders Google Street View &reg; panos as point clouds using the 3D LiDAR data captured along with the regular panorama images. I pulled fragments of code from various old experiments and combined them into what I hope is an easy to understand, single source file.
+                       </p>
+                        <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/street_cloud_simple" target="_blank"><img class="srcicon" src="img/githubsrc.png"></a>
+                    </li>
+                    <li>
                         <a href="apps/climate_temperature_change/index.html" target="_blank">
                             <img class="img_border" src="thumbs/climate_temperature_change.gif" />
                         </a>
                         <h3>Climate Temperature Change</h3>
                         <p>
-                        This is an experiment that investigates ways of visualizing the average worldwide monthly temperature anomalies from 1850 to 2017 via data from the <a href="https://www.metoffice.gov.uk/" target=_new">UK Met Office</a>. You may have seen the renowned <a href="https://www.climate-lab-book.ac.uk/spirals/" target="_new">Climate Spiral</a> images created by UK scientist <a href="https://www.climate-lab-book.ac.uk/about/" target="_new">Ed Hawkings</a> - this is a modest attempt to explore other ways of visualizing that same sobering data using modern web technologies such as WebGL.</p>
+                        This is an experiment that investigates ways of visualizing the average worldwide monthly temperature anomalies from 1850 to 2017 via data from the <a href="https://www.metoffice.gov.uk/" target="_new">UK Met Office</a>. You may have seen the renowned <a href="https://www.climate-lab-book.ac.uk/spirals/" target="_new">Climate Spiral</a> images created by UK scientist <a href="https://www.climate-lab-book.ac.uk/about/" target="_new">Ed Hawkings</a> - this is a modest attempt to explore other ways of visualizing that same sobering data using modern web technologies such as WebGL.</p>
                         <a href="https://github.com/callumprentice/callumprentice.github.io/tree/master/apps/climate_temperature_change" target="_blank"><img class="srcicon" src="img/githubsrc.png"></a>
                     </li>
-
                     <li>
                         <a href="apps/voronoi_airports/index.html" target="_blank">
                             <img class="img_border" src="thumbs/voronoi_airports.jpeg" />
@@ -355,6 +356,7 @@
                 <h1>Recent updates</h1>
                 <h2>
                 <ul>
+                <p>&#9679; 2020-06-01: New app - <a href="apps/street_cloud_simple/index.html" target="_blank">Street Cloud Simple</a></p>
                 <p>&#9679; 2018-09-15: New app - <a href="apps/climate_temperature_change/index.html" target="_blank">Climate Temperature Change</a></p>
                 <p>&#9679; 2018-06-24: New app - <a href="apps/voronoi_airports/index.html" target="_blank">Voronoi Airports WebGL</a></p>
                 <p>&#9679; 2018-04-30: New app - <a href="apps/soul_of_the_world/index.html" target="_blank">Soul of the World</a></p>
