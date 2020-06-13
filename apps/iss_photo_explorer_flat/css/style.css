@@ -1,0 +1,197 @@
+:root {
+    user-select: none;
+}
+body {
+    background-color: #fff;
+    font-family: 'Source Code Pro', monospace;
+    overflow: hidden;
+}
+.img_fit {
+    object-fit: contain;
+}
+.hide {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+.show {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+img {
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    -ms-user-drag: none;
+    user-drag: none;
+}
+a {
+    text-decoration: none;
+    color: #494;
+}
+h2 {
+    color: orange;
+}
+#loading_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #fff;
+    z-index: 100;
+}
+#loading_overlay img {
+    width: 80%;
+    height: 80%;
+    padding: 10%;
+}
+#content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #666;
+}
+#earth {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 50%;
+    width: 100%;
+    display: block;
+    background-color: #101031;
+}
+#earth_img {
+    position: absolute;
+}
+#credits {
+    position: absolute;
+    left: 0px;
+    top: 0;
+    width: 100%;
+    height: 24px;
+    text-align: center;
+    background-color: rgba(100, 200, 200, 0.5);
+    z-index: 20;
+}
+#splitter {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    left: 0;
+    top: calc(50% - 10px);
+    display: block;
+    user-select: none;
+    background-color: #448;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='20'><path d='M0 6 h40 M0 9 h40 M0 12 h40' fill='none' stroke='black'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: row-resize;
+}
+#photos {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(50% - 10px);
+    display: block;
+    background-color: #000;
+}
+#photo_thumbs {
+    position: absolute;
+    left: 0;
+    top: 51px;
+    width: calc(50% - 8px);
+    bottom: 0;
+    overflow-y: auto;
+    background-color: #000;
+    padding: 8px;
+}
+#photo_thumbs_title {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 49px;
+    display: block;
+    background-color: #444;
+    text-align: center;
+    color: #fff;
+    padding-top: 2px;
+
+}
+#photo_carousel {
+    position: absolute;
+    left: calc(50% + 8px);
+    top: 51px;
+    width: calc(50% - 8px);
+    bottom: 0;
+    display: block;
+    background-color: #000;
+
+}
+#photo_carousel_title {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 50%;
+    height: 49px;
+    display: block;
+    background-color: #444;
+    text-align: center;
+    color: #fff;
+    padding-top: 2px;
+}
+.prev_img {
+    width: 100%;
+    height: 100%;
+    background: center center no-repeat;
+    border: none;
+}
+#photo_carousel_prev {
+    position: absolute;
+    left: calc(50% + 16px);
+    top: calc(50% - 30px + 24px);
+    width: 60px;
+    bottom: (50% + 30px);
+    background-color: rgba(100, 200, 200, 0.0);
+    z-index: 10;
+}
+.next_img {
+    width: 100%;
+    height: 100%;
+    background: center center no-repeat;
+    border: none;
+}
+#photo_carousel_next {
+    position: absolute;
+    right: 16px;
+    top: calc(50% - 30px + 24px);
+    width: 60px;
+    bottom: (50% + 30px);
+    background-color: rgba(100, 200, 200, 0.0);
+    z-index: 10;
+}
+#photo_not_found {
+    font-size: 2em;
+    color: red;
+    text-align: center;
+}
+#photo_not_found a {
+    color: yellow;
+    text-decoration: none;
+}
+#map_marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background-color: #944;
+    border-radius: 12px;
+    z-index:20;
+    border: 2px solid #a66;
+}
