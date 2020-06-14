@@ -1,0 +1,236 @@
+:root {
+    --settings-title-height: 24px;
+    --settings-prev-next-width: 60px;
+    user-select: none;
+}
+body {
+    background-color: #aaa;
+    font-family: 'Nova Mono', monospace;
+    font-size: 16px;
+    overflow: hidden;
+}
+a {
+    color: #ffc;
+    text-decoration: none;
+}
+p {
+    margin-top: 2px;
+    margin-left: 16px;
+}
+#loading_overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: #fff;
+    z-index: 100;
+}
+#loading_overlay img {
+    width: 80%;
+    height: 80%;
+    padding: 10%;
+}
+.hide {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+.show {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+.img_fit {
+    object-fit: contain;
+}
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+#webgl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transition: bottom 0.25s ease;
+    background-color: #000;
+    overflow: hidden;
+}
+#webgl.expanded {
+    bottom: 50%;
+}
+#settings {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    right: 0;
+    bottom: 0;
+    transition: top 0.25s ease;
+    background-color: #ccc;
+    overflow: hidden;
+}
+#settings.expanded {
+    top: 50%;
+}
+.drag_drop_highlight {
+    outline: 3px dotted rgba(0, 255, 0, 0.75);
+    outline-offset: -24px;
+}
+#toggle_settings_btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(255, 255, 0, 0.4);
+    z-index: 1;
+    border-radius: 32px;
+}
+#toggle_settings_btn:hover {
+    background-color: rgba(255, 255, 0, 0.8);
+}
+#random_location_btn {
+    position: absolute;
+    top: 16px;
+    right: 80px;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(255, 255, 0, 0.4);
+    z-index: 1;
+    border-radius: 32px;
+}
+#random_location_btn:hover {
+    background-color: rgba(255, 255, 0, 0.8);
+}
+#help_btn {
+    position: absolute;
+    top: 16px;
+    right: 144px;
+    width: 48px;
+    height: 48px;
+    background-color: rgba(255, 255, 0, 0.4);
+    z-index: 1;
+    border-radius: 32px;
+}
+#help_btn:hover {
+    background-color: rgba(255, 255, 0, 0.8);
+}
+#toggle_settings_btn img {
+    width: 80%;
+    height: 80%;
+    padding: 10%;
+}
+#random_location_btn img {
+    width: 80%;
+    height: 80%;
+    padding: 10%;
+}
+#help_btn img {
+    width: 80%;
+    height: 80%;
+    padding: 10%;
+}
+#photo_list_title {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: var(--settings-title-height);
+    background-color: #686;
+    text-align: center;
+}
+#photo_list {
+    position: absolute;
+    left: 0;
+    top: var(--settings-title-height);
+    width: 50%;
+    bottom: 0;
+    background-color: #444;
+    overflow-y: scroll;
+}
+#photo_carousel_title {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 50%;
+    height: var(--settings-title-height);
+    text-align: center;
+    background-color: #88a;
+}
+#photo_carousel {
+    position: absolute;
+    left: 50%;
+    top: var(--settings-title-height);
+    width: 50%;
+    bottom: 0;
+    background-color: #669;
+}
+a img,
+a:link img,
+a:visited img {
+    border: 0;
+}
+.prev_img {
+    width: 100%;
+    height: 100%;
+    background: center center no-repeat;
+    border: none;
+}
+#photo_carousel_prev {
+    position: absolute;
+    left: 51%;
+    top: 25%;
+    width: var(--settings-prev-next-width);
+    bottom: 25%;
+    background-color: rgba(100, 200, 200, 0.0);
+    z-index: 10;
+}
+.next_img {
+    width: 100%;
+    height: 100%;
+    background: center center no-repeat;
+    border: none;
+}
+#photo_carousel_next {
+    position: absolute;
+    right: 1%;
+    top: 25%;
+    width: var(--settings-prev-next-width);
+    bottom: 25%;
+    background-color: rgba(100, 200, 200, 0.0);
+    z-index: 10;
+}
+#not_found {
+    color: #f66;
+    font-size: 2em;
+    text-align: center;
+}
+#help_box_bkg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    z-index: 200;
+    background-color: rgba(100, 100, 100, 0.9);
+}
+#help_box {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 10%;
+    bottom: 10%;
+    padding: 18px;
+    color: #fff;
+    text-align: justify;
+    z-index: 210;
+    background-color: rgba(50, 50, 100, 0.3);
+    font-size: 1.2em;
+    border: #999 2px solid;
+    border-radius: 16px;
+    overflow: auto;
+}
