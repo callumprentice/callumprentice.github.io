@@ -150,6 +150,9 @@ function viewPhoto(pid) {
     var title_elem = document.getElementById('photo_carousel_title');
     if (title_elem.clientWidth < 250) {
         title_html = `ISS 0${pid}<br>Click photo/arrows`;
+
+        document.getElementById('photo_carousel_prev').style.setProperty('--next-prev-size', '36px');
+        document.getElementById('photo_carousel_next').style.setProperty('--next-prev-size', '36px');
     }
     title_elem.innerHTML = title_html;
 }

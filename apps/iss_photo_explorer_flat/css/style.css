@@ -1,5 +1,6 @@
 :root {
     user-select: none;
+    --next-prev-size: 60px;
 }
 body {
     background-color: #fff;
@@ -154,9 +155,9 @@ h2 {
 #photo_carousel_prev {
     position: absolute;
     left: calc(50% + 16px);
-    top: calc(50% - 30px + 24px);
-    width: 60px;
-    bottom: (50% + 30px);
+    top: calc(50% - calc(var(--next-prev-size) / 2) + 24px);
+    width: var(--next-prev-size);
+    height: var(--next-prev-size);
     background-color: rgba(100, 200, 200, 0.0);
     z-index: 10;
 }
@@ -169,9 +170,9 @@ h2 {
 #photo_carousel_next {
     position: absolute;
     right: 16px;
-    top: calc(50% - 30px + 24px);
-    width: 60px;
-    bottom: (50% + 30px);
+    top: calc(50% - calc(var(--next-prev-size) / 2) + 24px);
+    width: var(--next-prev-size);
+    height: var(--next-prev-size);
     background-color: rgba(100, 200, 200, 0.0);
     z-index: 10;
 }
