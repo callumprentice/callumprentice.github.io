@@ -205,7 +205,7 @@ function setQueryParam(name, value) {
     params.set(name, value);
 
     url.search = params.toString();
-    window.history.pushState({}, '', url.toString());
+    window.history.replaceState({}, '', url.toString());
 }
 
 function getQueryParam(name) {
