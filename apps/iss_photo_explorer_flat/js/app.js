@@ -145,11 +145,12 @@ function viewPhoto(pid) {
     photo_carousel_elem.innerHTML = photo_html;
 
     var title_html =
-        `Image ID: ISS 0${pid} - click photo for full screen<br>` + `or click arrows to move through sequence`;
+        `ISS0${pid} - <a href="#" onclick="viewNasaPage('${pid}')" target="_new">(NASA link)</a><br>` +
+        `Click photo for full size or arrows to explore sequence`;
 
     var title_elem = document.getElementById('photo_carousel_title');
     if (title_elem.clientWidth < 250) {
-        title_html = `ISS 0${pid}<br>Click photo/arrows`;
+        title_html = `<a href="#" onclick="viewNasaPage('${pid}')" target="_new">ISS 0${pid}</a><br>Click photo/arrows`;
 
         document.getElementById('photo_carousel_prev').style.setProperty('--next-prev-size', '36px');
         document.getElementById('photo_carousel_next').style.setProperty('--next-prev-size', '36px');
@@ -161,6 +162,20 @@ function viewFullSize(pid) {
     var url = buildPhotoURL(pid, 'large');
 
     window.open(url);
+}
+
+function viewNasaPage(pid) {
+    var parts = pid.split('-');
+    var mission = 'ISS0' + parts[0];
+    var roll = parts[1];
+    var frame = parts[2];
+
+    var nasa_url = `https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?` +
+                   `mission=${mission}&` +
+                   `roll=${roll}&` +
+                   `frame=${frame}`
+console.log(nasa_url)
+    window.open(nasa_url);
 }
 
 function viewLoadError(pid) {
