@@ -5,6 +5,8 @@
 body {
     background-color: #fff;
     font-family: 'Source Code Pro', monospace;
+}
+body.app {
     overflow: hidden;
 }
 .img_fit {
