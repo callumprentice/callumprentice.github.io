@@ -145,12 +145,12 @@ function viewPhoto(pid) {
     photo_carousel_elem.innerHTML = photo_html;
 
     var title_html =
-        `ISS0${pid} - <a href="#" onclick="viewNasaPage('${pid}')" target="_new">(NASA link)</a><br>` +
+        `ISS0${pid} - <a href="${getNasaLink(pid)}" target="_new">(NASA link)</a><br>` +
         `Click photo for full size or arrows to explore sequence`;
 
     var title_elem = document.getElementById('photo_carousel_title');
     if (title_elem.clientWidth < 250) {
-        title_html = `<a href="#" onclick="viewNasaPage('${pid}')" target="_new">ISS 0${pid}</a><br>Click photo/arrows`;
+        title_html = `<a href="${getNasaLink(pid)}" target="_new">ISS 0${pid}</a><br>Click photo/arrows`;
 
         document.getElementById('photo_carousel_prev').style.setProperty('--next-prev-size', '36px');
         document.getElementById('photo_carousel_next').style.setProperty('--next-prev-size', '36px');
@@ -164,7 +164,7 @@ function viewFullSize(pid) {
     window.open(url);
 }
 
-function viewNasaPage(pid) {
+function getNasaLink(pid) {
     var parts = pid.split('-');
     var mission = 'ISS0' + parts[0];
     var roll = parts[1];
@@ -174,8 +174,7 @@ function viewNasaPage(pid) {
                    `mission=${mission}&` +
                    `roll=${roll}&` +
                    `frame=${frame}`
-console.log(nasa_url)
-    window.open(nasa_url);
+    return nasa_url
 }
 
 function viewLoadError(pid) {
