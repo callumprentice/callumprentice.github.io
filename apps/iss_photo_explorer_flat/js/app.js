@@ -170,11 +170,9 @@ function getNasaLink(pid) {
     var roll = parts[1];
     var frame = parts[2];
 
-    var nasa_url = `https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?` +
-                   `mission=${mission}&` +
-                   `roll=${roll}&` +
-                   `frame=${frame}`
-    return nasa_url
+    var nasa_url =
+        `https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?` + `mission=${mission}&` + `roll=${roll}&` + `frame=${frame}`;
+    return nasa_url;
 }
 
 function viewLoadError(pid) {
@@ -214,7 +212,6 @@ function getQueryParam(name) {
 }
 
 function gotoRandomLatLng() {
-
     var rand_index = Math.floor(Math.random() * Object.keys(latLngTable).length);
     var ll_index = Object.keys(latLngTable)[rand_index];
     var lat = parseFloat(ll_index.split('_')[0]) - 90.0;
@@ -228,22 +225,22 @@ function gotoRandomLatLng() {
 }
 
 function search() {
-
     var lat = document.getElementById('lat').value.trim();
     var lng = document.getElementById('lng').value.trim();
 
     lat = parseFloat(lat);
     lng = parseFloat(lng);
 
-    if (!lat || !lng)
+    if (isNaN(lat) || isNaN(lng) || lat < -90.0 || lat > 90.0 || lng < -180.0 || lng > 180.0) {
+        console.warn('Invalid location: ', lat, lng);
         return;
+    }
 
     setQueryParam('lat', lat);
     setQueryParam('lng', lng);
     setQueryParam('pn', 0);
 
     buildThumbs();
-
 }
 
 function latLngToLLIdx(lat, lng) {
@@ -322,7 +319,7 @@ function zlibDecompress(url, callback) {
                     return x.charCodeAt(0);
                 });
             var bin_data = new Uint8Array(char_data);
-            var data = pako.inflate(bin_data, {to: 'string'});
+            var data = pako.inflate(bin_data, { to: 'string' });
             callback(JSON.parse(data));
         };
     };
