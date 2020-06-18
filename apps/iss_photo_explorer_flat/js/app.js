@@ -214,6 +214,7 @@ function getQueryParam(name) {
 }
 
 function gotoRandomLatLng() {
+
     var rand_index = Math.floor(Math.random() * Object.keys(latLngTable).length);
     var ll_index = Object.keys(latLngTable)[rand_index];
     var lat = parseFloat(ll_index.split('_')[0]) - 90.0;
@@ -224,6 +225,25 @@ function gotoRandomLatLng() {
     setQueryParam('pn', 0);
 
     buildThumbs();
+}
+
+function search() {
+
+    var lat = document.getElementById('lat').value.trim();
+    var lng = document.getElementById('lng').value.trim();
+
+    lat = parseFloat(lat);
+    lng = parseFloat(lng);
+
+    if (!lat || !lng)
+        return;
+
+    setQueryParam('lat', lat);
+    setQueryParam('lng', lng);
+    setQueryParam('pn', 0);
+
+    buildThumbs();
+
 }
 
 function latLngToLLIdx(lat, lng) {
