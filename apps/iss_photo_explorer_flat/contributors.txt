@@ -1,7 +1,8 @@
 == A list of people who have been kind enough to submit PRs and code ==
 
 Callum Prentice (https://github.com/callumprentice)
-Callum's daughter (not yet! :)
+Callum's daughter (https:// .... not yet! :)
 
+Daniel Saewitz (https://github.com/switz)
 Wolfgang Faust (https://github.com/wolfgang42)
-Ofer Zelig (https://github.com/oferze)
+Ofer Zelig     (https://github.com/oferze)
