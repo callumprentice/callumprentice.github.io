@@ -1,0 +1,7 @@
+== A list of people who have been kind enough to submit PRs and code ==
+
+Callum Prentice (https://github.com/callumprentice)
+Callum's daughter (not yet! :)
+
+Wolfgang Faust (https://github.com/wolfgang42)
+Ofer Zelig (https://github.com/oferze)
