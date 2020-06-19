@@ -46,6 +46,10 @@ We didn't spend very long on this so there is likely some bugs and poorly writte
 <h2>Future ideas</h2>
 <p>
 <ul>
+<li>Add zooming to the map. This isn't possible with the map I made so I intend to look at adding in a <a target="new" href="https://leafletjs.com/">Leaflet</a> map - ideally with a toggle-able overlay or tile-set for the photo location tracks.</li>
+<li>An improved solution for thumbnails - it adds a lot to the searching but there isn't a tiny version - just 'small' and 'large'. Some kind of local caching? Not that effective over a 3.5 million image set.</li>
+<li>Drag/drop from Google Maps, extra lat/long and use it to search</li>
+<li>Use "My location" lookup to get lat/long</li>
 <li>Expand the searching so you can find photographs by mission, camera type etc.</li>
 <li>The sequences look incredible and it should be possible to write something to save off a sequence of images locally and the use <a href="https://ffmpeg.org/" target="_new">ffmpeg</a> to turn them into a movie</li>
 <li>Search by feature - E.G. "Show me pictures of Crew Dragon approaching"</li>
@@ -59,6 +63,7 @@ We didn't spend very long on this so there is likely some bugs and poorly writte
 <li>All the photos were generously provided by Earth Science and Remote Sensing Unit, NASA Johnson Space Center - there is a treasure trove of information to be found at their <a href="https://eol.jsc.nasa.gov/" target="_new">Gateway to Astronaut Photography</a></li>
 <li>The SVG image of the ISS displayed while the page is loading was taken from <a href="https://commons.wikimedia.org/wiki/File:International_Space_Station.svg" target="_new">Wikipedia</a></li>
 <li>We used the <a href="https://github.com/nodeca/pako" target="_new">pako zlib</a> library to compress the reverse lat/long reverse look-up data down to a more manageable size</li>
+<li>I started compiling a list of people who had generously submitted code and pull-requests to this project. You can find the list (a text file) <a href="contributors.txt" target="_new">here</a></li>
 </ul>
 <p>
 Comments, bugs, feedback and of course fixes for out doubtless many mistakes are very welcome - contact details are <a target="_new" href="https://callumprentice.github.io/#contact">here</a>
