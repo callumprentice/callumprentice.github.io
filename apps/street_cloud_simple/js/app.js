@@ -395,7 +395,7 @@ function load_depth(result) {
             }
             
             add_geometry(width, height, result);
-        });
+        })
         .catch((error) => {
             console.error(error);
         });
