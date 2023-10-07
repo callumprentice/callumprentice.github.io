@@ -1,0 +1,75 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+a {
+    color: yellow;
+    text-decoration: none;
+}
+h3 {
+    font-family: monospace;
+    font-size: 2.5vh;
+    color: #ccffcc;
+}
+p {
+    font-family: monospace;
+    font-size: 1.8vh;
+    color: #ffffdd;
+}
+#webgl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+#ui {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    width: 5vh;
+    height: 100%;
+    font-size: 3vh;
+    text-align: center;
+}
+.button {
+    background-color: rgba(100, 100, 100, 0.7);
+    border-radius: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 8px;
+}
+.label {
+    font-size: 1.5vh;
+    font-family: monospace;
+    color: #aaffaa;
+    background-color: rgba(100, 100, 100, 0.4);
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 12px;
+}
+#help {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 80%;
+    border: 2px grey solid;
+    border-radius: 16px;
+    display: none;
+    overflow: hidden;
+    background-color: rgba(100, 100, 100, 0.9);
+}
+#help-content {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    border-radius: 16px;
+    font-family: monospace;
+    font-size: 2vw;
+    padding: 1vw;
+    overflow: auto;
+    z-index: 10;
+}

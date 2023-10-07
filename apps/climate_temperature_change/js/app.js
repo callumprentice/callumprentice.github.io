@@ -656,6 +656,7 @@ function createRings(params) {
 
 function createSpiral(params) {
     var smoothed_points = processedData[0].points;
+    console.log("pd", processedData)
     var smoothed_colors = processedData[0].colors;
     var smoothed_alt_colors = processedData[0].alt_colors;
 

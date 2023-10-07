@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Global Temperature Change (1850-2023)</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <style>
+    </style>
+    <script type="text/javascript" src="./data.js"></script>
+    <script type="text/javascript" src="./js/chroma.min.js"></script>
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <div id="webgl"></div>
+    <div id="help">
+    <div id="help-content" onclick="toggleHelp()">
+      <center>
+        <h3>Global Temperature Change (1850-2023)</h3>
+      </center>
+      <p>Faced with seemingly <a href="https://www.npr.org/2023/10/05/1203821716/earth-is-on-track-for-its-hottest-year-yet-according-to-a-european-climate-agenc" target="_new">daily</a> <a href="https://www.theguardian.com/environment/2023/oct/05/gobsmackingly-bananas-scientists-stunned-by-planets-record-september-heat" target="_new">reports</a> about how our planet is warming and the terrifying effect it is having, and will have, on her generation, my 12 year old daughter asked if we could create something interesting together to show to her class. Based on the popular <a href="https://www.climate-lab-book.ac.uk/spirals/" target="_new">Climate Spiral</a> image and an earlier <a href="https://callumprentice.github.io/apps/climate_temperature_change/index.html" target="_new">experiment</a> I made 5+ years ago, she proposed we make a simpler, cleaner version. It was a hugely rewarding (and sobering) experience which will hopefully go down well at school.</p>
+
+      <p>It visualizes the average worldwide monthly temperature anomalies from 1850 to 2023 via data generously shared by the <a href="https://www.metoffice.gov.uk/hadobs/hadcrut5/data/current/download.html" target="_new">UK Met Office</a>. Based on the 1850-1900 mean temperature, if a value for a given month/year is less than this, the line is colored blue. Conversely, if it is greater, it is colored red. As you can see, we have already exceeded the +1°C delta many times and given how things are going, we are rapidly heading towards the terrifying <a href="https://news.mit.edu/2023/explained-climate-benchmark-rising-temperatures-0827" target="_new">+1.5°C threshold</a>.
+
+      <p>Caveats abound of course. We're not climate scientists or statisticians. The code interpolates between values for each month. We've likely made mistakes both in the code and our interpretation of the data. Even given all of that though, we'd both like to think that it still illustrates the terrifying direction we are heading. Data is published up to July 2023 although I expect September to appear soon.</p>
+
+      <p>Plenty left to do when we have time. There should be a Fahrenheit version as well as Centigrade. Likely some typos and fixes to the code. I'd like to find a way to let users explore different sections of the spiral without the hard-to-use raw 3D exploration of the earlier <a href="https://callumprentice.github.io/apps/climate_temperature_change/index.html" target="_new">experiment</a>.</p>
+
+      <p>Please do share the experiment, the code and any improvements or fixes you make. My contact information can be found <a href="https://callumprentice.github.io/#contact" target="_new">here</a> - we'd love to hear what you think. Made with ♥ by <a href="https://callumprentice.github.io/#contact" target="_new">Callum</a> and Siena (a fearless, bold, cute, princess).</p>
+    </div>
+    </div>
+    </a>
+    <div id="ui">
+      <a href="#" onclick="toggleLabels(false)">
+        <div class='button'>&#x1f3f7;</div>
+      </a>
+      <a href="#" onclick="toggleHelp()">
+        <div class='button'>&#x2754;</div>
+      </a>
+    </div>
+  </body>
+</html>
