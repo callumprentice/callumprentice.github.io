@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Callum Prentice (callum@gmail.com, https://callum.com)" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <link rel="icon" href="./favicon.svg" />
+    <style>
+      :root {
+        --bkg-check-col-1: #303050;
+        --bkg-check-col-2: #202040;
+        --bkg-check-size: 64px;
+      }
+      body {
+        font-family: monospace;
+        font-size: 16vw;
+        margin: 0;
+        user-select: none;
+        background-image: linear-gradient(
+            45deg,
+            var(--bkg-check-col-1) 25%,
+            transparent 25%,
+            transparent 75%,
+            var(--bkg-check-col-1) 75%,
+            var(--bkg-check-col-1) 100%
+          ),
+          linear-gradient(
+            45deg,
+            var(--bkg-check-col-1) 25%,
+            var(--bkg-check-col-2) 25%,
+            var(--bkg-check-col-2) 75%,
+            var(--bkg-check-col-1) 75%,
+            var(--bkg-check-col-1) 100%
+          );
+        background-position: 0 0, calc(var(--bkg-check-size) / 2) calc(var(--bkg-check-size) / 2);
+        background-size: var(--bkg-check-size) var(--bkg-check-size);
+        bottom: 0;
+        left: 0;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #aba;
+      }
+    </style>
+    <title>GLTFy</title>
+  </head>
+  <body>
+    GLTFy
+  </body>
+</html>
