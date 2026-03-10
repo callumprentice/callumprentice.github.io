@@ -63,6 +63,7 @@ function app() {
     if (latlng.found) {
         load_pano_by_location(latlng.lat, latlng.lng);
     } else {
+
         load_pano_by_location(37.800286, -122.4014286);
     }
 
@@ -237,17 +238,8 @@ function load_pano_by_id(pano_id) {
 
             for (var y = 0; y < num_y; ++y) {
                 for (var x = 0; x < num_x; ++x) {
-                    var url =
-                        'https://maps.google.com/cbk?output=tile&panoid=' +
-                        pano_id +
-                        '&zoom=' +
-                        zoom +
-                        '&x=' +
-                        x +
-                        '&y=' +
-                        y +
-                        '&' +
-                        Date.now();
+                    var url = 'https://geo3.ggpht.com/cbk?cb_client=apiv3&output=tile&x=' + x + '&y=' + y + '&zoom=' + zoom + '&nbt=1&fover=2&panoid=' + pano_id;
+   
 
                     (function (x, y) {
                         var img = new Image();
@@ -296,12 +288,12 @@ function load_pano_by_id(pano_id) {
 function load_depth(result) {
     positions = [];
 
-    var url =
-        'https://maps.google.com/cbk?' +
-        'output=json&cb_client=maps_sv&v=4&dm=&pm=1&ph=1&hl=en&panoid=' +
-        result.location.pano;
+    var url = "https://www.google.com/maps/photometa/v1?authuser=0&hl=en&gl=uk&pb=!1m4!1smaps_sv.tactile!11m2!2m1!1b1!2m2!1sen!2suk!3m3!1m2!1e2!2s" +
+        result.location.pano +
+        "!4m57!1e1!1e2!1e3!1e4!1e5!1e6!1e8!1e12!2m1!1e1!4m1!1i48!5m1!1e1!5m1!1e2!6m1!1e1!6m1!1e2!9m36!1m3!1e2!2b1!3e2!1m3!1e2!2b0!3e3!1m3!1e3!2b1!3e2!1m3!1e3!2b0!3e3!1m3!1e8!2b0!3e3!1m3!1e1!2b0!3e3!1m3!1e4!2b0!3e3!1m3!1e10!2b1!3e2!1m3!1e10!2b0!3e3";
 
     let request = (obj) => {
+        console.log(obj.url);
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest();
             xhr.open(obj.method || 'GET', obj.url);
@@ -321,8 +313,7 @@ function load_depth(result) {
         url: url,
     })
         .then((jsonp_data) => {
-            var raw_depth_map = JSON.parse(jsonp_data).model.depth_map;
-
+            var raw_depth_map = JSON.parse(jsonp_data.substr(4))[1][0][5][0][5][1][2];
             while (raw_depth_map.length % 4 != 0) {
                 raw_depth_map += '=';
             }
@@ -335,10 +326,12 @@ function load_depth(result) {
                 .map(function (x) {
                     return x.charCodeAt(0);
                 });
-            var data = pako.inflate(new Uint8Array(enc_data));
+                
+            var data = new Uint8Array(enc_data);
             var depth_map_data = new DataView(data.buffer);
             var number_of_planes = depth_map_data.getUint16(1, true);
             var width = depth_map_data.getUint16(3, true);
+
             var height = depth_map_data.getUint16(5, true);
             var offset = depth_map_data.getUint16(7, true);
             var planes = [];
@@ -400,7 +393,7 @@ function load_depth(result) {
                     positions.push(xp, -zp, yp);
                 }
             }
-
+            
             add_geometry(width, height, result);
         })
         .catch((error) => {
@@ -578,6 +571,7 @@ function load_pano_my_location() {
 function view_streetview() {
     var latlng = lat_lng_from_url();
     if (latlng.found) {
+        console.log("viewing");
         var svurl =
             'https://maps.google.com/maps?q=&layer=c&cbll=' + latlng.lat + ',' + latlng.lng + '&cbp=11,0,0,0,0';
         window.open(svurl);
